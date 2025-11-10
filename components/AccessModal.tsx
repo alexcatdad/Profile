@@ -113,7 +113,7 @@ export function AccessModal({
       });
 
       if (response.ok) {
-        setAccessData({ name, email, company: company || undefined, granted: true });
+        setAccessData({ name, email, company: company || undefined });
         setIsSubmitted(true);
         setTimeout(() => {
           onClose();

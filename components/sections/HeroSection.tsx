@@ -3,6 +3,7 @@
 import { useButton } from '@react-aria/button';
 import { motion } from 'framer-motion';
 import { ChevronDown, Github, Linkedin, Twitter } from 'lucide-react';
+import { useRef } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
 import { ContactReveal } from '@/components/ContactReveal';
 import type { Profile } from '@/types/content';
@@ -13,12 +14,16 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ profile, dictionary }: HeroSectionProps) {
-  const scrollToContentButtonProps = useButton({
-    onPress: () => {
-      const element = document.getElementById('summary');
-      element?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToContentButtonRef = useRef<HTMLButtonElement>(null);
+  const scrollToContentButtonProps = useButton(
+    {
+      onPress: () => {
+        const element = document.getElementById('summary');
+        element?.scrollIntoView({ behavior: 'smooth' });
+      },
     },
-  }).buttonProps;
+    scrollToContentButtonRef
+  ).buttonProps;
 
   const socialLinks = [
     profile.social.github && {
@@ -144,6 +149,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
           transition={{ duration: 0.5, delay: 0.7 }}
         >
           {socialLinks.map((link, index) => {
+            if (!link) return null;
             const Icon = link.icon;
             return (
               <motion.a
@@ -166,9 +172,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
           <ContactReveal email={profile.contact.email} dictionary={dictionary} />
         </motion.div>
 
-        <motion.button
-          {...scrollToContentButtonProps}
-          className="text-muted-foreground hover:text-primary transition-colors group"
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{
@@ -179,10 +183,16 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
               ease: 'easeInOut',
             },
           }}
-          aria-label="Scroll down"
         >
-          <ChevronDown className="w-8 h-8 mx-auto group-hover:scale-110 transition-transform" />
-        </motion.button>
+          <button
+            {...scrollToContentButtonProps}
+            ref={scrollToContentButtonRef}
+            className="text-muted-foreground hover:text-primary transition-colors group"
+            aria-label="Scroll down"
+          >
+            <ChevronDown className="w-8 h-8 mx-auto group-hover:scale-110 transition-transform" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );

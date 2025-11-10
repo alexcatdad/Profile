@@ -153,7 +153,7 @@ export async function loadContent(): Promise<ContentData> {
     return validated;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('Content validation error:', error.errors);
+      console.error('Content validation error:', error.issues);
       throw new Error(`Content validation failed: ${error.message}`);
     }
     throw error;

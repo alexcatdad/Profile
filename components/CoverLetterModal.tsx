@@ -1,7 +1,7 @@
 'use client';
 
 import { useButton } from '@react-aria/button';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -67,13 +67,22 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
     alert('PDF download will be implemented');
   };
 
-  const downloadButtonProps = useButton({
-    onPress: handleDownload,
-  }).buttonProps;
+  const downloadButtonRef = useRef<HTMLButtonElement>(null);
+  const resetButtonRef = useRef<HTMLButtonElement>(null);
 
-  const resetButtonProps = useButton({
-    onPress: handleReset,
-  }).buttonProps;
+  const downloadButtonProps = useButton(
+    {
+      onPress: handleDownload,
+    },
+    downloadButtonRef
+  ).buttonProps;
+
+  const resetButtonProps = useButton(
+    {
+      onPress: handleReset,
+    },
+    resetButtonRef
+  ).buttonProps;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>

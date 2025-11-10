@@ -3,7 +3,7 @@
 import { useButton } from '@react-aria/button';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -54,21 +54,30 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
     }
   };
 
-  const downloadCVButtonProps = useButton({
-    onPress: () => {
-      // TODO: Implement CV download
-      console.log('Download CV');
-    },
-  }).buttonProps;
+  const downloadCVButtonRef = useRef<HTMLButtonElement>(null);
+  const downloadCoverLetterButtonRef = useRef<HTMLButtonElement>(null);
 
-  const downloadCoverLetterButtonProps = useButton({
-    onPress: () => {
-      const url = new URL(window.location.href);
-      url.searchParams.set('coverLetter', 'true');
-      window.history.pushState({}, '', url.toString());
-      window.dispatchEvent(new PopStateEvent('popstate'));
+  const downloadCVButtonProps = useButton(
+    {
+      onPress: () => {
+        // TODO: Implement CV download
+        console.log('Download CV');
+      },
     },
-  }).buttonProps;
+    downloadCVButtonRef
+  ).buttonProps;
+
+  const downloadCoverLetterButtonProps = useButton(
+    {
+      onPress: () => {
+        const url = new URL(window.location.href);
+        url.searchParams.set('coverLetter', 'true');
+        window.history.pushState({}, '', url.toString());
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      },
+    },
+    downloadCoverLetterButtonRef
+  ).buttonProps;
 
   const navLinks = [
     { id: 'skills', label: dictionary.navigation.skills },
@@ -128,12 +137,14 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
               <ThemeToggle />
               <button
                 {...downloadCoverLetterButtonProps}
+                ref={downloadCoverLetterButtonRef}
                 className="px-4 py-2 border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-all duration-200 font-medium hover:border-primary/50"
               >
                 {dictionary.navigation.downloadCoverLetter}
               </button>
               <button
                 {...downloadCVButtonProps}
+                ref={downloadCVButtonRef}
                 className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
               >
                 {dictionary.navigation.downloadCV}
@@ -188,12 +199,14 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
               </div>
               <button
                 {...downloadCoverLetterButtonProps}
+                ref={downloadCoverLetterButtonRef}
                 className="w-full px-4 py-2 border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors font-medium text-left"
               >
                 {dictionary.navigation.downloadCoverLetter}
               </button>
               <button
                 {...downloadCVButtonProps}
+                ref={downloadCVButtonRef}
                 className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
               >
                 {dictionary.navigation.downloadCV}
@@ -202,6 +215,5 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
           </div>
         </motion.div>
       </motion.nav>
-    </>
   );
 }

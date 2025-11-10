@@ -2,7 +2,7 @@
 
 import { useButton } from '@react-aria/button';
 import { Moon, Sun } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -31,9 +31,13 @@ export function ThemeToggle() {
     updateTheme(newTheme);
   };
 
-  const buttonProps = useButton({
-    onPress: toggleTheme,
-  }).buttonProps;
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonProps = useButton(
+    {
+      onPress: toggleTheme,
+    },
+    buttonRef
+  ).buttonProps;
 
   if (!mounted) {
     return (
@@ -44,6 +48,7 @@ export function ThemeToggle() {
   return (
     <button
       {...buttonProps}
+      ref={buttonRef}
       type="button"
       className="w-10 h-10 rounded-lg bg-muted hover:bg-accent flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 border border-border hover:border-primary/50"
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}

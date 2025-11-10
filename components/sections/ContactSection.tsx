@@ -18,11 +18,15 @@ export function ContactSection({ profile, dictionary }: ContactSectionProps) {
   const isInView = useInView(ref, { once: true, margin: '-20%' });
   const [isRevealed, setIsRevealed] = useState(false);
 
-  const revealButtonProps = useButton({
-    onPress: () => {
-      setIsRevealed(true);
+  const revealButtonRef = useRef<HTMLButtonElement>(null);
+  const revealButtonProps = useButton(
+    {
+      onPress: () => {
+        setIsRevealed(true);
+      },
     },
-  }).buttonProps;
+    revealButtonRef
+  ).buttonProps;
 
   return (
     <section id="contact" ref={ref} className="py-20 px-4 bg-background">
@@ -47,15 +51,16 @@ export function ContactSection({ profile, dictionary }: ContactSectionProps) {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <motion.button
-            {...revealButtonProps}
-            className="group px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            {dictionary.contact.reveal}
-          </motion.button>
+          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
+            <button
+              {...revealButtonProps}
+              ref={revealButtonRef}
+              className="group px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              {dictionary.contact.reveal}
+            </button>
+          </motion.div>
 
           <motion.button
             type="button"
