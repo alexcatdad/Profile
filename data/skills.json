@@ -1,0 +1,42 @@
+[
+  {
+    "name": "TypeScript",
+    "category": "Languages",
+    "level": "expert"
+  },
+  {
+    "name": "JavaScript",
+    "category": "Languages",
+    "level": "expert"
+  },
+  {
+    "name": "React",
+    "category": "Frontend",
+    "level": "expert"
+  },
+  {
+    "name": "Next.js",
+    "category": "Frontend",
+    "level": "advanced"
+  },
+  {
+    "name": "Node.js",
+    "category": "Backend",
+    "level": "advanced"
+  },
+  {
+    "name": "PostgreSQL",
+    "category": "Database",
+    "level": "advanced"
+  },
+  {
+    "name": "AWS",
+    "category": "Cloud",
+    "level": "intermediate"
+  },
+  {
+    "name": "Docker",
+    "category": "DevOps",
+    "level": "advanced"
+  }
+]

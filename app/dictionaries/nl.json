@@ -1,0 +1,64 @@
+{
+  "accessModal": {
+    "title": "Toegang aanvragen om profiel te bekijken",
+    "subtitle": "Voer uw gegevens in om toegang te krijgen tot:",
+    "benefits": {
+      "cv": "Volledig professioneel CV en werkgeschiedenis",
+      "projects": "Open source bijdragen en GitHub-projecten",
+      "packages": "NPM-pakketten met downloadstatistieken",
+      "downloads": "Downloadbaar CV en aanpasbare sollicitatiebrief"
+    },
+    "privacyNote": "Uw gegevens worden alleen gebruikt om profieltoegang te verlenen en kunnen worden gebruikt voor professionele netwerkdoeleinden.",
+    "fields": {
+      "name": {
+        "label": "Uw volledige naam *",
+        "placeholder": "Jan Jansen",
+        "error": "Voer alstublieft uw volledige naam in"
+      },
+      "email": {
+        "label": "Uw e-mailadres *",
+        "placeholder": "jan.jansen@bedrijf.nl",
+        "error": "Voer alstublieft een geldig e-mailadres in"
+      },
+      "company": {
+        "label": "Bedrijf/Organisatie",
+        "placeholder": "Acme BV"
+      }
+    },
+    "submit": "Toegang tot profiel",
+    "submitting": "Toegang verlenen...",
+    "footer": {
+      "security": "🔒 Uw gegevens zijn veilig en worden niet gedeeld met derden.",
+      "required": "* Verplichte velden"
+    }
+  },
+  "welcome": {
+    "back": "Welkom terug, {name}!",
+    "granted": "Toegang verleend!"
+  },
+  "navigation": {
+    "skills": "Vaardigheden",
+    "experience": "Ervaring",
+    "projects": "Projecten",
+    "education": "Opleiding",
+    "contact": "Contact",
+    "downloadCV": "CV downloaden",
+    "downloadCoverLetter": "Sollicitatiebrief downloaden"
+  },
+  "contact": {
+    "reveal": "Contactgegevens onthullen",
+    "sendMessage": "Direct bericht sturen",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd!",
+    "call": "Bellen"
+  },
+  "coverLetter": {
+    "title": "Sollicitatiebrief",
+    "download": "PDF downloaden",
+    "reset": "Terugzetten naar sjabloon",
+    "saved": "Opgeslagen",
+    "lastEdited": "Laatst bewerkt: {timestamp}"
+  }
+}

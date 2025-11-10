@@ -1,0 +1,64 @@
+{
+  "accessModal": {
+    "title": "Request Access to View Profile",
+    "subtitle": "Enter your information to unlock access to:",
+    "benefits": {
+      "cv": "Complete professional CV and work history",
+      "projects": "Open source contributions and GitHub projects",
+      "packages": "NPM packages with download metrics",
+      "downloads": "Downloadable CV and customizable cover letter"
+    },
+    "privacyNote": "Your information will only be used to grant profile access and may be used for professional networking purposes.",
+    "fields": {
+      "name": {
+        "label": "Your Full Name *",
+        "placeholder": "John Smith",
+        "error": "Please enter your full name"
+      },
+      "email": {
+        "label": "Your Email Address *",
+        "placeholder": "john.smith@company.com",
+        "error": "Please enter a valid email address"
+      },
+      "company": {
+        "label": "Company/Organization",
+        "placeholder": "Acme Corp"
+      }
+    },
+    "submit": "Access Profile",
+    "submitting": "Granting access...",
+    "footer": {
+      "security": "🔒 Your information is secure and will not be shared with third parties.",
+      "required": "* Required fields"
+    }
+  },
+  "welcome": {
+    "back": "Welcome back, {name}!",
+    "granted": "Access granted!"
+  },
+  "navigation": {
+    "skills": "Skills",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education",
+    "contact": "Contact",
+    "downloadCV": "Download CV",
+    "downloadCoverLetter": "Download Cover Letter"
+  },
+  "contact": {
+    "reveal": "Reveal Contact Information",
+    "sendMessage": "Send Direct Message",
+    "email": "Email",
+    "phone": "Phone",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "call": "Call"
+  },
+  "coverLetter": {
+    "title": "Cover Letter",
+    "download": "Download PDF",
+    "reset": "Reset to Template",
+    "saved": "Saved",
+    "lastEdited": "Last edited: {timestamp}"
+  }
+}

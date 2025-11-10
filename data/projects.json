@@ -1,0 +1,35 @@
+[
+  {
+    "id": "proj-1",
+    "name": "Awesome Library",
+    "description": "A powerful utility library for modern JavaScript applications",
+    "url": "https://awesome-library.example.com",
+    "githubUrl": "https://github.com/alexdeveloper/awesome-library",
+    "stars": 1234,
+    "npmPackage": "awesome-library",
+    "downloads": 50000,
+    "featured": true,
+    "technologies": ["TypeScript", "JavaScript", "Node.js"],
+    "image": "/images/awesome-library.png"
+  },
+  {
+    "id": "proj-2",
+    "name": "Client Project Alpha",
+    "description": "Enterprise application for financial services",
+    "featured": false,
+    "technologies": ["React", "TypeScript", "PostgreSQL"],
+    "private": true,
+    "nda": true
+  },
+  {
+    "id": "proj-3",
+    "name": "UI Component Kit",
+    "description": "Accessible React component library",
+    "githubUrl": "https://github.com/alexdeveloper/ui-kit",
+    "stars": 567,
+    "npmPackage": "@alex/ui-kit",
+    "downloads": 12000,
+    "featured": false,
+    "technologies": ["React", "TypeScript", "Tailwind CSS"]
+  }
+]

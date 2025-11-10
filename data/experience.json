@@ -1,0 +1,33 @@
+[
+  {
+    "id": "exp-1",
+    "company": "Tech Corp",
+    "position": "Senior Full Stack Developer",
+    "location": "San Francisco, CA",
+    "startDate": "2021-01",
+    "endDate": null,
+    "current": true,
+    "description": [
+      "Led development of customer-facing web applications serving 1M+ users",
+      "Architected microservices infrastructure reducing API response time by 40%",
+      "Mentored junior developers and established coding standards and best practices"
+    ],
+    "technologies": ["TypeScript", "React", "Node.js", "PostgreSQL", "AWS"],
+    "logo": "/images/tech-corp.png"
+  },
+  {
+    "id": "exp-2",
+    "company": "StartupXYZ",
+    "position": "Full Stack Developer",
+    "location": "Remote",
+    "startDate": "2019-06",
+    "endDate": "2020-12",
+    "current": false,
+    "description": [
+      "Built MVP from scratch using React and Node.js",
+      "Implemented real-time features using WebSockets",
+      "Collaborated with design team to create intuitive user interfaces"
+    ],
+    "technologies": ["JavaScript", "React", "Node.js", "MongoDB", "Socket.io"]
+  }
+]

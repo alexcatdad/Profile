@@ -1,0 +1,29 @@
+{
+  "header": {
+    "name": "Alex Developer",
+    "title": "Senior Full Stack Developer",
+    "email": "alex@example.com",
+    "phone": "+1-555-0123",
+    "location": "San Francisco, CA",
+    "linkedin": "https://linkedin.com/in/alex-developer"
+  },
+  "date": "November 10, 2025",
+  "recipient": {
+    "name": "Hiring Manager",
+    "company": "Company Name",
+    "address": "123 Business St",
+    "city": "San Francisco, CA 94105"
+  },
+  "salutation": "Dear Hiring Manager,",
+  "paragraphs": {
+    "introduction": "I am writing to express my strong interest in the [Position Title] position at [Company Name]. With [X] years of experience in full-stack development and a proven track record of building scalable web applications, I am excited about the opportunity to contribute to your team.",
+    "qualifications": "In my current role at Tech Corp, I have led the development of customer-facing applications serving over 1 million users. My expertise in TypeScript, React, and Node.js, combined with my experience in cloud infrastructure and microservices architecture, aligns perfectly with the requirements of this position. I have also contributed to open-source projects with over 1,200 GitHub stars and published NPM packages with 50,000+ downloads.",
+    "alignment": "I am particularly drawn to [Company Name]'s innovative approach to [Industry/Technology] and your commitment to [Company Value]. Your focus on [Specific Project/Initiative] resonates with my passion for [Relevant Interest], and I am eager to bring my skills in [Relevant Skills] to help drive your mission forward.",
+    "closing": "I would welcome the opportunity to discuss how my expertise in full-stack development, cloud architecture, and team leadership can contribute to [Company Name]'s continued success. Thank you for considering my application."
+  },
+  "signature": {
+    "closing": "Sincerely,",
+    "name": "Alex Developer",
+    "title": "Senior Full Stack Developer"
+  }
+}
