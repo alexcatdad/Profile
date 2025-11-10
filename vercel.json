@@ -3,7 +3,6 @@
   "bunVersion": "1.3.x",
   "buildCommand": "bun run build",
   "installCommand": "bun install",
-  "framework": "nextjs",
-  "regions": ["iad1"]
+  "framework": "nextjs"
 }
 
