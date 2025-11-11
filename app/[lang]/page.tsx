@@ -3,6 +3,7 @@ import { getDictionary } from '@/app/dictionaries';
 import { AccessGate } from '@/components/AccessGate';
 import { ProfilePage } from '@/components/ProfilePage';
 import { loadContent } from '@/lib/content-loader';
+import { filterContentByRole, getRoleFromSearchParams } from '@/lib/role-filter';
 
 function ProfilePageWrapper({
   content,
@@ -23,12 +24,24 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ coverLetter?: string; cover?: string; cl?: string }>;
+  searchParams: Promise<{
+    coverLetter?: string;
+    cover?: string;
+    cl?: string;
+    role?: string;
+    job?: string;
+  }>;
 }) {
   const { lang } = await params;
   const search = await searchParams;
   const dictionary = await getDictionary(lang as 'en' | 'nl');
-  const content = await loadContent();
+  let content = await loadContent();
+
+  // Apply role-based filtering if role parameter is present
+  const role = getRoleFromSearchParams(search);
+  if (role !== 'all') {
+    content = filterContentByRole(content, role);
+  }
 
   const coverLetterOpen =
     search.coverLetter === 'true' ||
