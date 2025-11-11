@@ -61,10 +61,33 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
     }
   };
 
-  const handleDownload = () => {
-    // TODO: Implement PDF generation
-    console.log('Download PDF', editedTemplate);
-    alert('PDF download will be implemented');
+  const handleDownload = async () => {
+    try {
+      setIsSaving(true);
+
+      // Dynamically import PDF components (client-side only)
+      const { pdf } = await import('@react-pdf/renderer');
+      const { CoverLetterPDF } = await import('@/components/pdf/CoverLetterPDF');
+
+      // Generate PDF
+      const blob = await pdf(<CoverLetterPDF template={editedTemplate} />).toBlob();
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `cover-letter-${editedTemplate.header.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setIsSaving(false);
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('Failed to generate PDF. Please try again.');
+      setIsSaving(false);
+    }
   };
 
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
@@ -86,14 +109,18 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{dictionary.coverLetter.title}</DialogTitle>
+      <DialogContent className="max-w-4xl w-[95vw] sm:w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 md:p-8">
+        <DialogHeader className="mb-4 sm:mb-6">
+          <DialogTitle className="text-xl sm:text-2xl">{dictionary.coverLetter.title}</DialogTitle>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-2 font-light">
+            Customize your cover letter and download as PDF
+          </p>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Header Block */}
-          <div className="space-y-2">
+          <div className="space-y-3 glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple">
+            <label className="text-xs font-semibold text-primary uppercase tracking-wider">Header Information</label>
             <input
               type="text"
               value={editedTemplate.header.name}
@@ -103,7 +130,8 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                   header: { ...editedTemplate.header, name: e.target.value },
                 })
               }
-              className="text-2xl font-bold w-full bg-transparent border-b border-input focus:outline-none focus:border-primary text-foreground"
+              className="text-xl sm:text-2xl font-bold w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="Your Name"
             />
             <input
               type="text"
@@ -114,9 +142,10 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                   header: { ...editedTemplate.header, title: e.target.value },
                 })
               }
-              className="text-lg w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+              className="text-base sm:text-lg w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="Your Title"
             />
-            <div className="flex gap-4 text-sm text-muted-foreground">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
               <input
                 type="email"
                 value={editedTemplate.header.email}
@@ -126,7 +155,7 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                     header: { ...editedTemplate.header, email: e.target.value },
                   })
                 }
-                className="flex-1 bg-transparent border-b border-input focus:outline-none focus:border-primary"
+                className="glass-subtle border-0 px-4 py-2.5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
                 placeholder="Email"
               />
               {editedTemplate.header.phone && (
@@ -139,7 +168,7 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                       header: { ...editedTemplate.header, phone: e.target.value },
                     })
                   }
-                  className="flex-1 bg-transparent border-b border-input focus:outline-none focus:border-primary"
+                  className="glass-subtle border-0 px-4 py-2.5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
                   placeholder="Phone"
                 />
               )}
@@ -152,24 +181,27 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                     header: { ...editedTemplate.header, location: e.target.value },
                   })
                 }
-                className="flex-1 bg-transparent border-b border-input focus:outline-none focus:border-primary"
+                className="glass-subtle border-0 px-4 py-2.5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
                 placeholder="Location"
               />
             </div>
           </div>
 
           {/* Date */}
-          <div>
+          <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+            <label className="text-xs font-semibold text-primary uppercase tracking-wider">Date</label>
             <input
               type="text"
               value={editedTemplate.date}
               onChange={(e) => setEditedTemplate({ ...editedTemplate, date: e.target.value })}
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+              className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="January 1, 2024"
             />
           </div>
 
           {/* Recipient */}
-          <div className="space-y-2">
+          <div className="space-y-3 glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple">
+            <label className="text-xs font-semibold text-primary uppercase tracking-wider">Recipient</label>
             <input
               type="text"
               value={editedTemplate.recipient.name}
@@ -179,7 +211,8 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                   recipient: { ...editedTemplate.recipient, name: e.target.value },
                 })
               }
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+              className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="Hiring Manager Name"
             />
             <input
               type="text"
@@ -190,7 +223,8 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                   recipient: { ...editedTemplate.recipient, company: e.target.value },
                 })
               }
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+              className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="Company Name"
             />
             {editedTemplate.recipient.address && (
               <input
@@ -205,7 +239,8 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                     },
                   })
                 }
-                className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+                className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+                placeholder="Street Address"
               />
             )}
             {editedTemplate.recipient.city && (
@@ -221,133 +256,158 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                     },
                   })
                 }
-                className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+                className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+                placeholder="City, State ZIP"
               />
             )}
           </div>
 
           {/* Salutation */}
-          <div>
+          <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+            <label className="text-xs font-semibold text-primary uppercase tracking-wider">Salutation</label>
             <input
               type="text"
               value={editedTemplate.salutation}
               onChange={(e) => setEditedTemplate({ ...editedTemplate, salutation: e.target.value })}
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
+              className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+              placeholder="Dear Hiring Manager,"
             />
           </div>
 
           {/* Body Paragraphs */}
           <div className="space-y-4">
-            <textarea
-              value={editedTemplate.paragraphs.introduction}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  paragraphs: {
-                    ...editedTemplate.paragraphs,
-                    introduction: e.target.value,
-                  },
-                })
-              }
-              className="w-full min-h-[100px] p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background"
-              placeholder="Introduction paragraph"
-            />
-            <textarea
-              value={editedTemplate.paragraphs.qualifications}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  paragraphs: {
-                    ...editedTemplate.paragraphs,
-                    qualifications: e.target.value,
-                  },
-                })
-              }
-              className="w-full min-h-[100px] p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background"
-              placeholder="Qualifications paragraph"
-            />
-            <textarea
-              value={editedTemplate.paragraphs.alignment}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  paragraphs: {
-                    ...editedTemplate.paragraphs,
-                    alignment: e.target.value,
-                  },
-                })
-              }
-              className="w-full min-h-[100px] p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background"
-              placeholder="Alignment paragraph"
-            />
-            <textarea
-              value={editedTemplate.paragraphs.closing}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  paragraphs: {
-                    ...editedTemplate.paragraphs,
-                    closing: e.target.value,
-                  },
-                })
-              }
-              className="w-full min-h-[100px] p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background"
-              placeholder="Closing paragraph"
-            />
+            <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+              <label className="text-xs font-semibold text-primary uppercase tracking-wider">Introduction</label>
+              <textarea
+                value={editedTemplate.paragraphs.introduction}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    paragraphs: {
+                      ...editedTemplate.paragraphs,
+                      introduction: e.target.value,
+                    },
+                  })
+                }
+                className="w-full min-h-[120px] glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple resize-none"
+                placeholder="Opening paragraph that introduces yourself and your interest..."
+              />
+            </div>
+
+            <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+              <label className="text-xs font-semibold text-primary uppercase tracking-wider">Qualifications</label>
+              <textarea
+                value={editedTemplate.paragraphs.qualifications}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    paragraphs: {
+                      ...editedTemplate.paragraphs,
+                      qualifications: e.target.value,
+                    },
+                  })
+                }
+                className="w-full min-h-[120px] glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple resize-none"
+                placeholder="Highlight your relevant skills and experience..."
+              />
+            </div>
+
+            <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+              <label className="text-xs font-semibold text-primary uppercase tracking-wider">Alignment</label>
+              <textarea
+                value={editedTemplate.paragraphs.alignment}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    paragraphs: {
+                      ...editedTemplate.paragraphs,
+                      alignment: e.target.value,
+                    },
+                  })
+                }
+                className="w-full min-h-[120px] glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple resize-none"
+                placeholder="Explain why you're a great fit for the role..."
+              />
+            </div>
+
+            <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-3">
+              <label className="text-xs font-semibold text-primary uppercase tracking-wider">Closing</label>
+              <textarea
+                value={editedTemplate.paragraphs.closing}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    paragraphs: {
+                      ...editedTemplate.paragraphs,
+                      closing: e.target.value,
+                    },
+                  })
+                }
+                className="w-full min-h-[120px] glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple resize-none"
+                placeholder="Express enthusiasm and next steps..."
+              />
+            </div>
           </div>
 
           {/* Signature */}
-          <div className="space-y-2">
-            <input
-              type="text"
-              value={editedTemplate.signature.closing}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  signature: {
-                    ...editedTemplate.signature,
-                    closing: e.target.value,
-                  },
-                })
-              }
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
-            />
-            <input
-              type="text"
-              value={editedTemplate.signature.name}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  signature: {
-                    ...editedTemplate.signature,
-                    name: e.target.value,
-                  },
-                })
-              }
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
-            />
-            <input
-              type="text"
-              value={editedTemplate.signature.title}
-              onChange={(e) =>
-                setEditedTemplate({
-                  ...editedTemplate,
-                  signature: {
-                    ...editedTemplate.signature,
-                    title: e.target.value,
-                  },
-                })
-              }
-              className="w-full bg-transparent border-b border-input focus:outline-none focus:border-primary"
-            />
+          <div className="glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple space-y-4">
+            <label className="text-xs font-semibold text-primary uppercase tracking-wider">Signature</label>
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={editedTemplate.signature.closing}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    signature: {
+                      ...editedTemplate.signature,
+                      closing: e.target.value,
+                    },
+                  })
+                }
+                className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+                placeholder="Sincerely,"
+              />
+              <input
+                type="text"
+                value={editedTemplate.signature.name}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    signature: {
+                      ...editedTemplate.signature,
+                      name: e.target.value,
+                    },
+                  })
+                }
+                className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple font-semibold"
+                placeholder="Your Name"
+              />
+              <input
+                type="text"
+                value={editedTemplate.signature.title}
+                onChange={(e) =>
+                  setEditedTemplate({
+                    ...editedTemplate,
+                    signature: {
+                      ...editedTemplate.signature,
+                      title: e.target.value,
+                    },
+                  })
+                }
+                className="w-full glass-subtle border-0 px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all shadow-apple"
+                placeholder="Your Title"
+              />
+            </div>
           </div>
 
           {/* Footer Controls */}
-          <div className="flex items-center justify-between pt-4 border-t">
-            <div className="text-sm text-muted-foreground">
-              {isSaving && <span>{dictionary.coverLetter.saved}...</span>}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 glass-subtle p-4 sm:p-6 rounded-3xl shadow-apple">
+            <div className="text-sm text-muted-foreground font-medium">
+              {isSaving && <span className="text-primary">💾 {dictionary.coverLetter.saved}...</span>}
               {lastSaved && !isSaving && (
-                <span>
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500" />
                   {dictionary.coverLetter.lastEdited.replace(
                     '{timestamp}',
                     lastSaved.toLocaleTimeString()
@@ -355,13 +415,29 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                 </span>
               )}
             </div>
-            <div className="flex gap-2">
-              <Button {...resetButtonProps} variant="outline" onClick={handleReset}>
+            <div className="flex gap-3 w-full sm:w-auto">
+              <button
+                {...resetButtonProps}
+                ref={resetButtonRef}
+                className="flex-1 sm:flex-none px-6 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary"
+              >
                 {dictionary.coverLetter.reset}
-              </Button>
-              <Button {...downloadButtonProps} onClick={handleDownload}>
-                {dictionary.coverLetter.download}
-              </Button>
+              </button>
+              <button
+                {...downloadButtonProps}
+                ref={downloadButtonRef}
+                disabled={isSaving}
+                className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isSaving ? (
+                  <>
+                    <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Generating PDF...
+                  </>
+                ) : (
+                  dictionary.coverLetter.download
+                )}
+              </button>
             </div>
           </div>
         </div>
