@@ -50,13 +50,20 @@ const sectionThemes: Record<string, SectionTheme> = {
 };
 
 export function AnimatedBackground() {
+  const [mounted, setMounted] = useState(false);
   const { scrollYProgress } = useScroll();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentSection, setCurrentSection] = useState('hero');
   const [currentTheme, setCurrentTheme] = useState(sectionThemes.hero);
 
+  // Only render on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Track which section is in view
   useEffect(() => {
+    if (!mounted) return;
     const sections = ['hero', 'metrics', 'experience', 'projects', 'skills', 'achievements', 'contact'];
 
     const observers = sections.map((sectionId) => {
@@ -92,6 +99,8 @@ export function AnimatedBackground() {
 
   // Mouse parallax
   useEffect(() => {
+    if (!mounted) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth - 0.5) * 30,
@@ -101,7 +110,12 @@ export function AnimatedBackground() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [mounted]);
+
+  // Don't render during SSR
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">

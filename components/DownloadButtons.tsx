@@ -2,11 +2,17 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, FileText, FileCode2, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function DownloadButtons() {
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState<'pdf' | 'markdown' | null>(null);
+
+  // Only render on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDownload = async (format: 'pdf' | 'markdown') => {
     setIsDownloading(format);
@@ -38,6 +44,11 @@ export function DownloadButtons() {
       setIsOpen(false);
     }
   };
+
+  // Don't render during SSR
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-8 right-8 z-50">
