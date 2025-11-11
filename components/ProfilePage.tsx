@@ -13,6 +13,8 @@ import { SummarySection } from './sections/SummarySection';
 import { MetricsSection } from './sections/MetricsSection';
 import { AchievementsSection } from './sections/AchievementsSection';
 import { TestimonialsSection } from './sections/TestimonialsSection';
+import { AwardsSection } from './sections/AwardsSection';
+import { PublicationsSection } from './sections/PublicationsSection';
 
 interface ProfilePageProps {
   content: ContentData;
@@ -48,9 +50,19 @@ export function ProfilePage({ content, dictionary, coverLetterOpen = false }: Pr
         <ExperienceSection experience={content.experience} dictionary={dictionary} />
         <ProjectsSection projects={content.projects} dictionary={dictionary} />
 
+        {/* Publications */}
+        {content.publications && content.publications.length > 0 && (
+          <PublicationsSection publications={content.publications} />
+        )}
+
         {/* Testimonials */}
         {content.testimonials && content.testimonials.length > 0 && (
           <TestimonialsSection testimonials={content.testimonials} />
+        )}
+
+        {/* Awards */}
+        {content.awards && content.awards.length > 0 && (
+          <AwardsSection awards={content.awards} />
         )}
 
         <EducationSection
