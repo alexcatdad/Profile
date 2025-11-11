@@ -3,6 +3,7 @@ import type { ContentData } from '@/types/content';
 import { CoverLetterModalWrapper } from './CoverLetterModalWrapper';
 import { Navigation } from './Navigation';
 import { ScrollProgress } from './ScrollProgress';
+import { DownloadButtons } from './DownloadButtons';
 import { ContactSection } from './sections/ContactSection';
 import { EducationSection } from './sections/EducationSection';
 import { ExperienceSection } from './sections/ExperienceSection';
@@ -27,6 +28,7 @@ export function ProfilePage({ content, dictionary, coverLetterOpen = false }: Pr
     <div className="min-h-screen bg-background text-foreground">
       <ScrollProgress />
       <Navigation dictionary={dictionary} />
+      <DownloadButtons />
       <main role="main" aria-label="Profile content">
         <HeroSection profile={content.profile} dictionary={dictionary} />
         <SummarySection profile={content.profile} experience={content.experience} />
