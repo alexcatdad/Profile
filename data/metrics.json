@@ -1,0 +1,83 @@
+[
+  {
+    "id": "metric-1",
+    "label": "Years of Experience",
+    "value": 8,
+    "suffix": "+",
+    "description": "Professional software development experience",
+    "icon": "📅",
+    "trend": "up"
+  },
+  {
+    "id": "metric-2",
+    "label": "Projects Delivered",
+    "value": 50,
+    "suffix": "+",
+    "description": "Successfully completed and deployed projects",
+    "icon": "🚀",
+    "trend": "up"
+  },
+  {
+    "id": "metric-3",
+    "label": "Code Reviews",
+    "value": "2K",
+    "suffix": "+",
+    "description": "Pull requests reviewed and approved",
+    "icon": "📝",
+    "trend": "up"
+  },
+  {
+    "id": "metric-4",
+    "label": "Open Source PRs",
+    "value": 100,
+    "suffix": "+",
+    "description": "Contributions to major open source projects",
+    "icon": "⭐",
+    "trend": "up"
+  },
+  {
+    "id": "metric-5",
+    "label": "Uptime Maintained",
+    "value": 99.9,
+    "suffix": "%",
+    "description": "System reliability across production applications",
+    "icon": "✅",
+    "trend": "up"
+  },
+  {
+    "id": "metric-6",
+    "label": "Team Members Mentored",
+    "value": 12,
+    "suffix": "+",
+    "description": "Junior developers guided and mentored",
+    "icon": "👥",
+    "trend": "up"
+  },
+  {
+    "id": "metric-7",
+    "label": "Performance Improvement",
+    "value": 45,
+    "suffix": "%",
+    "description": "Average application speed improvement",
+    "icon": "⚡",
+    "trend": "up"
+  },
+  {
+    "id": "metric-8",
+    "label": "Users Impacted",
+    "value": "1.5M",
+    "suffix": "+",
+    "description": "Active users across deployed applications",
+    "icon": "👤",
+    "trend": "up"
+  },
+  {
+    "id": "metric-9",
+    "label": "Tech Stack Mastered",
+    "value": 30,
+    "suffix": "+",
+    "description": "Technologies and frameworks proficient in",
+    "icon": "💻",
+    "trend": "up"
+  }
+]

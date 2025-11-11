@@ -1,0 +1,68 @@
+[
+  {
+    "id": "achieve-1",
+    "title": "Led Migration to Microservices",
+    "description": "Successfully architected and led the migration of a monolithic application to microservices, improving system reliability and deployment frequency",
+    "metric": {
+      "value": "99.9%",
+      "label": "uptime achieved"
+    },
+    "date": "2023-06",
+    "icon": "🏗️"
+  },
+  {
+    "id": "achieve-2",
+    "title": "Open Source Contributions",
+    "description": "Regular contributor to major open source projects including React, Next.js, and TypeScript with 100+ merged PRs",
+    "metric": {
+      "value": "100+",
+      "label": "PRs merged"
+    },
+    "date": "2024-11",
+    "icon": "⭐"
+  },
+  {
+    "id": "achieve-3",
+    "title": "Performance Optimization Champion",
+    "description": "Led initiative to optimize application performance across the stack, resulting in significantly improved user experience",
+    "metric": {
+      "value": "60%",
+      "label": "faster load times"
+    },
+    "date": "2024-03",
+    "icon": "⚡"
+  },
+  {
+    "id": "achieve-4",
+    "title": "Mentorship Program",
+    "description": "Established and led mentorship program for junior developers, resulting in improved team skills and retention",
+    "metric": {
+      "value": "12",
+      "label": "developers mentored"
+    },
+    "date": "2023-09",
+    "icon": "👥"
+  },
+  {
+    "id": "achieve-5",
+    "title": "Security Enhancement",
+    "description": "Implemented comprehensive security measures including authentication, authorization, and vulnerability scanning",
+    "metric": {
+      "value": "0",
+      "label": "security incidents"
+    },
+    "date": "2024-08",
+    "icon": "🔒"
+  },
+  {
+    "id": "achieve-6",
+    "title": "Cost Optimization",
+    "description": "Optimized cloud infrastructure and database usage, significantly reducing monthly operational costs",
+    "metric": {
+      "value": "$50K",
+      "label": "annual savings"
+    },
+    "date": "2024-05",
+    "icon": "💰"
+  }
+]

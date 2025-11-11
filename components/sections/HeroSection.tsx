@@ -1,11 +1,9 @@
 'use client';
 
-import { useButton } from '@react-aria/button';
 import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Twitter } from 'lucide-react';
+import { ArrowDown, Download, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
-import { ContactReveal } from '@/components/ContactReveal';
 import type { Profile } from '@/types/content';
 
 interface HeroSectionProps {
@@ -14,185 +12,153 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ profile, dictionary }: HeroSectionProps) {
-  const scrollToContentButtonRef = useRef<HTMLButtonElement>(null);
-  const scrollToContentButtonProps = useButton(
-    {
-      onPress: () => {
-        const element = document.getElementById('summary');
-        element?.scrollIntoView({ behavior: 'smooth' });
-      },
-    },
-    scrollToContentButtonRef
-  ).buttonProps;
+  const heroRef = useRef<HTMLElement>(null);
 
-  const socialLinks = [
-    profile.social.github && {
-      href: `https://github.com/${profile.social.github}`,
-      icon: Github,
-      label: 'GitHub',
-      color: 'hover:text-[#181717] dark:hover:text-[#f5f5f5]',
-    },
-    profile.social.linkedin && {
-      href: `https://linkedin.com/in/${profile.social.linkedin}`,
-      icon: Linkedin,
-      label: 'LinkedIn',
-      color: 'hover:text-[#0077B5]',
-    },
-    profile.social.twitter && {
-      href: `https://twitter.com/${profile.social.twitter}`,
-      icon: Twitter,
-      label: 'Twitter',
-      color: 'hover:text-[#1DA1F2]',
-    },
-  ].filter(Boolean);
+  const scrollToContent = () => {
+    const metricsSection = document.getElementById('metrics');
+    metricsSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const firstName = profile.name.split(' ')[0];
+  const lastName = profile.name.split(' ').slice(1).join(' ');
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Animated background gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5"
-        animate={{
-          backgroundPosition: ['0% 0%', '100% 100%'],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          repeatType: 'reverse',
-        }}
-      />
-
-      {/* Decorative elements */}
+    <section
+      id="hero"
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+      style={{
+        background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background) / 0.95) 50%, hsl(var(--background)) 100%)',
+      }}
+    >
+      {/* Subtle gradient accent */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-8"
-        >
-          <div className="relative inline-block">
-            <motion.img
-              src={profile.headshot}
-              alt={profile.name}
-              className="w-48 h-48 rounded-full mx-auto object-cover shadow-2xl ring-4 ring-primary/20"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            />
-            <motion.div
-              className="absolute -bottom-2 -right-2 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
-            >
-              <span className="text-2xl">👋</span>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        <motion.h1
-          className="text-5xl md:text-7xl font-bold mb-4 text-foreground bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          {profile.name}
-        </motion.h1>
-
-        <motion.p
-          className="text-2xl md:text-3xl text-primary font-semibold mb-4"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          {profile.title}
-        </motion.p>
-
-        <motion.p
-          className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          {profile.tagline}
-        </motion.p>
-
-        <motion.div
-          className="flex justify-center gap-4 mb-12 flex-wrap"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-        >
-          {socialLinks.map((link, index) => {
-            if (!link) return null;
-            const Icon = link.icon;
-            return (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center transition-all duration-200 ${link.color} hover:border-primary/50 hover:shadow-md`}
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 + index * 0.1 }}
-                aria-label={link.label}
-              >
-                <Icon className="w-5 h-5" />
-              </motion.a>
-            );
-          })}
-          <ContactReveal email={profile.contact.email} dictionary={dictionary} />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 10, 0] }}
-          transition={{
-            opacity: { delay: 1 },
-            y: {
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            },
-          }}
-        >
-          <button
-            {...scrollToContentButtonProps}
-            ref={scrollToContentButtonRef}
-            className="text-muted-foreground hover:text-primary transition-colors group"
-            aria-label="Scroll down"
+      {/* Main content */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col items-center text-center space-y-8 sm:space-y-12">
+          {/* Sparkle badge - minimal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, type: 'spring', bounce: 0.5 }}
           >
-            <ChevronDown className="w-8 h-8 mx-auto group-hover:scale-110 transition-transform" />
-          </button>
-        </motion.div>
+            <div className="inline-flex items-center gap-2 px-5 py-2 border border-primary/20 bg-primary/5 rounded-full">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Available for Opportunities</span>
+            </div>
+          </motion.div>
+
+          {/* Main headline - HUGE and BOLD */}
+          <motion.div
+            className="space-y-4 sm:space-y-6"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none">
+              <span className="block gradient-text-hero">{firstName}</span>
+              <span className="block text-foreground mt-2">{lastName}</span>
+            </h1>
+
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-muted-foreground max-w-5xl mx-auto leading-tight">
+              {profile.title}
+            </p>
+
+            <motion.p
+              className="text-lg sm:text-xl md:text-2xl text-muted-foreground/80 max-w-3xl mx-auto font-light leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              {profile.tagline}
+            </motion.p>
+          </motion.div>
+
+          {/* Stats bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="flex flex-wrap items-center justify-center gap-6 sm:gap-12"
+          >
+            {[
+              { label: 'Years Experience', value: `${profile.yearsOfExperience}+` },
+              { label: 'Projects Delivered', value: '50+' },
+              { label: 'Technologies', value: '30+' },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="flex flex-col items-center group"
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <div className="text-4xl sm:text-5xl md:text-6xl font-black gradient-text-hero">
+                  {stat.value}
+                </div>
+                <div className="text-sm sm:text-base text-muted-foreground font-semibold mt-1">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-24 md:mb-0"
+          >
+            <motion.button
+              className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl font-bold text-lg sm:text-xl shadow-apple-xl hover:shadow-glow-accent transition-all duration-300 overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const contact = document.getElementById('contact');
+                contact?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                Let's Work Together
+                <Sparkles className="w-5 h-5" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.button>
+
+            <motion.button
+              className="px-8 sm:px-12 py-4 sm:py-5 border-2 border-border hover:border-foreground rounded-2xl font-bold text-lg sm:text-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Download className="w-5 h-5" />
+              Download CV
+            </motion.button>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            onClick={scrollToContent}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:block"
+          >
+            <motion.div
+              className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer group"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <span className="text-sm font-semibold">Scroll to explore</span>
+              <div className="w-12 h-12 rounded-full glass flex items-center justify-center group-hover:glass-strong transition-all">
+                <ArrowDown className="w-5 h-5" />
+              </div>
+            </motion.div>
+          </motion.button>
+        </div>
       </div>
     </section>
   );

@@ -64,21 +64,26 @@ export function SummarySection({ profile, experience }: SummarySectionProps) {
   }, [isInView, totalYears, countedYears]);
 
   return (
-    <section id="summary" ref={ref} className="py-20 px-4 bg-muted/30">
-      <div className="max-w-4xl mx-auto">
+    <section id="summary" ref={ref} className="py-32 px-4 relative overflow-hidden bg-gradient-to-b from-transparent via-accent/5 to-transparent">
+      <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="space-y-6 mb-12"
+          transition={{ duration: 0.7, type: 'spring', stiffness: 100 }}
+          className="space-y-8 mb-16"
         >
           {profile.summary.map((paragraph, index) => (
             <motion.p
               key={paragraph}
-              className="text-lg md:text-xl text-foreground leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-xl md:text-2xl text-foreground/90 leading-relaxed font-light text-center"
+              initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: index * 0.15 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.2,
+                type: 'spring',
+                stiffness: 100
+              }}
             >
               {paragraph}
             </motion.p>
@@ -86,32 +91,35 @@ export function SummarySection({ profile, experience }: SummarySectionProps) {
         </motion.div>
 
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-card border border-border rounded-2xl shadow-lg"
-          initial={{ opacity: 0, x: -40 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          className="relative group"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.6, type: 'spring', stiffness: 100 }}
         >
-          <div className="flex items-center gap-6">
-            <div className="relative">
-              <div className="px-8 py-4 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-2xl font-bold text-4xl shadow-lg">
-                {totalYears > 0 ? (countedYears > 0 ? countedYears : totalYears) : 0}+
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-3xl opacity-20 blur-xl" />
+          <div className="relative flex flex-col sm:flex-row items-center justify-between gap-8 p-10 glass hover:glass-strong rounded-3xl shadow-apple-xl transition-all duration-500">
+            <div className="flex items-center gap-8">
+              <div className="relative">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-3xl blur-2xl opacity-50"
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.7, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <div className="relative px-10 py-6 bg-gradient-to-br from-primary via-accent to-primary rounded-3xl text-white font-extrabold text-5xl shadow-apple-xl">
+                  {totalYears > 0 ? (countedYears > 0 ? countedYears : totalYears) : 0}+
+                </div>
               </div>
-              <motion.div
-                className="absolute inset-0 bg-primary rounded-2xl blur-xl opacity-50"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
+              <div>
+                <span className="text-2xl font-bold text-foreground block mb-1">
+                  Years of Experience
+                </span>
+                <span className="text-sm text-muted-foreground font-medium">Professional Development</span>
+              </div>
             </div>
-            <div>
-              <span className="text-lg font-semibold text-muted-foreground block">
-                Years of Experience
-              </span>
-              <span className="text-sm text-muted-foreground">Professional Development</span>
+            <div className="flex items-center gap-3 glass-subtle px-6 py-4 rounded-2xl shadow-apple">
+              <span className="text-2xl">📍</span>
+              <span className="font-semibold text-lg">{profile.location}</span>
             </div>
-          </div>
-          <div className="flex items-center gap-2 text-muted-foreground px-4 py-2 bg-muted rounded-lg">
-            <span className="text-xl">📍</span>
-            <span className="font-medium">{profile.location}</span>
           </div>
         </motion.div>
       </div>
