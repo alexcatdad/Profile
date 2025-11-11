@@ -49,16 +49,16 @@ export function ExperienceSection({ experience, dictionary }: ExperienceSectionP
           </motion.p>
         </motion.div>
 
-        {/* Timeline */}
+        {/* Infographic Timeline */}
         <div className="relative">
-          {/* Minimal timeline line */}
-          <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />
+          {/* Visual timeline line with gradient */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent to-primary/20 rounded-full" />
 
           <div className="space-y-16">
             {experience.map((exp, index) => (
               <motion.div
                 key={exp.id}
-                className="relative pl-8 sm:pl-12"
+                className="relative pl-12 sm:pl-16"
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{
@@ -66,50 +66,84 @@ export function ExperienceSection({ experience, dictionary }: ExperienceSectionP
                   delay: index * 0.1,
                 }}
               >
-                {/* Timeline dot */}
-                <div className="absolute left-0 top-2 -translate-x-1/2 z-10">
-                  <div className="w-2 h-2 rounded-full bg-foreground ring-4 ring-background" />
-                </div>
+                {/* Animated timeline dot with pulse */}
+                <motion.div
+                  className="absolute left-0 top-2 -translate-x-1/2 z-10"
+                  initial={{ scale: 0 }}
+                  animate={isInView ? { scale: 1 } : {}}
+                  transition={{ delay: index * 0.1 + 0.3, type: "spring" }}
+                >
+                  <div className="relative">
+                    <div className="w-4 h-4 rounded-full bg-primary ring-4 ring-background shadow-lg" />
+                    <div className="absolute inset-0 w-4 h-4 rounded-full bg-primary animate-ping opacity-20" />
+                  </div>
+                </motion.div>
 
-                {/* Content */}
-                <div className="space-y-4 p-8 glass-subtle rounded-2xl shadow-apple">
-                  {/* Header */}
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className="text-2xl sm:text-3xl font-black mb-2">
-                        {exp.position}
-                      </h3>
-                      <p className="text-lg font-bold text-primary mb-3">
-                        {exp.company}
-                      </p>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5" />
-                          <span>{exp.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span>
-                            {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                {/* Content with infographic elements */}
+                <div className="space-y-6 p-8 glass-subtle rounded-2xl shadow-apple border border-border/50 hover:border-primary/30 transition-all duration-300">
+                  {/* Header with infographic elements */}
+                  <div className="space-y-4">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                            {index + 1}
                           </span>
+                          <h3 className="text-2xl sm:text-3xl font-black">
+                            {exp.position}
+                          </h3>
+                        </div>
+                        <p className="text-lg font-bold text-primary mb-3">
+                          {exp.company}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span>{exp.location}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>
+                              {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                            </span>
+                          </div>
                         </div>
                       </div>
+                      {exp.logo && (
+                        <motion.img
+                          src={exp.logo}
+                          alt={`${exp.company} logo`}
+                          className="w-16 h-16 object-contain rounded-xl border border-border p-2 glass-subtle"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                          transition={{ delay: index * 0.1 + 0.4 }}
+                        />
+                      )}
                     </div>
-                    {exp.logo && (
-                      <img
-                        src={exp.logo}
-                        alt={`${exp.company} logo`}
-                        className="w-16 h-16 object-contain rounded-xl border border-border p-2"
+
+                    {/* Visual duration bar */}
+                    <motion.div
+                      className="relative h-2 bg-border/30 rounded-full overflow-hidden"
+                      initial={{ scaleX: 0 }}
+                      animate={isInView ? { scaleX: 1 } : {}}
+                      transition={{ delay: index * 0.1 + 0.5, duration: 0.8 }}
+                      style={{ transformOrigin: 'left' }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary"
+                        initial={{ x: '-100%' }}
+                        animate={isInView ? { x: 0 } : {}}
+                        transition={{ delay: index * 0.1 + 0.6, duration: 1 }}
                       />
-                    )}
+                    </motion.div>
                   </div>
 
-                  {/* Description */}
+                  {/* Description with enhanced bullets */}
                   <ul className="space-y-3 text-base text-muted-foreground">
                     {exp.description.map((desc, descIndex) => (
                       <motion.li
                         key={desc}
-                        className="flex items-start gap-3"
+                        className="flex items-start gap-3 group"
                         initial={{ opacity: 0, x: -10 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{
@@ -117,23 +151,32 @@ export function ExperienceSection({ experience, dictionary }: ExperienceSectionP
                           delay: index * 0.1 + descIndex * 0.05
                         }}
                       >
-                        <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-foreground/40 mt-2" />
+                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-primary/60 mt-2 group-hover:bg-primary group-hover:scale-125 transition-all" />
                         <span className="leading-relaxed">{desc}</span>
                       </motion.li>
                     ))}
                   </ul>
 
-                  {/* Technologies */}
+                  {/* Technologies with visual badges */}
                   {exp.technologies && exp.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-4">
-                      {exp.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 text-xs font-semibold text-foreground/70 border border-border rounded-full hover:border-primary/30 hover:text-foreground transition-colors"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                    <div className="space-y-3 pt-4">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                        <div className="w-1 h-1 rounded-full bg-primary" />
+                        <span>Tech Stack</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.technologies.map((tech, techIdx) => (
+                          <motion.span
+                            key={tech}
+                            className="px-3 py-1.5 text-xs font-semibold text-primary/80 bg-primary/5 border border-primary/20 rounded-full hover:bg-primary/10 hover:border-primary/40 hover:scale-105 transition-all cursor-default shadow-sm"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                            transition={{ delay: index * 0.1 + 0.7 + techIdx * 0.03 }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
