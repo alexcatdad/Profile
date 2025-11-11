@@ -40,7 +40,7 @@ function AnimatedMetric({ metric, index }: { metric: Metric; index: number }) {
       role="article"
       aria-label={`${metric.label}: ${metric.prefix || ''}${metric.value}${metric.suffix || ''}`}
     >
-      <div className="space-y-4">
+      <div className="space-y-4 p-8 glass-subtle rounded-2xl shadow-apple-lg">
         {/* Icon */}
         {metric.icon && (
           <div className="text-3xl" aria-hidden="true">

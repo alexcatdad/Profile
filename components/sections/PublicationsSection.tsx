@@ -92,7 +92,7 @@ export function PublicationsSection({ publications }: PublicationsSectionProps) 
                 delay: index * 0.1,
               }}
             >
-              <div className="space-y-3">
+              <div className="space-y-3 p-6 glass-subtle rounded-2xl shadow-apple">
                 {/* Type badge */}
                 <div className="inline-flex items-center gap-2 px-3 py-1 border border-border rounded-full text-xs font-semibold">
                   {getTypeIcon(publication.type)}

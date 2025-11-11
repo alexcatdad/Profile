@@ -64,7 +64,7 @@ export function AchievementsSection({ achievements }: AchievementsSectionProps) 
           {achievements.map((achievement, index) => (
             <motion.article
               key={achievement.id}
-              className="border-l border-border pl-8 sm:pl-12"
+              className="border-l-2 border-border"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{
@@ -73,7 +73,7 @@ export function AchievementsSection({ achievements }: AchievementsSectionProps) 
               }}
               aria-label={achievement.title}
             >
-              <div className="space-y-3">
+              <div className="space-y-3 ml-8 sm:ml-12 p-6 glass-subtle rounded-2xl shadow-apple">
                 {/* Header */}
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <h3 className="text-2xl font-black text-foreground">

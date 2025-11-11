@@ -64,7 +64,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           {testimonials.map((testimonial, index) => (
             <motion.article
               key={testimonial.id}
-              className="border-l-2 border-border pl-8 sm:pl-12"
+              className="border-l-2 border-border"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{
@@ -73,8 +73,9 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
               }}
               aria-label={`Testimonial from ${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
             >
-              {/* Relationship badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 rounded-full text-xs font-semibold text-primary mb-4">
+              <div className="ml-8 sm:ml-12 p-8 glass-subtle rounded-2xl shadow-apple">
+                {/* Relationship badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 rounded-full text-xs font-semibold text-primary mb-4">
                 {testimonial.relationship}
               </div>
 
@@ -94,6 +95,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                   </div>
                 </div>
               </footer>
+              </div>
             </motion.article>
           ))}
         </div>

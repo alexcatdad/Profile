@@ -71,7 +71,7 @@ export function AwardsSection({ awards }: AwardsSectionProps) {
                 delay: index * 0.1,
               }}
             >
-              <div className="space-y-3">
+              <div className="space-y-3 p-6 glass-subtle rounded-2xl shadow-apple">
                 <h3 className="text-xl font-black text-foreground">
                   {award.url ? (
                     <a

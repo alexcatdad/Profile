@@ -151,7 +151,7 @@ export function SkillsSection({ skills, experience, dictionary }: SkillsSectionP
                           delay: categoryIndex * 0.1 + skillIndex * 0.03,
                         }}
                       >
-                        <div className="space-y-3">
+                        <div className="space-y-3 p-4 glass-subtle rounded-xl shadow-apple">
                           {/* Skill name and metadata */}
                           <div className="flex items-baseline justify-between gap-3">
                             <span className="font-bold text-foreground text-base">

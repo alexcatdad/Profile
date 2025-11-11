@@ -67,12 +67,12 @@ export function ExperienceSection({ experience, dictionary }: ExperienceSectionP
                 }}
               >
                 {/* Timeline dot */}
-                <div className="absolute left-0 top-2 -translate-x-1/2">
+                <div className="absolute left-0 top-2 -translate-x-1/2 z-10">
                   <div className="w-2 h-2 rounded-full bg-foreground ring-4 ring-background" />
                 </div>
 
                 {/* Content */}
-                <div className="space-y-4">
+                <div className="space-y-4 p-8 glass-subtle rounded-2xl shadow-apple">
                   {/* Header */}
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                     <div className="flex-1">

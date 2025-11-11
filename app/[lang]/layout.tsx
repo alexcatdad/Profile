@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../globals.css';
 import { ThemeScript } from '@/components/ThemeScript';
+import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 
 export async function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'nl' }];
@@ -27,7 +28,10 @@ export default async function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="antialiased bg-background text-foreground">{children}</body>
+      <body className="antialiased bg-background text-foreground">
+        <AnimatedBackground />
+        {children}
+      </body>
     </html>
   );
 }

@@ -67,8 +67,8 @@ function ProjectCard({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      {/* Subtle border container */}
-      <div className="relative p-8 sm:p-10 border-l border-border hover:border-primary/50 transition-colors duration-500 h-full">
+      {/* Glassmorphism container with border accent */}
+      <div className="relative p-8 sm:p-10 glass-subtle rounded-2xl border-l-2 border-border hover:border-primary/50 transition-colors duration-500 h-full shadow-apple">
         {/* Hover accent line */}
         <motion.div
           className="absolute left-0 top-0 w-0.5 bg-gradient-to-b from-primary to-accent origin-top"
