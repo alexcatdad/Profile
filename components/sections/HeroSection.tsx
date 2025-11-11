@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowDown, Download, Sparkles } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
 import type { Profile } from '@/types/content';
 
@@ -12,37 +12,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ profile, dictionary }: HeroSectionProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLElement>(null);
-
-  // Mouse parallax effect
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 150 };
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
-
-  // Transform for parallax layers
-  const x1 = useTransform(x, [0, 1], [0, 30]);
-  const y1 = useTransform(y, [0, 1], [0, 30]);
-  const x2 = useTransform(x, [0, 1], [0, 20]);
-  const y2 = useTransform(y, [0, 1], [0, 20]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      mouseX.set(x);
-      mouseY.set(y);
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
 
   const scrollToContent = () => {
     const metricsSection = document.getElementById('metrics');
@@ -60,69 +30,24 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
         background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background) / 0.95) 50%, hsl(var(--background)) 100%)',
       }}
     >
-      {/* Animated gradient mesh background */}
+      {/* Subtle gradient accent */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-1/2 -left-1/2 w-full h-full opacity-30"
-          style={{ x: x1, y: y1 }}
-        >
-          <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-3xl animate-pulse-glow" />
-        </motion.div>
-        <motion.div
-          className="absolute -bottom-1/2 -right-1/2 w-full h-full opacity-20"
-          style={{ x: x2, y: y2 }}
-        >
-          <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-tl from-accent/40 to-primary/40 blur-3xl animate-pulse-glow" />
-        </motion.div>
-
-        {/* Floating orbs */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-64 h-64 rounded-full blur-3xl"
-            style={{
-              background: `radial-gradient(circle, ${
-                i % 2 === 0 ? 'rgba(var(--primary-rgb), 0.15)' : 'rgba(var(--accent-rgb), 0.15)'
-              } 0%, transparent 70%)`,
-              left: `${20 + i * 15}%`,
-              top: `${10 + i * 12}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, 20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
-          }}
-        />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
       {/* Main content */}
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="flex flex-col items-center text-center space-y-8 sm:space-y-12">
-          {/* Sparkle badge */}
+          {/* Sparkle badge - minimal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, type: 'spring', bounce: 0.5 }}
           >
-            <div className="inline-flex items-center gap-2 px-6 py-3 glass-strong rounded-full shadow-apple-xl group hover:shadow-glow transition-all duration-500">
-              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-              <span className="text-sm font-bold gradient-text">Available for Opportunities</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 border border-primary/20 bg-primary/5 rounded-full">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Available for Opportunities</span>
             </div>
           </motion.div>
 
@@ -204,7 +129,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
             </motion.button>
 
             <motion.button
-              className="px-8 sm:px-12 py-4 sm:py-5 glass-strong rounded-2xl font-bold text-lg sm:text-xl shadow-apple hover:shadow-apple-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
+              className="px-8 sm:px-12 py-4 sm:py-5 border-2 border-border hover:border-foreground rounded-2xl font-bold text-lg sm:text-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
