@@ -81,44 +81,53 @@ const styles = StyleSheet.create({
   },
   // Experience
   experienceItem: {
-    marginBottom: 14,
-    paddingLeft: 12,
-    borderLeft: '3pt solid #3B82F6',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 6,
+    borderLeft: '4pt solid #3B82F6',
   },
   experienceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4,
+    alignItems: 'flex-start',
+    marginBottom: 6,
+  },
+  experienceLeft: {
+    flex: 1,
   },
   jobTitle: {
     fontSize: 12,
     fontWeight: 'bold',
     color: '#1a1a1a',
+    marginBottom: 2,
   },
   company: {
-    fontSize: 11,
+    fontSize: 10,
     color: '#3B82F6',
-    marginBottom: 3,
     fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  experienceRight: {
+    alignItems: 'flex-end',
   },
   dates: {
     fontSize: 9,
     color: '#6B7280',
+    marginBottom: 2,
   },
   location: {
     fontSize: 9,
     color: '#6B7280',
-    marginBottom: 4,
   },
   bulletPoints: {
-    marginTop: 4,
+    marginTop: 6,
   },
   bulletPoint: {
     fontSize: 9,
     color: '#374151',
-    marginBottom: 3,
-    paddingLeft: 12,
-    lineHeight: 1.5,
+    marginBottom: 4,
+    lineHeight: 1.6,
   },
   technologies: {
     flexDirection: 'row',
@@ -136,21 +145,23 @@ const styles = StyleSheet.create({
   },
   // Projects
   projectItem: {
-    marginBottom: 12,
-    paddingLeft: 12,
-    borderLeft: '3pt solid #8B5CF6',
+    marginBottom: 14,
+    padding: 12,
+    backgroundColor: '#FAF5FF',
+    borderRadius: 6,
+    borderLeft: '4pt solid #8B5CF6',
   },
   projectName: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   projectDescription: {
     fontSize: 9,
     color: '#4B5563',
-    lineHeight: 1.5,
-    marginBottom: 4,
+    lineHeight: 1.6,
+    marginBottom: 6,
   },
   projectLink: {
     fontSize: 8,
@@ -159,15 +170,17 @@ const styles = StyleSheet.create({
   },
   // Education
   educationItem: {
-    marginBottom: 10,
-    paddingLeft: 12,
-    borderLeft: '2pt solid #10B981',
+    marginBottom: 12,
+    padding: 10,
+    backgroundColor: '#F0FDF4',
+    borderRadius: 6,
+    borderLeft: '4pt solid #10B981',
   },
   degree: {
     fontSize: 11,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 2,
+    marginBottom: 3,
   },
   institution: {
     fontSize: 10,
@@ -207,20 +220,22 @@ const styles = StyleSheet.create({
   },
   // Achievements
   achievementItem: {
-    marginBottom: 10,
-    paddingLeft: 12,
-    borderLeft: '3pt solid #F59E0B',
+    marginBottom: 12,
+    padding: 10,
+    backgroundColor: '#FFFBEB',
+    borderRadius: 6,
+    borderLeft: '4pt solid #F59E0B',
   },
   achievementTitle: {
     fontSize: 11,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 2,
+    marginBottom: 3,
   },
   achievementDescription: {
     fontSize: 9,
     color: '#4B5563',
-    lineHeight: 1.5,
+    lineHeight: 1.6,
   },
   // Footer
   footer: {
@@ -238,19 +253,17 @@ const styles = StyleSheet.create({
   // Stats inline
   statsRow: {
     flexDirection: 'row',
-    gap: 16,
-    marginTop: 4,
-    marginBottom: 8,
+    gap: 8,
   },
   statItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 2,
   },
   statValue: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: 'bold',
-    color: '#3B82F6',
+    color: '#8B5CF6',
   },
   statLabel: {
     fontSize: 8,
@@ -323,24 +336,28 @@ export function ProfilePDF({ content }: ProfilePDFProps) {
 
         {/* Experience */}
         <Text style={styles.sectionTitle}>Professional Experience</Text>
-        {experience.slice(0, 4).map((exp) => (
+        {experience.slice(0, 3).map((exp) => (
           <View key={exp.id} style={styles.experienceItem}>
-            <Text style={styles.jobTitle}>{exp.position}</Text>
-            <Text style={styles.company}>{exp.company}</Text>
             <View style={styles.experienceHeader}>
-              <Text style={styles.location}>{exp.location}</Text>
-              <Text style={styles.dates}>
-                {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-              </Text>
+              <View style={styles.experienceLeft}>
+                <Text style={styles.jobTitle}>{exp.position}</Text>
+                <Text style={styles.company}>{exp.company}</Text>
+              </View>
+              <View style={styles.experienceRight}>
+                <Text style={styles.dates}>
+                  {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                </Text>
+                <Text style={styles.location}>{exp.location}</Text>
+              </View>
             </View>
             <View style={styles.bulletPoints}>
-              {exp.description.slice(0, 3).map((desc, idx) => (
+              {exp.description.slice(0, 2).map((desc, idx) => (
                 <Text key={idx} style={styles.bulletPoint}>• {desc}</Text>
               ))}
             </View>
             {exp.technologies && exp.technologies.length > 0 && (
               <View style={styles.technologies}>
-                {exp.technologies.slice(0, 8).map((tech) => (
+                {exp.technologies.slice(0, 6).map((tech) => (
                   <Text key={tech} style={styles.techTag}>{tech}</Text>
                 ))}
               </View>
@@ -354,29 +371,29 @@ export function ProfilePDF({ content }: ProfilePDFProps) {
       <Page size="A4" style={styles.page}>
         {/* Projects */}
         <Text style={styles.sectionTitle}>Featured Projects</Text>
-        {projects.slice(0, 5).map((project) => (
+        {projects.slice(0, 4).map((project) => (
           <View key={project.id} style={styles.projectItem}>
-            <Text style={styles.projectName}>{project.name}</Text>
-            {(project.stars !== undefined || project.downloads !== undefined) && (
-              <View style={styles.statsRow}>
-                {project.stars !== undefined && (
-                  <View style={styles.statItem}>
-                    <Text style={styles.statValue}>★ {project.stars}</Text>
-                    <Text style={styles.statLabel}>stars</Text>
-                  </View>
-                )}
-                {project.downloads !== undefined && (
-                  <View style={styles.statItem}>
-                    <Text style={styles.statValue}>↓ {project.downloads}</Text>
-                    <Text style={styles.statLabel}>downloads</Text>
-                  </View>
-                )}
-              </View>
-            )}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Text style={styles.projectName}>{project.name}</Text>
+              {(project.stars !== undefined || project.downloads !== undefined) && (
+                <View style={styles.statsRow}>
+                  {project.stars !== undefined && (
+                    <View style={styles.statItem}>
+                      <Text style={styles.statValue}>★ {project.stars}</Text>
+                    </View>
+                  )}
+                  {project.downloads !== undefined && (
+                    <View style={styles.statItem}>
+                      <Text style={styles.statValue}>↓ {project.downloads}</Text>
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
             <Text style={styles.projectDescription}>{project.description}</Text>
             {project.technologies && project.technologies.length > 0 && (
               <View style={styles.technologies}>
-                {project.technologies.slice(0, 8).map((tech) => (
+                {project.technologies.slice(0, 6).map((tech) => (
                   <Text key={tech} style={styles.techTag}>{tech}</Text>
                 ))}
               </View>
@@ -388,7 +405,7 @@ export function ProfilePDF({ content }: ProfilePDFProps) {
         {achievements && achievements.length > 0 && (
           <View>
             <Text style={styles.sectionTitle}>Key Achievements</Text>
-            {achievements.slice(0, 4).map((achievement) => (
+            {achievements.slice(0, 3).map((achievement) => (
               <View key={achievement.id} style={styles.achievementItem}>
                 <Text style={styles.achievementTitle}>{achievement.title}</Text>
                 <Text style={styles.achievementDescription}>{achievement.description}</Text>
