@@ -4,229 +4,257 @@ import type { ContentData } from '@/types/content';
 // Compact, beautiful PDF styles matching the website aesthetic
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    padding: 48,
     fontFamily: 'Helvetica',
-    fontSize: 9,
-    lineHeight: 1.4,
+    fontSize: 10,
+    lineHeight: 1.5,
     color: '#1a1a1a',
     backgroundColor: '#ffffff',
   },
   // Header Section
   header: {
-    marginBottom: 20,
-    paddingBottom: 15,
-    borderBottom: '2pt solid #3B82F6',
+    marginBottom: 24,
+    paddingBottom: 20,
+    borderBottom: '3pt solid #3B82F6',
+    backgroundColor: '#F0F9FF',
+    padding: 20,
+    borderRadius: 8,
   },
   name: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 6,
     color: '#1a1a1a',
-    letterSpacing: -0.8,
+    letterSpacing: -1,
   },
   title: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#3B82F6',
-    marginBottom: 8,
+    marginBottom: 10,
     fontWeight: 'bold',
   },
   contactRow: {
     flexDirection: 'row',
-    gap: 12,
-    fontSize: 8,
-    color: '#666666',
+    gap: 16,
+    fontSize: 9,
+    color: '#6B7280',
     flexWrap: 'wrap',
   },
   contactItem: {
-    marginRight: 8,
+    marginRight: 12,
   },
   // Section Headers
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginTop: 16,
-    marginBottom: 8,
-    paddingBottom: 4,
-    borderBottom: '1pt solid #E5E7EB',
-    letterSpacing: -0.3,
+    marginTop: 20,
+    marginBottom: 10,
+    paddingBottom: 6,
+    borderBottom: '2pt solid #E5E7EB',
+    letterSpacing: -0.5,
+    textTransform: 'uppercase',
   },
   // Summary
   summary: {
-    fontSize: 9,
-    lineHeight: 1.5,
+    fontSize: 10,
+    lineHeight: 1.6,
     color: '#374151',
-    marginBottom: 12,
+    marginBottom: 16,
     textAlign: 'justify',
   },
   // Skills
   skillsContainer: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   skillCategory: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginTop: 6,
-    marginBottom: 3,
+    color: '#3B82F6',
+    marginTop: 8,
+    marginBottom: 4,
   },
   skillsList: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#4B5563',
-    lineHeight: 1.4,
+    lineHeight: 1.5,
   },
   // Experience
   experienceItem: {
-    marginBottom: 12,
+    marginBottom: 14,
+    paddingLeft: 12,
+    borderLeft: '3pt solid #3B82F6',
   },
   experienceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   jobTitle: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#1a1a1a',
   },
   company: {
-    fontSize: 10,
+    fontSize: 11,
     color: '#3B82F6',
-    marginBottom: 2,
+    marginBottom: 3,
     fontWeight: 'bold',
   },
   dates: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#6B7280',
   },
   location: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#6B7280',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   bulletPoints: {
-    marginTop: 3,
+    marginTop: 4,
   },
   bulletPoint: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#374151',
-    marginBottom: 2,
-    paddingLeft: 10,
-    lineHeight: 1.4,
+    marginBottom: 3,
+    paddingLeft: 12,
+    lineHeight: 1.5,
   },
   technologies: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
-    marginTop: 4,
+    gap: 5,
+    marginTop: 6,
   },
   techTag: {
     fontSize: 7,
     color: '#3B82F6',
     backgroundColor: '#EFF6FF',
-    padding: '2 6',
-    borderRadius: 3,
+    padding: '3 8',
+    borderRadius: 4,
+    border: '1pt solid #BFDBFE',
   },
   // Projects
   projectItem: {
-    marginBottom: 10,
+    marginBottom: 12,
+    paddingLeft: 12,
+    borderLeft: '3pt solid #8B5CF6',
   },
   projectName: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 2,
-  },
-  projectDescription: {
-    fontSize: 8,
-    color: '#4B5563',
-    lineHeight: 1.4,
     marginBottom: 3,
   },
+  projectDescription: {
+    fontSize: 9,
+    color: '#4B5563',
+    lineHeight: 1.5,
+    marginBottom: 4,
+  },
   projectLink: {
-    fontSize: 7,
+    fontSize: 8,
     color: '#3B82F6',
     textDecoration: 'none',
   },
   // Education
   educationItem: {
-    marginBottom: 8,
+    marginBottom: 10,
+    paddingLeft: 12,
+    borderLeft: '2pt solid #10B981',
   },
   degree: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 'bold',
     color: '#1a1a1a',
     marginBottom: 2,
   },
   institution: {
-    fontSize: 9,
-    color: '#3B82F6',
-    marginBottom: 1,
+    fontSize: 10,
+    color: '#10B981',
+    marginBottom: 2,
+    fontWeight: 'bold',
   },
   educationDate: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#6B7280',
   },
   // Metrics
   metricsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 16,
     gap: 12,
   },
   metricBox: {
     flex: 1,
     alignItems: 'center',
-    padding: 8,
-    backgroundColor: '#F9FAFB',
-    borderRadius: 4,
+    padding: 12,
+    backgroundColor: '#F0F9FF',
+    borderRadius: 6,
+    border: '1pt solid #BFDBFE',
   },
   metricValue: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#3B82F6',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   metricLabel: {
-    fontSize: 7,
+    fontSize: 8,
     color: '#6B7280',
     textAlign: 'center',
   },
   // Achievements
   achievementItem: {
-    marginBottom: 8,
+    marginBottom: 10,
+    paddingLeft: 12,
+    borderLeft: '3pt solid #F59E0B',
   },
   achievementTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 'bold',
     color: '#1a1a1a',
     marginBottom: 2,
   },
   achievementDescription: {
-    fontSize: 8,
+    fontSize: 9,
     color: '#4B5563',
-    lineHeight: 1.4,
+    lineHeight: 1.5,
   },
   // Footer
   footer: {
     position: 'absolute',
     bottom: 30,
-    left: 40,
-    right: 40,
+    left: 48,
+    right: 48,
     borderTop: '1pt solid #E5E7EB',
-    paddingTop: 8,
-    fontSize: 7,
+    paddingTop: 10,
+    fontSize: 8,
     color: '#9CA3AF',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  // Two column layout
-  twoColumn: {
+  // Stats inline
+  statsRow: {
     flexDirection: 'row',
-    gap: 20,
+    gap: 16,
+    marginTop: 4,
+    marginBottom: 8,
   },
-  column: {
-    flex: 1,
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  statValue: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#3B82F6',
+  },
+  statLabel: {
+    fontSize: 8,
+    color: '#6B7280',
   },
 });
 
@@ -329,15 +357,26 @@ export function ProfilePDF({ content }: ProfilePDFProps) {
         {projects.slice(0, 5).map((project) => (
           <View key={project.id} style={styles.projectItem}>
             <Text style={styles.projectName}>{project.name}</Text>
-            <Text style={styles.projectDescription}>{project.description}</Text>
-            {project.githubUrl && (
-              <Link src={project.githubUrl} style={styles.projectLink}>
-                {project.githubUrl}
-              </Link>
+            {(project.stars !== undefined || project.downloads !== undefined) && (
+              <View style={styles.statsRow}>
+                {project.stars !== undefined && (
+                  <View style={styles.statItem}>
+                    <Text style={styles.statValue}>★ {project.stars}</Text>
+                    <Text style={styles.statLabel}>stars</Text>
+                  </View>
+                )}
+                {project.downloads !== undefined && (
+                  <View style={styles.statItem}>
+                    <Text style={styles.statValue}>↓ {project.downloads}</Text>
+                    <Text style={styles.statLabel}>downloads</Text>
+                  </View>
+                )}
+              </View>
             )}
+            <Text style={styles.projectDescription}>{project.description}</Text>
             {project.technologies && project.technologies.length > 0 && (
               <View style={styles.technologies}>
-                {project.technologies.slice(0, 6).map((tech) => (
+                {project.technologies.slice(0, 8).map((tech) => (
                   <Text key={tech} style={styles.techTag}>{tech}</Text>
                 ))}
               </View>
@@ -359,23 +398,28 @@ export function ProfilePDF({ content }: ProfilePDFProps) {
         )}
 
         {/* Education */}
-        <Text style={styles.sectionTitle}>Education & Certifications</Text>
+        <Text style={styles.sectionTitle}>Education</Text>
         {education.map((edu) => (
           <View key={edu.id} style={styles.educationItem}>
-            <Text style={styles.degree}>{edu.degree}</Text>
+            <Text style={styles.degree}>{edu.degree} - {edu.field}</Text>
             <Text style={styles.institution}>{edu.institution}</Text>
             <Text style={styles.educationDate}>
-              {edu.startDate} - {edu.endDate}
+              {edu.startDate} - {edu.current ? 'Present' : edu.endDate}
             </Text>
           </View>
         ))}
-        {certifications && certifications.length > 0 && certifications.slice(0, 4).map((cert) => (
-          <View key={cert.id} style={styles.educationItem}>
-            <Text style={styles.degree}>{cert.name}</Text>
-            <Text style={styles.institution}>{cert.issuer}</Text>
-            <Text style={styles.educationDate}>{cert.issueDate}</Text>
+        {certifications && certifications.length > 0 && (
+          <View>
+            <Text style={styles.sectionTitle}>Certifications</Text>
+            {certifications.slice(0, 4).map((cert) => (
+              <View key={cert.id} style={styles.educationItem}>
+                <Text style={styles.degree}>{cert.name}</Text>
+                <Text style={styles.institution}>{cert.issuer}</Text>
+                <Text style={styles.educationDate}>{cert.issueDate}</Text>
+              </View>
+            ))}
           </View>
-        ))}
+        )}
 
         {/* Footer */}
         <View style={styles.footer}>
