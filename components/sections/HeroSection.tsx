@@ -223,7 +223,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
           transition={{ delay: 1.2 }}
         >
           <motion.button
-            {...scrollToContentButtonProps}
+            {...(scrollToContentButtonProps as any)}
             ref={scrollToContentButtonRef}
             className="w-12 h-12 rounded-full glass hover:glass-strong transition-all duration-300 shadow-apple hover:shadow-apple-lg flex items-center justify-center group mx-auto"
             whileHover={{ scale: 1.1 }}

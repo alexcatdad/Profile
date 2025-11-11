@@ -297,7 +297,7 @@ export function AccessModal({
                           </div>
 
                           <motion.button
-                            {...submitButtonProps}
+                            {...(submitButtonProps as any)}
                             ref={submitButtonRef}
                             type="submit"
                             className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-bold py-3.5 sm:py-4 px-6 rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-apple-lg hover:shadow-apple-xl text-sm sm:text-base"

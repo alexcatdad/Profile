@@ -141,7 +141,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
             <div className="hidden lg:flex items-center gap-3">
               <ThemeToggle />
               <motion.button
-                {...downloadCoverLetterButtonProps}
+                {...(downloadCoverLetterButtonProps as any)}
                 ref={downloadCoverLetterButtonRef}
                 className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary"
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -150,7 +150,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 {dictionary.navigation.downloadCoverLetter}
               </motion.button>
               <motion.button
-                {...downloadCVButtonProps}
+                {...(downloadCVButtonProps as any)}
                 ref={downloadCVButtonRef}
                 className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl"
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -212,7 +212,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 <ThemeToggle />
               </div>
               <motion.button
-                {...downloadCoverLetterButtonProps}
+                {...(downloadCoverLetterButtonProps as any)}
                 ref={downloadCoverLetterButtonRef}
                 className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-left shadow-apple"
                 whileTap={{ scale: 0.98 }}
@@ -220,7 +220,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 {dictionary.navigation.downloadCoverLetter}
               </motion.button>
               <motion.button
-                {...downloadCVButtonProps}
+                {...(downloadCVButtonProps as any)}
                 ref={downloadCVButtonRef}
                 className="w-full px-5 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-2xl transition-all duration-300 font-semibold shadow-apple-lg"
                 whileTap={{ scale: 0.98 }}
