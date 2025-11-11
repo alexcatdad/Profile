@@ -2,18 +2,73 @@
   {
     "id": "exp-1",
     "company": "Tech Corp",
-    "position": "Senior Full Stack Developer",
+    "position": "Senior Full Stack Developer & Tech Lead",
     "location": "San Francisco, CA",
     "startDate": "2021-01",
     "endDate": null,
     "current": true,
     "description": [
-      "Led development of customer-facing web applications serving 1M+ users",
-      "Architected microservices infrastructure reducing API response time by 40%",
-      "Mentored junior developers and established coding standards and best practices"
+      "Lead a team of 8 engineers in developing and scaling customer-facing web applications serving 1.5M+ active users with 99.9% uptime",
+      "Architect and implement microservices infrastructure using Node.js, TypeScript, and AWS, reducing API response time by 45% and increasing system throughput by 60%",
+      "Spearhead adoption of modern development practices including CI/CD pipelines, automated testing (95% code coverage), and infrastructure as code",
+      "Mentor junior developers through code reviews, pair programming sessions, and technical workshops, resulting in 40% faster onboarding time",
+      "Collaborate with product, design, and stakeholders to define technical roadmap and deliver features that increased user engagement by 35%",
+      "Established coding standards, best practices, and documentation that improved team velocity by 25%"
     ],
-    "technologies": ["TypeScript", "React", "Node.js", "PostgreSQL", "AWS"],
-    "logo": "/images/tech-corp.png"
+    "technologies": [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "NestJS",
+      "PostgreSQL",
+      "Redis",
+      "AWS",
+      "Docker",
+      "Kubernetes",
+      "GraphQL"
+    ],
+    "logo": "/images/tech-corp.png",
+    "teamSize": 8,
+    "companyWebsite": "https://techcorp.example.com",
+    "achievements": [
+      {
+        "id": "ach-exp1-1",
+        "title": "Reduced API Response Time",
+        "description": "Optimized microservices architecture and implemented caching strategies",
+        "metric": {
+          "value": "45%",
+          "label": "faster"
+        }
+      },
+      {
+        "id": "ach-exp1-2",
+        "title": "Scaled to 1.5M+ Users",
+        "description": "Led infrastructure improvements to handle exponential user growth",
+        "metric": {
+          "value": "1.5M+",
+          "label": "active users"
+        }
+      },
+      {
+        "id": "ach-exp1-3",
+        "title": "Team Velocity Improvement",
+        "description": "Implemented best practices and improved development workflows",
+        "metric": {
+          "value": "25%",
+          "label": "faster delivery"
+        }
+      },
+      {
+        "id": "ach-exp1-4",
+        "title": "High Test Coverage",
+        "description": "Established testing culture and automated testing suite",
+        "metric": {
+          "value": "95%",
+          "label": "code coverage"
+        }
+      }
+    ]
   },
   {
     "id": "exp-2",
@@ -24,10 +79,138 @@
     "endDate": "2020-12",
     "current": false,
     "description": [
-      "Built MVP from scratch using React and Node.js",
-      "Implemented real-time features using WebSockets",
-      "Collaborated with design team to create intuitive user interfaces"
+      "Built MVP from scratch using React, Node.js, and MongoDB, enabling company to secure $2M Series A funding",
+      "Implemented real-time collaboration features using WebSockets, supporting 10,000+ concurrent users",
+      "Developed responsive UI components with React that improved mobile conversion rates by 28%",
+      "Collaborated with design team to create intuitive user interfaces, resulting in 4.7/5.0 user satisfaction rating",
+      "Integrated third-party APIs (Stripe, SendGrid, Twilio) for payments, email, and SMS functionality",
+      "Optimized database queries and indexes, reducing page load times by 40%"
     ],
-    "technologies": ["JavaScript", "React", "Node.js", "MongoDB", "Socket.io"]
+    "technologies": [
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Socket.io",
+      "Redis",
+      "AWS",
+      "Docker"
+    ],
+    "teamSize": 4,
+    "achievements": [
+      {
+        "id": "ach-exp2-1",
+        "title": "Secured Series A Funding",
+        "description": "Built MVP that demonstrated product-market fit",
+        "metric": {
+          "value": "$2M",
+          "label": "funding raised"
+        }
+      },
+      {
+        "id": "ach-exp2-2",
+        "title": "Real-time Scalability",
+        "description": "Implemented WebSocket infrastructure for concurrent users",
+        "metric": {
+          "value": "10K+",
+          "label": "concurrent users"
+        }
+      },
+      {
+        "id": "ach-exp2-3",
+        "title": "Mobile Conversion Boost",
+        "description": "Optimized responsive design and user experience",
+        "metric": {
+          "value": "28%",
+          "label": "increase"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-3",
+    "company": "Digital Solutions Inc",
+    "position": "Frontend Developer",
+    "location": "New York, NY",
+    "startDate": "2018-06",
+    "endDate": "2019-05",
+    "current": false,
+    "description": [
+      "Developed and maintained client-facing web applications for enterprise customers in finance and healthcare sectors",
+      "Built reusable React component library used across 5+ projects, reducing development time by 30%",
+      "Implemented comprehensive unit and integration tests using Jest and Testing Library",
+      "Worked closely with UX designers to implement pixel-perfect responsive designs",
+      "Participated in Agile ceremonies and contributed to sprint planning and retrospectives",
+      "Improved application performance through code splitting and lazy loading, achieving 85+ Lighthouse scores"
+    ],
+    "technologies": [
+      "JavaScript",
+      "React",
+      "Redux",
+      "CSS3",
+      "Sass",
+      "Webpack",
+      "Jest",
+      "REST APIs"
+    ],
+    "teamSize": 6,
+    "achievements": [
+      {
+        "id": "ach-exp3-1",
+        "title": "Reusable Component Library",
+        "description": "Created shared library accelerating development",
+        "metric": {
+          "value": "30%",
+          "label": "time saved"
+        }
+      },
+      {
+        "id": "ach-exp3-2",
+        "title": "Performance Excellence",
+        "description": "Optimized applications for top performance scores",
+        "metric": {
+          "value": "85+",
+          "label": "Lighthouse score"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-4",
+    "company": "Web Agency Pro",
+    "position": "Junior Web Developer",
+    "location": "San Francisco, CA",
+    "startDate": "2017-08",
+    "endDate": "2018-05",
+    "current": false,
+    "description": [
+      "Developed responsive websites and landing pages for small to medium-sized businesses",
+      "Converted design mockups into functional, cross-browser compatible web pages",
+      "Implemented SEO best practices resulting in 50%+ increase in organic traffic for clients",
+      "Maintained and updated existing client websites with new features and content",
+      "Collaborated with designers and project managers to deliver projects on time and within budget"
+    ],
+    "technologies": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "jQuery",
+      "WordPress",
+      "PHP",
+      "MySQL"
+    ],
+    "teamSize": 3,
+    "achievements": [
+      {
+        "id": "ach-exp4-1",
+        "title": "SEO Improvement",
+        "description": "Implemented SEO optimizations for client websites",
+        "metric": {
+          "value": "50%+",
+          "label": "traffic increase"
+        }
+      }
+    ]
   }
 ]

@@ -35,6 +35,24 @@ const SkillSchema = z.object({
   name: z.string(),
   category: z.string(),
   level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional(),
+  yearsOfExperience: z.number().optional(),
+  proficiency: z.number().min(0).max(100).optional(),
+  lastUsed: z.string().optional(),
+  highlighted: z.boolean().optional(),
+});
+
+const AchievementSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  metric: z
+    .object({
+      value: z.union([z.string(), z.number()]),
+      label: z.string(),
+    })
+    .optional(),
+  date: z.string().optional(),
+  icon: z.string().optional(),
 });
 
 const WorkExperienceSchema = z.object({
@@ -48,6 +66,9 @@ const WorkExperienceSchema = z.object({
   description: z.array(z.string()),
   technologies: z.array(z.string()),
   logo: z.string().optional(),
+  achievements: z.array(AchievementSchema).optional(),
+  teamSize: z.number().optional(),
+  companyWebsite: z.string().optional(),
 });
 
 const ProjectSchema = z.object({
@@ -118,6 +139,51 @@ const CoverLetterTemplateSchema = z.object({
   }),
 });
 
+const TestimonialSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  position: z.string(),
+  company: z.string(),
+  relationship: z.string(),
+  text: z.string(),
+  avatar: z.string().optional(),
+  linkedinUrl: z.string().url().optional(),
+  date: z.string().optional(),
+});
+
+const AwardSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  issuer: z.string(),
+  date: z.string(),
+  description: z.string().optional(),
+  icon: z.string().optional(),
+  url: z.string().url().optional(),
+});
+
+const PublicationSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  type: z.enum(['article', 'talk', 'podcast', 'video', 'book']),
+  publisher: z.string(),
+  date: z.string(),
+  url: z.string().url().optional(),
+  description: z.string().optional(),
+  views: z.number().optional(),
+  likes: z.number().optional(),
+});
+
+const MetricSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  value: z.union([z.string(), z.number()]),
+  suffix: z.string().optional(),
+  prefix: z.string().optional(),
+  description: z.string().optional(),
+  icon: z.string().optional(),
+  trend: z.enum(['up', 'down', 'neutral']).optional(),
+});
+
 const ContentDataSchema = z.object({
   profile: ProfileSchema,
   skills: z.array(SkillSchema),
@@ -126,6 +192,11 @@ const ContentDataSchema = z.object({
   education: z.array(EducationSchema),
   certifications: z.array(CertificationSchema),
   coverLetterTemplate: CoverLetterTemplateSchema,
+  achievements: z.array(AchievementSchema).optional(),
+  testimonials: z.array(TestimonialSchema).optional(),
+  awards: z.array(AwardSchema).optional(),
+  publications: z.array(PublicationSchema).optional(),
+  metrics: z.array(MetricSchema).optional(),
 });
 
 export async function loadContent(): Promise<ContentData> {
@@ -138,17 +209,59 @@ export async function loadContent(): Promise<ContentData> {
     const certificationsData = await import('@/data/certifications.json');
     const coverLetterData = await import('@/data/cover-letter-template.json');
 
-    const content: ContentData = {
-      profile: profileData.default as Profile,
-      skills: skillsData.default as Skill[],
-      experience: experienceData.default as WorkExperience[],
-      projects: projectsData.default as Project[],
-      education: educationData.default as Education[],
-      certifications: certificationsData.default as Certification[],
-      coverLetterTemplate: coverLetterData.default as CoverLetterTemplate,
+    // Load optional new sections
+    let achievementsData;
+    let testimonialsData;
+    let awardsData;
+    let publicationsData;
+    let metricsData;
+
+    try {
+      achievementsData = await import('@/data/achievements.json');
+    } catch {
+      achievementsData = null;
+    }
+
+    try {
+      testimonialsData = await import('@/data/testimonials.json');
+    } catch {
+      testimonialsData = null;
+    }
+
+    try {
+      awardsData = await import('@/data/awards.json');
+    } catch {
+      awardsData = null;
+    }
+
+    try {
+      publicationsData = await import('@/data/publications.json');
+    } catch {
+      publicationsData = null;
+    }
+
+    try {
+      metricsData = await import('@/data/metrics.json');
+    } catch {
+      metricsData = null;
+    }
+
+    const content = {
+      profile: profileData.default,
+      skills: skillsData.default,
+      experience: experienceData.default,
+      projects: projectsData.default,
+      education: educationData.default,
+      certifications: certificationsData.default,
+      coverLetterTemplate: coverLetterData.default,
+      ...(achievementsData && { achievements: achievementsData.default }),
+      ...(testimonialsData && { testimonials: testimonialsData.default }),
+      ...(awardsData && { awards: awardsData.default }),
+      ...(publicationsData && { publications: publicationsData.default }),
+      ...(metricsData && { metrics: metricsData.default }),
     };
 
-    // Runtime validation
+    // Runtime validation - Zod will handle type coercion and validation
     const validated = ContentDataSchema.parse(content);
     return validated;
   } catch (error) {
