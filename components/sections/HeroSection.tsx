@@ -134,7 +134,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none">
-              <span className="block gradient-text-hero text-3d">{firstName}</span>
+              <span className="block gradient-text-hero">{firstName}</span>
               <span className="block text-foreground mt-2">{lastName}</span>
             </h1>
 

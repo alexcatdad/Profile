@@ -147,7 +147,7 @@ function AnimatedMetric({ metric, index }: { metric: Metric; index: number }) {
               )}
               <motion.span
                 ref={countRef as any}
-                className="text-6xl sm:text-7xl font-black gradient-text-hero text-3d"
+                className="text-6xl sm:text-7xl font-black gradient-text-hero"
                 animate={
                   isInView
                     ? {
@@ -299,7 +299,7 @@ export function MetricsSection({ metrics }: MetricsSectionProps) {
             id="metrics-heading"
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none"
           >
-            <span className="block gradient-text-hero text-3d">Impact & Results</span>
+            <span className="block gradient-text-hero">Impact & Results</span>
           </h2>
 
           <motion.p

@@ -377,7 +377,7 @@ export function SkillsSection({ skills, experience, dictionary }: SkillsSectionP
           </motion.div>
 
           <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
-            <span className="block gradient-text-hero text-3d">{dictionary.navigation.skills}</span>
+            <span className="block gradient-text-hero">{dictionary.navigation.skills}</span>
           </h2>
 
           <motion.p

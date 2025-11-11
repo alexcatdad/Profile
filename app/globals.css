@@ -47,15 +47,27 @@
   }
 
   .gradient-text-hero {
-    @apply bg-clip-text text-transparent;
+    /* Fallback for better readability */
+    color: hsl(var(--foreground));
     background: linear-gradient(
       135deg,
-      theme('colors.primary') 0%,
-      theme('colors.accent') 50%,
-      theme('colors.primary') 100%
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--primary)) 100%
     );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     background-size: 200% 200%;
-    animation: gradient-shift 4s ease infinite;
+  }
+
+  /* Fallback for browsers that don't support background-clip: text */
+  @supports not (background-clip: text) {
+    .gradient-text-hero {
+      color: hsl(var(--primary));
+      background: none;
+      -webkit-text-fill-color: unset;
+    }
   }
 
   /* 3D Text depth */
