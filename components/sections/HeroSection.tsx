@@ -110,7 +110,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-24 md:mb-0"
           >
             <motion.button
               className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl font-bold text-lg sm:text-xl shadow-apple-xl hover:shadow-glow-accent transition-all duration-300 overflow-hidden"
