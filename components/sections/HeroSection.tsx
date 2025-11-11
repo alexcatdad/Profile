@@ -24,6 +24,7 @@ export function HeroSection({ profile, dictionary }: HeroSectionProps) {
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
       style={{
