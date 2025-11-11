@@ -6,46 +6,46 @@ import { useEffect, useState } from 'react';
 interface SectionTheme {
   primaryColor: string;
   secondaryColor: string;
-  shapeType: 'circles' | 'hexagons' | 'waves' | 'particles' | 'geometric';
-  intensity: number;
+  accentColor: string;
+  shapeType: 'grid' | 'hexagons' | 'triangles' | 'diamonds' | 'polygons';
 }
 
 const sectionThemes: Record<string, SectionTheme> = {
   hero: {
-    primaryColor: 'rgba(59, 130, 246, 0.7)', // primary blue - BOOSTED
-    secondaryColor: 'rgba(139, 92, 246, 0.7)', // accent purple - BOOSTED
-    shapeType: 'circles',
-    intensity: 1.5,
+    primaryColor: '#3B82F6',
+    secondaryColor: '#8B5CF6',
+    accentColor: '#06B6D4',
+    shapeType: 'grid',
   },
   metrics: {
-    primaryColor: 'rgba(59, 130, 246, 0.75)',
-    secondaryColor: 'rgba(16, 185, 129, 0.7)', // green - BOOSTED
-    shapeType: 'geometric',
-    intensity: 1.6,
+    primaryColor: '#3B82F6',
+    secondaryColor: '#10B981',
+    accentColor: '#14B8A6',
+    shapeType: 'diamonds',
   },
   experience: {
-    primaryColor: 'rgba(139, 92, 246, 0.7)',
-    secondaryColor: 'rgba(236, 72, 153, 0.65)', // pink - BOOSTED
-    shapeType: 'waves',
-    intensity: 1.4,
+    primaryColor: '#8B5CF6',
+    secondaryColor: '#EC4899',
+    accentColor: '#A855F7',
+    shapeType: 'triangles',
   },
   projects: {
-    primaryColor: 'rgba(59, 130, 246, 0.75)',
-    secondaryColor: 'rgba(245, 158, 11, 0.65)', // orange - BOOSTED
+    primaryColor: '#3B82F6',
+    secondaryColor: '#F59E0B',
+    accentColor: '#EF4444',
     shapeType: 'hexagons',
-    intensity: 1.5,
   },
   skills: {
-    primaryColor: 'rgba(16, 185, 129, 0.7)',
-    secondaryColor: 'rgba(59, 130, 246, 0.7)',
-    shapeType: 'particles',
-    intensity: 1.5,
+    primaryColor: '#10B981',
+    secondaryColor: '#3B82F6',
+    accentColor: '#8B5CF6',
+    shapeType: 'polygons',
   },
   default: {
-    primaryColor: 'rgba(59, 130, 246, 0.6)',
-    secondaryColor: 'rgba(139, 92, 246, 0.6)',
-    shapeType: 'circles',
-    intensity: 1.3,
+    primaryColor: '#3B82F6',
+    secondaryColor: '#8B5CF6',
+    accentColor: '#06B6D4',
+    shapeType: 'grid',
   },
 };
 
@@ -119,322 +119,280 @@ export function AnimatedBackground() {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* SVG Animated Shapes Layer */}
+      {/* Animated geometric grid pattern */}
       <svg
         className="absolute inset-0 w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Gradient definitions */}
           <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 1 }}>
-              <animate attributeName="stop-color" values={`${currentTheme.primaryColor};${currentTheme.secondaryColor};${currentTheme.primaryColor}`} dur="8s" repeatCount="indefinite" />
-            </stop>
-            <stop offset="100%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 1 }}>
-              <animate attributeName="stop-color" values={`${currentTheme.secondaryColor};${currentTheme.primaryColor};${currentTheme.secondaryColor}`} dur="8s" repeatCount="indefinite" />
-            </stop>
+            <stop offset="0%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 0.15 }} />
+            <stop offset="100%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 0.15 }} />
           </linearGradient>
-
-          <radialGradient id="radial1">
-            <stop offset="0%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 0 }} />
-          </radialGradient>
-
-          <radialGradient id="radial2">
-            <stop offset="0%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 0 }} />
-          </radialGradient>
-
-          {/* Enhanced blur filter for more glow */}
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="80" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
+          <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 0.15 }} />
+            <stop offset="100%" style={{ stopColor: currentTheme.accentColor, stopOpacity: 0.15 }} />
+          </linearGradient>
+          <linearGradient id="grad3" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" style={{ stopColor: currentTheme.accentColor, stopOpacity: 0.15 }} />
+            <stop offset="100%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 0.15 }} />
+          </linearGradient>
         </defs>
 
-        {/* Dynamic geometric shapes based on section */}
-        {currentTheme.shapeType === 'circles' && (
-          <>
-            <circle
-              cx="20%"
-              cy="20%"
-              r="150"
-              fill="url(#radial1)"
-              filter="url(#glow)"
-              opacity="0.95"
-            >
-              <animate attributeName="r" values="150;250;150" dur="8s" repeatCount="indefinite" />
-              <animate attributeName="cy" values="20%;25%;20%" dur="10s" repeatCount="indefinite" />
-            </circle>
-
-            <circle
-              cx="80%"
-              cy="40%"
-              r="200"
-              fill="url(#radial2)"
-              filter="url(#glow)"
-              opacity="0.9"
-            >
-              <animate attributeName="r" values="200;300;200" dur="10s" repeatCount="indefinite" />
-              <animate attributeName="cx" values="80%;75%;80%" dur="12s" repeatCount="indefinite" />
-            </circle>
-
-            <circle
-              cx="50%"
-              cy="70%"
-              r="180"
-              fill="url(#radial1)"
-              filter="url(#glow)"
-              opacity="0.85"
-            >
-              <animate attributeName="r" values="180;280;180" dur="12s" repeatCount="indefinite" />
-              <animate attributeName="cy" values="70%;65%;70%" dur="14s" repeatCount="indefinite" />
-            </circle>
-          </>
-        )}
-
-        {currentTheme.shapeType === 'hexagons' && (
-          <>
-            <path
-              d="M 300 200 L 400 250 L 400 350 L 300 400 L 200 350 L 200 250 Z"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.9"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 300 300"
-                to="360 300 300"
-                dur="20s"
-                repeatCount="indefinite"
-              />
-              <animate attributeName="opacity" values="0.75;1;0.75" dur="6s" repeatCount="indefinite" />
-            </path>
-
-            <path
-              d="M 900 400 L 1000 450 L 1000 550 L 900 600 L 800 550 L 800 450 Z"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.85"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="360 900 500"
-                to="0 900 500"
-                dur="25s"
-                repeatCount="indefinite"
-              />
-              <animate attributeName="opacity" values="0.7;0.95;0.7" dur="8s" repeatCount="indefinite" />
-            </path>
-          </>
-        )}
-
-        {currentTheme.shapeType === 'waves' && (
-          <>
-            <path
-              d="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.8"
-            >
-              <animate
-                attributeName="d"
-                values="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z;
-                        M 0 400 Q 400 500 800 400 T 1600 400 L 1600 800 L 0 800 Z;
-                        M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z"
-                dur="8s"
-                repeatCount="indefinite"
-              />
-            </path>
-
-            <path
-              d="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.7"
-            >
-              <animate
-                attributeName="d"
-                values="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z;
-                        M 0 300 Q 400 400 800 300 T 1600 300 L 1600 700 L 0 700 Z;
-                        M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z"
-                dur="12s"
-                repeatCount="indefinite"
-              />
-            </path>
-          </>
-        )}
-
-        {currentTheme.shapeType === 'geometric' && (
-          <>
-            <polygon
-              points="200,100 300,200 200,300 100,200"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.85"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 200 200"
-                to="360 200 200"
-                dur="15s"
-                repeatCount="indefinite"
-              />
-              <animate attributeName="opacity" values="0.7;0.95;0.7" dur="5s" repeatCount="indefinite" />
-            </polygon>
-
-            <rect
-              x="700"
-              y="400"
-              width="200"
-              height="200"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.8"
-              rx="20"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 800 500"
-                to="-360 800 500"
-                dur="20s"
-                repeatCount="indefinite"
-              />
-              <animate attributeName="opacity" values="0.65;0.9;0.65" dur="7s" repeatCount="indefinite" />
-            </rect>
-
-            <polygon
-              points="1200,600 1300,650 1250,750 1150,750 1100,650"
-              fill="url(#grad1)"
-              filter="url(#glow)"
-              opacity="0.75"
-            >
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="360 1200 700"
-                to="0 1200 700"
-                dur="18s"
-                repeatCount="indefinite"
-              />
-              <animate attributeName="opacity" values="0.6;0.85;0.6" dur="6s" repeatCount="indefinite" />
-            </polygon>
-          </>
-        )}
-
-        {currentTheme.shapeType === 'particles' && (
-          <>
-            {[...Array(30)].map((_, i) => (
-              <circle
-                key={i}
-                cx={`${(i * 7) % 100}%`}
-                cy={`${(i * 11) % 100}%`}
-                r={Math.random() * 5 + 3}
-                fill={i % 2 === 0 ? currentTheme.primaryColor : currentTheme.secondaryColor}
-                opacity="0.9"
-              >
-                <animate
-                  attributeName="cy"
-                  values={`${(i * 11) % 100}%;${((i * 11) + 20) % 100}%;${(i * 11) % 100}%`}
-                  dur={`${10 + Math.random() * 10}s`}
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  values="0.7;1;0.7"
-                  dur={`${3 + Math.random() * 3}s`}
-                  repeatCount="indefinite"
-                />
-              </circle>
+        {/* Grid pattern */}
+        {currentTheme.shapeType === 'grid' && (
+          <g>
+            {[...Array(12)].map((_, i) => (
+              <g key={i}>
+                <rect
+                  x={`${(i * 15) % 100}%`}
+                  y={`${(i * 8) % 80}%`}
+                  width="120"
+                  height="120"
+                  fill="none"
+                  stroke="url(#grad1)"
+                  strokeWidth="2"
+                  opacity="0.6"
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from={`0 ${(i * 15) % 100 + 60} ${(i * 8) % 80 + 60}`}
+                    to={`360 ${(i * 15) % 100 + 60} ${(i * 8) % 80 + 60}`}
+                    dur={`${20 + i * 2}s`}
+                    repeatCount="indefinite"
+                  />
+                  <animate attributeName="opacity" values="0.4;0.8;0.4" dur={`${4 + i}s`} repeatCount="indefinite" />
+                </rect>
+                <circle
+                  cx={`${(i * 15) % 100 + 5}%`}
+                  cy={`${(i * 8) % 80 + 5}%`}
+                  r="40"
+                  fill="none"
+                  stroke="url(#grad2)"
+                  strokeWidth="2"
+                  opacity="0.5"
+                >
+                  <animate attributeName="r" values="40;60;40" dur={`${8 + i}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.3;0.7;0.3" dur={`${5 + i}s`} repeatCount="indefinite" />
+                </circle>
+              </g>
             ))}
-          </>
+          </g>
+        )}
+
+        {/* Hexagon pattern */}
+        {currentTheme.shapeType === 'hexagons' && (
+          <g>
+            {[...Array(15)].map((_, i) => {
+              const x = (i % 5) * 20 + 10;
+              const y = Math.floor(i / 5) * 25 + 15;
+              const points = `${x},${y} ${x + 5},${y - 3} ${x + 10},${y} ${x + 10},${y + 6} ${x + 5},${y + 9} ${x},${y + 6}`;
+              return (
+                <polygon
+                  key={i}
+                  points={points}
+                  fill="none"
+                  stroke="url(#grad1)"
+                  strokeWidth="2"
+                  opacity="0.5"
+                  transform={`scale(${8 + (i % 3)})`}
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from={`0 ${x + 5} ${y + 3}`}
+                    to={`360 ${x + 5} ${y + 3}`}
+                    dur={`${15 + i * 2}s`}
+                    repeatCount="indefinite"
+                    additive="sum"
+                  />
+                  <animate attributeName="opacity" values="0.3;0.7;0.3" dur={`${6 + i}s`} repeatCount="indefinite" />
+                </polygon>
+              );
+            })}
+          </g>
+        )}
+
+        {/* Triangle pattern */}
+        {currentTheme.shapeType === 'triangles' && (
+          <g>
+            {[...Array(20)].map((_, i) => {
+              const x = (i * 13) % 100;
+              const y = (i * 17) % 100;
+              return (
+                <polygon
+                  key={i}
+                  points={`${x},${y} ${x + 10},${y + 15} ${x - 10},${y + 15}`}
+                  fill={i % 3 === 0 ? 'url(#grad1)' : i % 3 === 1 ? 'url(#grad2)' : 'url(#grad3)'}
+                  opacity="0.4"
+                  transform={`scale(${6 + (i % 4)})`}
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from={`0 ${x} ${y + 7.5}`}
+                    to={`${i % 2 === 0 ? 360 : -360} ${x} ${y + 7.5}`}
+                    dur={`${18 + i * 1.5}s`}
+                    repeatCount="indefinite"
+                    additive="sum"
+                  />
+                  <animate attributeName="opacity" values="0.2;0.6;0.2" dur={`${5 + i * 0.5}s`} repeatCount="indefinite" />
+                </polygon>
+              );
+            })}
+          </g>
+        )}
+
+        {/* Diamond pattern */}
+        {currentTheme.shapeType === 'diamonds' && (
+          <g>
+            {[...Array(18)].map((_, i) => {
+              const x = (i * 11) % 95 + 5;
+              const y = (i * 13) % 85 + 10;
+              return (
+                <g key={i}>
+                  <polygon
+                    points={`${x},${y - 8} ${x + 8},${y} ${x},${y + 8} ${x - 8},${y}`}
+                    fill="none"
+                    stroke={i % 2 === 0 ? 'url(#grad1)' : 'url(#grad2)'}
+                    strokeWidth="2"
+                    opacity="0.5"
+                    transform={`scale(${5 + (i % 3)})`}
+                  >
+                    <animateTransform
+                      attributeName="transform"
+                      type="rotate"
+                      from={`0 ${x} ${y}`}
+                      to={`360 ${x} ${y}`}
+                      dur={`${16 + i * 2}s`}
+                      repeatCount="indefinite"
+                      additive="sum"
+                    />
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur={`${4 + i * 0.8}s`} repeatCount="indefinite" />
+                  </polygon>
+                  <rect
+                    x={x - 4}
+                    y={y - 4}
+                    width="8"
+                    height="8"
+                    fill="url(#grad3)"
+                    opacity="0.3"
+                    transform={`scale(${4 + (i % 2)}) rotate(45 ${x} ${y})`}
+                  >
+                    <animate attributeName="opacity" values="0.2;0.5;0.2" dur={`${7 + i}s`} repeatCount="indefinite" />
+                  </rect>
+                </g>
+              );
+            })}
+          </g>
+        )}
+
+        {/* Complex polygon pattern */}
+        {currentTheme.shapeType === 'polygons' && (
+          <g>
+            {[...Array(16)].map((_, i) => {
+              const x = (i * 15) % 100;
+              const y = (i * 19) % 90;
+              const sides = 5 + (i % 3);
+              const points = Array.from({ length: sides }, (_, j) => {
+                const angle = (j * 2 * Math.PI) / sides - Math.PI / 2;
+                return `${x + 10 * Math.cos(angle)},${y + 10 * Math.sin(angle)}`;
+              }).join(' ');
+              return (
+                <polygon
+                  key={i}
+                  points={points}
+                  fill={i % 3 === 0 ? 'url(#grad1)' : i % 3 === 1 ? 'url(#grad2)' : 'url(#grad3)'}
+                  opacity="0.4"
+                  transform={`scale(${5 + (i % 4)})`}
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from={`0 ${x} ${y}`}
+                    to={`${i % 2 === 0 ? 360 : -360} ${x} ${y}`}
+                    dur={`${20 + i * 2}s`}
+                    repeatCount="indefinite"
+                    additive="sum"
+                  />
+                  <animate attributeName="opacity" values="0.2;0.6;0.2" dur={`${6 + i}s`} repeatCount="indefinite" />
+                </polygon>
+              );
+            })}
+          </g>
         )}
       </svg>
 
-      {/* Framer Motion animated gradients with mouse parallax - BOOSTED OPACITY */}
+      {/* Animated geometric lines */}
       <motion.div
-        className="absolute -top-1/4 -left-1/4 w-[1200px] h-[1200px] rounded-full blur-3xl"
-        style={{
-          background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, transparent 70%)`,
-          y: y1,
-          x: mousePosition.x,
-          opacity: 0.85 * currentTheme.intensity,
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+        className="absolute inset-0"
+        style={{ y: y1 }}
+      >
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <line
+            x1="0%"
+            y1="20%"
+            x2="100%"
+            y2="20%"
+            stroke={currentTheme.primaryColor}
+            strokeWidth="1"
+            opacity="0.15"
+          >
+            <animate attributeName="y1" values="20%;25%;20%" dur="10s" repeatCount="indefinite" />
+            <animate attributeName="y2" values="20%;15%;20%" dur="10s" repeatCount="indefinite" />
+          </line>
+          <line
+            x1="0%"
+            y1="60%"
+            x2="100%"
+            y2="60%"
+            stroke={currentTheme.secondaryColor}
+            strokeWidth="1"
+            opacity="0.15"
+          >
+            <animate attributeName="y1" values="60%;65%;60%" dur="12s" repeatCount="indefinite" />
+            <animate attributeName="y2" values="60%;55%;60%" dur="12s" repeatCount="indefinite" />
+          </line>
+        </svg>
+      </motion.div>
 
+      {/* Floating geometric shapes with parallax */}
       <motion.div
-        className="absolute top-1/3 -right-1/4 w-[1100px] h-[1100px] rounded-full blur-3xl"
+        className="absolute top-[15%] left-[10%] w-32 h-32 border-2 opacity-10"
         style={{
-          background: `radial-gradient(circle, ${currentTheme.secondaryColor} 0%, transparent 70%)`,
+          borderColor: currentTheme.primaryColor,
           y: y2,
-          x: -mousePosition.x * 0.5,
-          opacity: 0.75 * currentTheme.intensity,
-        }}
-        animate={{
-          scale: [1, 1.4, 1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 1,
-        }}
-      />
-
-      <motion.div
-        className="absolute bottom-1/4 left-1/3 w-[1000px] h-[1000px] rounded-full blur-3xl"
-        style={{
-          background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, transparent 70%)`,
-          y: y3,
-          x: mousePosition.x * 0.7,
-          opacity: 0.65 * currentTheme.intensity,
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 2,
-        }}
-      />
-
-      {/* Rotating gradient mesh - BOOSTED */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 w-[1400px] h-[1400px] -translate-x-1/2 -translate-y-1/2 opacity-40"
-        style={{
-          background: `conic-gradient(from 0deg, ${currentTheme.primaryColor}, ${currentTheme.secondaryColor}, ${currentTheme.primaryColor})`,
           rotate,
+        }}
+      />
+      <motion.div
+        className="absolute top-[40%] right-[15%] w-40 h-40 border-2 opacity-10"
+        style={{
+          borderColor: currentTheme.secondaryColor,
+          y: y1,
+          rotate: useTransform(scrollYProgress, [0, 1], [0, -360]),
+          borderRadius: '30%',
+        }}
+      />
+      <motion.div
+        className="absolute bottom-[20%] left-[20%] w-36 h-36 border-2 opacity-10"
+        style={{
+          borderColor: currentTheme.accentColor,
+          y: y3,
+          rotate: useTransform(scrollYProgress, [0, 1], [360, 0]),
+          clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
         }}
       />
 
       {/* Subtle grid overlay */}
       <div
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
+          backgroundImage: `linear-gradient(${currentTheme.primaryColor}15 1px, transparent 1px), linear-gradient(90deg, ${currentTheme.secondaryColor}15 1px, transparent 1px)`,
+          backgroundSize: '100px 100px',
         }}
       />
-
-      {/* Radial gradient vignette */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/40" />
     </div>
   );
 }
