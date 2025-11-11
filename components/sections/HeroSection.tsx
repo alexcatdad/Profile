@@ -1,11 +1,9 @@
 'use client';
 
-import { useButton } from '@react-aria/button';
-import { motion } from 'framer-motion';
-import { ChevronDown, Github, Linkedin, Twitter } from 'lucide-react';
-import { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { ArrowDown, Download, Sparkles } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
-import { ContactReveal } from '@/components/ContactReveal';
 import type { Profile } from '@/types/content';
 
 interface HeroSectionProps {
@@ -14,233 +12,227 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ profile, dictionary }: HeroSectionProps) {
-  const scrollToContentButtonRef = useRef<HTMLButtonElement>(null);
-  const scrollToContentButtonProps = useButton(
-    {
-      onPress: () => {
-        const element = document.getElementById('summary');
-        element?.scrollIntoView({ behavior: 'smooth' });
-      },
-    },
-    scrollToContentButtonRef
-  ).buttonProps;
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
 
-  const socialLinks = [
-    profile.social.github && {
-      href: `https://github.com/${profile.social.github}`,
-      icon: Github,
-      label: 'GitHub',
-      color: 'hover:text-[#181717] dark:hover:text-[#f5f5f5]',
-    },
-    profile.social.linkedin && {
-      href: `https://linkedin.com/in/${profile.social.linkedin}`,
-      icon: Linkedin,
-      label: 'LinkedIn',
-      color: 'hover:text-[#0077B5]',
-    },
-    profile.social.twitter && {
-      href: `https://twitter.com/${profile.social.twitter}`,
-      icon: Twitter,
-      label: 'Twitter',
-      color: 'hover:text-[#1DA1F2]',
-    },
-  ].filter(Boolean);
+  // Mouse parallax effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 150 };
+  const x = useSpring(mouseX, springConfig);
+  const y = useSpring(mouseY, springConfig);
+
+  // Transform for parallax layers
+  const x1 = useTransform(x, [0, 1], [0, 30]);
+  const y1 = useTransform(y, [0, 1], [0, 30]);
+  const x2 = useTransform(x, [0, 1], [0, 20]);
+  const y2 = useTransform(y, [0, 1], [0, 20]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!heroRef.current) return;
+      const rect = heroRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      mouseX.set(x);
+      mouseY.set(y);
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  const scrollToContent = () => {
+    const metricsSection = document.getElementById('metrics');
+    metricsSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const firstName = profile.name.split(' ')[0];
+  const lastName = profile.name.split(' ').slice(1).join(' ');
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Animated gradient background - Apple style */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-background via-50% to-accent/8 gradient-animate" />
-
-      {/* Radial gradient overlay for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-
-      {/* Floating orbs - Apple-inspired */}
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
+      style={{
+        background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background) / 0.95) 50%, hsl(var(--background)) 100%)',
+      }}
+    >
+      {/* Animated gradient mesh background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/4 left-[10%] w-96 h-96 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, 80, 0],
-            y: [0, 40, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+          className="absolute -top-1/2 -left-1/2 w-full h-full opacity-30"
+          style={{ x: x1, y: y1 }}
+        >
+          <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-3xl animate-pulse-glow" />
+        </motion.div>
         <motion.div
-          className="absolute bottom-1/4 right-[10%] w-[32rem] h-[32rem] bg-gradient-to-br from-accent/20 to-primary/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, -80, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] bg-gradient-to-br from-primary/10 via-accent/10 to-transparent rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
+          className="absolute -bottom-1/2 -right-1/2 w-full h-full opacity-20"
+          style={{ x: x2, y: y2 }}
+        >
+          <div className="w-[800px] h-[800px] rounded-full bg-gradient-to-tl from-accent/40 to-primary/40 blur-3xl animate-pulse-glow" />
+        </motion.div>
+
+        {/* Floating orbs */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-64 h-64 rounded-full blur-3xl"
+            style={{
+              background: `radial-gradient(circle, ${
+                i % 2 === 0 ? 'rgba(var(--primary-rgb), 0.15)' : 'rgba(var(--accent-rgb), 0.15)'
+              } 0%, transparent 70%)`,
+              left: `${20 + i * 15}%`,
+              top: `${10 + i * 12}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 20, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.5,
+            }}
+          />
+        ))}
+
+        {/* Grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
           }}
         />
       </div>
 
-      <div className="max-w-5xl mx-auto text-center relative z-10">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.8,
-            delay: 0.2,
-            type: 'spring',
-            stiffness: 100,
-            damping: 15
-          }}
-          className="mb-12"
-        >
-          <div className="relative inline-block group">
-            {/* Glowing ring effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-
-            <motion.img
-              src={profile.headshot}
-              alt={profile.name}
-              className="relative w-52 h-52 rounded-full mx-auto object-cover shadow-apple-xl ring-4 ring-white/50 dark:ring-white/10"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            />
-
-            {/* Wave badge with glassmorphism */}
-            <motion.div
-              className="absolute -bottom-3 -right-3 w-20 h-20 glass-strong rounded-full flex items-center justify-center shadow-apple-lg"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{
-                delay: 0.9,
-                type: 'spring',
-                stiffness: 200,
-                damping: 15
-              }}
-              whileHover={{ scale: 1.1, rotate: 10 }}
-            >
-              <span className="text-3xl">👋</span>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        <motion.h1
-          className="text-6xl md:text-8xl font-extrabold mb-6 bg-gradient-to-br from-foreground via-foreground to-foreground/60 bg-clip-text text-transparent"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 0.7,
-            delay: 0.4,
-            type: 'spring',
-            stiffness: 100
-          }}
-          style={{ lineHeight: 1.05 }}
-        >
-          {profile.name}
-        </motion.h1>
-
-        <motion.p
-          className="text-2xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 0.7,
-            delay: 0.5,
-            type: 'spring',
-            stiffness: 100
-          }}
-        >
-          {profile.title}
-        </motion.p>
-
-        <motion.p
-          className="text-xl md:text-2xl text-muted-foreground mb-16 max-w-3xl mx-auto leading-relaxed font-light"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 0.7,
-            delay: 0.6,
-            type: 'spring',
-            stiffness: 100
-          }}
-        >
-          {profile.tagline}
-        </motion.p>
-
-        <motion.div
-          className="flex justify-center gap-3 mb-16 flex-wrap"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.7 }}
-        >
-          {socialLinks.map((link, index) => {
-            if (!link) return null;
-            const Icon = link.icon;
-            return (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-14 h-14 rounded-2xl glass hover:glass-strong flex items-center justify-center transition-all duration-300 ${link.color} shadow-apple hover:shadow-apple-lg group`}
-                whileHover={{ scale: 1.08, y: -4 }}
-                whileTap={{ scale: 0.96 }}
-                initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  delay: 0.8 + index * 0.08,
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 20
-                }}
-                aria-label={link.label}
-              >
-                <Icon className="w-6 h-6 transition-transform group-hover:scale-110" />
-              </motion.a>
-            );
-          })}
-          <ContactReveal email={profile.contact.email} dictionary={dictionary} />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <motion.button
-            {...(scrollToContentButtonProps as any)}
-            ref={scrollToContentButtonRef}
-            className="w-12 h-12 rounded-full glass hover:glass-strong transition-all duration-300 shadow-apple hover:shadow-apple-lg flex items-center justify-center group mx-auto"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            animate={{ y: [0, 8, 0] }}
-            transition={{
-              y: {
-                duration: 2.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              },
-            }}
-            aria-label="Scroll down"
+      {/* Main content */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col items-center text-center space-y-8 sm:space-y-12">
+          {/* Sparkle badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, type: 'spring', bounce: 0.5 }}
           >
-            <ChevronDown className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+            <div className="inline-flex items-center gap-2 px-6 py-3 glass-strong rounded-full shadow-apple-xl group hover:shadow-glow transition-all duration-500">
+              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+              <span className="text-sm font-bold gradient-text">Available for Opportunities</span>
+            </div>
+          </motion.div>
+
+          {/* Main headline - HUGE and BOLD */}
+          <motion.div
+            className="space-y-4 sm:space-y-6"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none">
+              <span className="block gradient-text-hero text-3d">{firstName}</span>
+              <span className="block text-foreground mt-2">{lastName}</span>
+            </h1>
+
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-muted-foreground max-w-5xl mx-auto leading-tight">
+              {profile.title}
+            </p>
+
+            <motion.p
+              className="text-lg sm:text-xl md:text-2xl text-muted-foreground/80 max-w-3xl mx-auto font-light leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              {profile.tagline}
+            </motion.p>
+          </motion.div>
+
+          {/* Stats bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="flex flex-wrap items-center justify-center gap-6 sm:gap-12"
+          >
+            {[
+              { label: 'Years Experience', value: `${profile.yearsOfExperience}+` },
+              { label: 'Projects Delivered', value: '50+' },
+              { label: 'Technologies', value: '30+' },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="flex flex-col items-center group"
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <div className="text-4xl sm:text-5xl md:text-6xl font-black gradient-text-hero">
+                  {stat.value}
+                </div>
+                <div className="text-sm sm:text-base text-muted-foreground font-semibold mt-1">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
+          >
+            <motion.button
+              className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl font-bold text-lg sm:text-xl shadow-apple-xl hover:shadow-glow-accent transition-all duration-300 overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const contact = document.getElementById('contact');
+                contact?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                Let's Work Together
+                <Sparkles className="w-5 h-5" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.button>
+
+            <motion.button
+              className="px-8 sm:px-12 py-4 sm:py-5 glass-strong rounded-2xl font-bold text-lg sm:text-xl shadow-apple hover:shadow-apple-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Download className="w-5 h-5" />
+              Download CV
+            </motion.button>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+            onClick={scrollToContent}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:block"
+          >
+            <motion.div
+              className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer group"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <span className="text-sm font-semibold">Scroll to explore</span>
+              <div className="w-12 h-12 rounded-full glass flex items-center justify-center group-hover:glass-strong transition-all">
+                <ArrowDown className="w-5 h-5" />
+              </div>
+            </motion.div>
           </motion.button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

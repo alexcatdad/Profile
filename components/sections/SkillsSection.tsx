@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Search, Sparkles, Trophy, Zap } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
 import { enrichSkillsWithExperience } from '@/lib/skill-experience';
@@ -12,17 +13,312 @@ interface SkillsSectionProps {
   dictionary: Dictionary;
 }
 
+// 3D Flip Card Component
+function SkillCard({
+  skill,
+  index,
+  isInView,
+}: {
+  skill: Skill;
+  index: number;
+  isInView: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), {
+    stiffness: 200,
+    damping: 20,
+  });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), {
+    stiffness: 200,
+    damping: 20,
+  });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || isFlipped) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+    setIsHovered(false);
+  };
+
+  const getLevelColor = (level?: string) => {
+    switch (level) {
+      case 'expert':
+        return 'from-emerald-500 via-green-500 to-teal-600';
+      case 'advanced':
+        return 'from-blue-500 via-cyan-500 to-sky-600';
+      case 'intermediate':
+        return 'from-yellow-500 via-orange-500 to-amber-600';
+      default:
+        return 'from-gray-400 via-gray-500 to-slate-500';
+    }
+  };
+
+  const getLevelIcon = (level?: string) => {
+    switch (level) {
+      case 'expert':
+        return <Trophy className="w-4 h-4" />;
+      case 'advanced':
+        return <Zap className="w-4 h-4" />;
+      case 'intermediate':
+        return <Sparkles className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className="perspective h-64 cursor-pointer"
+      initial={{ opacity: 0, scale: 0.8, y: 50 }}
+      animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.05,
+        type: 'spring',
+        stiffness: 100,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      {/* Glow effect */}
+      <motion.div
+        className="absolute -inset-1 rounded-2xl opacity-0 blur-2xl"
+        style={{
+          background: `linear-gradient(135deg, rgba(var(--primary-rgb), 0.6), rgba(var(--accent-rgb), 0.6))`,
+        }}
+        animate={{
+          opacity: isHovered ? 0.8 : 0,
+          scale: isHovered ? 1.05 : 1,
+        }}
+        transition={{ duration: 0.3 }}
+      />
+
+      <motion.div
+        className="relative w-full h-full preserve-3d"
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+        style={{
+          rotateX: isFlipped ? 0 : rotateX,
+          rotateY: isFlipped ? 180 : rotateY,
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {/* Front of card */}
+        <div
+          className="absolute inset-0 glass-strong rounded-2xl p-6 shadow-apple-xl backface-hidden overflow-hidden"
+          style={{ backfaceVisibility: 'hidden' }}
+        >
+          {/* Animated gradient background */}
+          <motion.div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              background: `radial-gradient(circle at 50% 50%, rgba(var(--primary-rgb), 0.1), transparent 70%)`,
+            }}
+          />
+
+          <div className="relative h-full flex flex-col justify-between">
+            {/* Header */}
+            <div>
+              <div className="flex items-start justify-between mb-4">
+                <motion.h3
+                  className="text-2xl font-black gradient-text-hero"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {skill.name}
+                </motion.h3>
+                {skill.highlighted && (
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Sparkles className="w-5 h-5 text-yellow-500 fill-yellow-400" />
+                  </motion.div>
+                )}
+              </div>
+
+              <motion.div
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl glass text-xs font-bold"
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className={`text-transparent bg-gradient-to-r ${getLevelColor(skill.level)} bg-clip-text`}>
+                  {skill.level?.toUpperCase() || 'LEARNING'}
+                </span>
+              </motion.div>
+            </div>
+
+            {/* Circular progress */}
+            {skill.proficiency !== undefined && (
+              <div className="flex items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <svg className="w-full h-full -rotate-90">
+                    <circle
+                      cx="64"
+                      cy="64"
+                      r="56"
+                      className="stroke-muted/20"
+                      strokeWidth="8"
+                      fill="none"
+                    />
+                    <motion.circle
+                      cx="64"
+                      cy="64"
+                      r="56"
+                      className={`stroke-current bg-gradient-to-r ${getLevelColor(skill.level)}`}
+                      strokeWidth="8"
+                      fill="none"
+                      strokeLinecap="round"
+                      initial={{ strokeDasharray: '0 352' }}
+                      animate={
+                        isInView
+                          ? {
+                              strokeDasharray: `${(skill.proficiency / 100) * 352} 352`,
+                            }
+                          : {}
+                      }
+                      transition={{ duration: 1.5, delay: index * 0.05 + 0.3, ease: 'easeOut' }}
+                      style={{
+                        stroke: `url(#gradient-${skill.name.replace(/\s+/g, '-')})`,
+                      }}
+                    />
+                    <defs>
+                      <linearGradient
+                        id={`gradient-${skill.name.replace(/\s+/g, '-')}`}
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stopColor="hsl(var(--primary))" />
+                        <stop offset="100%" stopColor="hsl(var(--accent))" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.span
+                      className="text-4xl font-black gradient-text-hero"
+                      initial={{ scale: 0 }}
+                      animate={isInView ? { scale: 1 } : {}}
+                      transition={{ delay: index * 0.05 + 0.5, type: 'spring', bounce: 0.6 }}
+                    >
+                      {skill.proficiency}
+                    </motion.span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="flex items-center justify-between">
+              {skill.yearsOfExperience && skill.yearsOfExperience > 0 && (
+                <motion.div
+                  className="flex items-center gap-2 px-3 py-1.5 glass rounded-xl"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  {getLevelIcon(skill.level)}
+                  <span className="text-sm font-black">
+                    {Math.floor(skill.yearsOfExperience)}+ years
+                  </span>
+                </motion.div>
+              )}
+              <motion.div
+                className="text-xs text-muted-foreground font-semibold"
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Click to flip
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Back of card */}
+        <div
+          className="absolute inset-0 glass-strong rounded-2xl p-6 shadow-apple-xl backface-hidden overflow-hidden"
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+          }}
+        >
+          <div className="relative h-full flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-black text-foreground">{skill.name}</h3>
+              <motion.button
+                className="px-3 py-1.5 glass hover:glass-strong rounded-xl text-xs font-bold"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                Flip Back
+              </motion.button>
+            </div>
+
+            <div className="space-y-4 flex-grow">
+              <div className="p-4 glass rounded-xl">
+                <div className="text-xs text-muted-foreground font-semibold mb-1">Category</div>
+                <div className="text-sm font-bold gradient-text">{skill.category}</div>
+              </div>
+
+              {skill.yearsOfExperience && (
+                <div className="p-4 glass rounded-xl">
+                  <div className="text-xs text-muted-foreground font-semibold mb-1">Experience</div>
+                  <div className="text-sm font-bold">
+                    {Math.floor(skill.yearsOfExperience)} years, {Math.round((skill.yearsOfExperience % 1) * 12)} months
+                  </div>
+                </div>
+              )}
+
+              {skill.lastUsed && (
+                <div className="p-4 glass rounded-xl">
+                  <div className="text-xs text-muted-foreground font-semibold mb-1">Last Used</div>
+                  <div className="text-sm font-bold">{skill.lastUsed}</div>
+                </div>
+              )}
+
+              <div className="p-4 glass rounded-xl">
+                <div className="text-xs text-muted-foreground font-semibold mb-1">Proficiency</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-grow h-2 bg-muted/30 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full bg-gradient-to-r ${getLevelColor(skill.level)}`}
+                      style={{ width: `${skill.proficiency || 0}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-black">{skill.proficiency}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export function SkillsSection({ skills, experience, dictionary }: SkillsSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-20%' });
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Enrich skills with calculated years of experience
   const skillsWithExperience = enrichSkillsWithExperience(skills, experience);
   const categories = ['all', ...Array.from(new Set(skillsWithExperience.map((s) => s.category)))];
 
-  // Filter skills
   const filteredSkills = skillsWithExperience.filter((skill) => {
     const matchesCategory = selectedCategory === 'all' || skill.category === selectedCategory;
     const matchesSearch =
@@ -32,204 +328,120 @@ export function SkillsSection({ skills, experience, dictionary }: SkillsSectionP
     return matchesCategory && matchesSearch;
   });
 
-  const categoriesWithSkills = Array.from(
-    new Set(filteredSkills.map((s) => s.category))
-  );
-
-  const getLevelColor = (level?: string) => {
-    switch (level) {
-      case 'expert':
-        return 'from-green-500 to-emerald-600';
-      case 'advanced':
-        return 'from-blue-500 to-cyan-600';
-      case 'intermediate':
-        return 'from-yellow-500 to-orange-500';
-      default:
-        return 'from-gray-400 to-gray-500';
-    }
-  };
-
-  const getLevelLabel = (level?: string) => {
-    return level ? level.charAt(0).toUpperCase() + level.slice(1) : '';
-  };
-
   return (
-    <section id="skills" ref={ref} className="py-16 sm:py-24 px-4 relative overflow-hidden">
-      {/* Subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+    <section id="skills" ref={ref} className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Animated mesh background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-96 h-96 rounded-full blur-3xl"
+            style={{
+              background: `radial-gradient(circle, ${
+                i % 2 === 0 ? 'rgba(var(--primary-rgb), 0.15)' : 'rgba(var(--accent-rgb), 0.15)'
+              } 0%, transparent 70%)`,
+              left: `${20 + i * 30}%`,
+              top: `${10 + i * 25}%`,
+            }}
+            animate={{
+              y: [0, -40, 0],
+              x: [0, 30, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 12 + i * 3,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 2,
+            }}
+          />
+        ))}
+      </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header */}
         <motion.div
-          className="text-center mb-12 sm:mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, type: 'spring', stiffness: 100 }}
+          transition={{ duration: 0.8, type: 'spring', stiffness: 80 }}
         >
           <motion.div
-            className="inline-block mb-4"
-            initial={{ scale: 0.8, opacity: 0 }}
+            className="inline-flex items-center gap-2 mb-6 px-8 py-4 glass-strong rounded-full shadow-glow"
+            initial={{ scale: 0.5, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2, type: 'spring', bounce: 0.5 }}
           >
-            <span className="px-6 py-2 glass rounded-full text-sm font-semibold text-primary shadow-apple">
-              Technical Excellence
-            </span>
+            <Zap className="w-5 h-5 text-primary animate-pulse" />
+            <span className="text-base font-black gradient-text">Technical Arsenal</span>
           </motion.div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">
-            {dictionary.navigation.skills}
-          </h2>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-light mb-8">
-            {skillsWithExperience.length} technologies refined through years of hands-on experience
-          </p>
 
-          {/* Search and Filter Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 max-w-4xl mx-auto">
-            {/* Search */}
-            <div className="flex-1">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
+            <span className="block gradient-text-hero text-3d">{dictionary.navigation.skills}</span>
+          </h2>
+
+          <motion.p
+            className="text-xl sm:text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto font-light mb-12"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {skillsWithExperience.length} technologies mastered through years of real-world experience
+          </motion.p>
+
+          {/* Search and Filter */}
+          <div className="flex flex-col sm:flex-row gap-4 max-w-5xl mx-auto">
+            <motion.div
+              className="flex-1 relative"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search skills..."
+                placeholder="Search your next tech stack..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 glass-subtle rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground/50 transition-all shadow-apple"
-                aria-label="Search skills"
+                className="w-full pl-12 pr-4 py-4 glass-strong rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground placeholder:text-muted-foreground/50 transition-all shadow-apple-lg font-semibold"
               />
-            </div>
+            </motion.div>
 
-            {/* Category Filter */}
             <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
               {categories.map((category) => (
-                <button
+                <motion.button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-2xl font-semibold text-sm whitespace-nowrap transition-all duration-300 ${
+                  className={`px-6 py-4 rounded-2xl font-black text-sm whitespace-nowrap transition-all duration-300 ${
                     selectedCategory === category
-                      ? 'bg-gradient-to-r from-primary to-accent text-white shadow-apple-lg'
-                      : 'glass hover:glass-strong text-foreground/70 hover:text-foreground shadow-apple'
+                      ? 'bg-gradient-to-r from-primary to-accent text-white shadow-glow'
+                      : 'glass-strong hover:glass text-foreground/70 hover:text-foreground shadow-apple'
                   }`}
-                  aria-pressed={selectedCategory === category}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {category === 'all' ? 'All' : category}
-                </button>
+                  {category === 'all' ? 'All Skills' : category}
+                </motion.button>
               ))}
             </div>
           </div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {categoriesWithSkills.map((category, categoryIndex) => {
-            const categorySkills = filteredSkills.filter((s) => s.category === category);
-            return (
-              <motion.div
-                key={category}
-                className="group relative"
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.7,
-                  delay: categoryIndex * 0.15,
-                  type: 'spring',
-                  stiffness: 100,
-                }}
-                whileHover={{ y: -8 }}
-              >
-                {/* Gradient glow effect on hover */}
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
-
-                <div className="relative glass hover:glass-strong p-6 sm:p-8 rounded-3xl shadow-apple hover:shadow-apple-xl transition-all duration-500 h-full">
-                  {/* Category header */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent group-hover:scale-150 transition-transform duration-300" />
-                    <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                      {category}
-                    </h3>
-                    <span className="ml-auto text-sm font-semibold text-muted-foreground">
-                      {categorySkills.length}
-                    </span>
-                  </div>
-
-                  {/* Skills with proficiency */}
-                  <div className="space-y-4">
-                    {categorySkills.map((skill, skillIndex) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{
-                          duration: 0.4,
-                          delay: categoryIndex * 0.15 + skillIndex * 0.05,
-                        }}
-                      >
-                        <div className="space-y-2">
-                          {/* Skill name and badges */}
-                          <div className="flex items-center justify-between gap-2 flex-wrap">
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold text-foreground text-sm sm:text-base">
-                                {skill.name}
-                              </span>
-                              {skill.highlighted && (
-                                <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 text-primary text-xs font-bold">
-                                  ⭐
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              {skill.yearsOfExperience && skill.yearsOfExperience > 0 && (
-                                <span className="text-xs font-bold px-2 py-1 bg-gradient-to-r from-primary to-accent text-white rounded-lg">
-                                  {Math.floor(skill.yearsOfExperience)}y
-                                </span>
-                              )}
-                              {skill.level && (
-                                <span
-                                  className={`text-xs font-semibold px-2 py-1 rounded-lg bg-gradient-to-r ${getLevelColor(
-                                    skill.level
-                                  )} text-white`}
-                                >
-                                  {getLevelLabel(skill.level)}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Proficiency bar */}
-                          {skill.proficiency !== undefined && (
-                            <div className="relative">
-                              <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
-                                <motion.div
-                                  className={`h-full bg-gradient-to-r ${getLevelColor(
-                                    skill.level
-                                  )} rounded-full`}
-                                  initial={{ width: 0 }}
-                                  animate={isInView ? { width: `${skill.proficiency}%` } : {}}
-                                  transition={{
-                                    duration: 1,
-                                    delay: categoryIndex * 0.15 + skillIndex * 0.05 + 0.2,
-                                    ease: 'easeOut',
-                                  }}
-                                />
-                              </div>
-                              <span className="absolute -top-1 right-0 text-xs font-bold text-muted-foreground">
-                                {skill.proficiency}%
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {filteredSkills.length === 0 && (
+        {/* Skills Grid */}
+        {filteredSkills.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredSkills.map((skill, index) => (
+              <SkillCard key={skill.name} skill={skill} index={index} isInView={isInView} />
+            ))}
+          </div>
+        ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12 text-muted-foreground"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-20"
           >
-            No skills found matching your search.
+            <div className="text-6xl mb-4">🔍</div>
+            <p className="text-2xl font-bold text-muted-foreground">No skills found</p>
+            <p className="text-lg text-muted-foreground/70 mt-2">Try a different search or category</p>
           </motion.div>
         )}
       </div>
