@@ -89,81 +89,92 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
 
   return (
     <motion.nav
-      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
-          : 'bg-background/80 backdrop-blur-sm'
+          ? 'glass-strong shadow-apple-lg border-b border-white/10'
+          : 'bg-transparent backdrop-blur-0'
       }`}
     >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
             <motion.button
               type="button"
-              onClick={() => scrollToSection('skills')}
-              className="text-xl font-bold text-foreground hover:text-primary transition-colors"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-2xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-500"
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.96 }}
             >
-              Profile
+              Portfolio
             </motion.button>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
-                <button
+                <motion.button
                   key={link.id}
                   type="button"
                   onClick={() => scrollToSection(link.id)}
-                  className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`relative px-5 py-2.5 rounded-2xl font-semibold text-sm transition-all duration-300 ${
                     activeSection === link.id
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground hover:text-primary hover:bg-accent/50'
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.96 }}
                 >
                   {link.label}
                   {activeSection === link.id && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+                      className="absolute inset-0 glass rounded-2xl -z-10 shadow-apple"
                       layoutId="activeSection"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
-                </button>
+                </motion.button>
               ))}
             </div>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               <ThemeToggle />
-              <button
+              <motion.button
                 {...downloadCoverLetterButtonProps}
                 ref={downloadCoverLetterButtonRef}
-                className="px-4 py-2 border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-all duration-200 font-medium hover:border-primary/50"
+                className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.96 }}
               >
                 {dictionary.navigation.downloadCoverLetter}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 {...downloadCVButtonProps}
                 ref={downloadCVButtonRef}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.96 }}
               >
                 {dictionary.navigation.downloadCV}
-              </button>
+              </motion.button>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
+            <motion.button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors"
+              className="lg:hidden p-3 rounded-2xl glass hover:glass-strong transition-all duration-300 shadow-apple"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.96 }}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-foreground" />
+                <X className="h-5 w-5 text-foreground" />
               ) : (
-                <Menu className="h-6 w-6 text-foreground" />
+                <Menu className="h-5 w-5 text-foreground" />
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -174,43 +185,48 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
             height: isMobileMenuOpen ? 'auto' : 0,
             opacity: isMobileMenuOpen ? 1 : 0,
           }}
-          transition={{ duration: 0.2 }}
-          className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur-md"
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="lg:hidden overflow-hidden border-t border-white/10 glass-strong"
         >
-          <div className="px-4 py-4 space-y-2">
-            {navLinks.map((link) => (
-              <button
+          <div className="px-6 py-6 space-y-2">
+            {navLinks.map((link, index) => (
+              <motion.button
                 key={link.id}
                 type="button"
                 onClick={() => scrollToSection(link.id)}
-                className={`w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`w-full text-left px-5 py-3 rounded-2xl font-semibold transition-all duration-300 ${
                   activeSection === link.id
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-primary hover:bg-accent/50'
+                    ? 'text-primary glass shadow-apple'
+                    : 'text-muted-foreground hover:text-foreground hover:glass-subtle'
                 }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: isMobileMenuOpen ? 1 : 0, x: isMobileMenuOpen ? 0 : -20 }}
+                transition={{ delay: index * 0.05 }}
               >
                 {link.label}
-              </button>
+              </motion.button>
             ))}
-            <div className="pt-4 border-t border-border space-y-2">
-              <div className="flex items-center justify-between px-4 py-2">
-                <span className="text-sm text-muted-foreground">Theme</span>
+            <div className="pt-4 mt-4 border-t border-white/10 space-y-3">
+              <div className="flex items-center justify-between px-5 py-3 glass rounded-2xl">
+                <span className="text-sm font-semibold text-muted-foreground">Theme</span>
                 <ThemeToggle />
               </div>
-              <button
+              <motion.button
                 {...downloadCoverLetterButtonProps}
                 ref={downloadCoverLetterButtonRef}
-                className="w-full px-4 py-2 border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors font-medium text-left"
+                className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-left shadow-apple"
+                whileTap={{ scale: 0.98 }}
               >
                 {dictionary.navigation.downloadCoverLetter}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 {...downloadCVButtonProps}
                 ref={downloadCVButtonRef}
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                className="w-full px-5 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-2xl transition-all duration-300 font-semibold shadow-apple-lg"
+                whileTap={{ scale: 0.98 }}
               >
                 {dictionary.navigation.downloadCV}
-              </button>
+              </motion.button>
             </div>
           </div>
         </motion.div>
