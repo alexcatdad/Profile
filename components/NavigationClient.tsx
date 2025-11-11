@@ -54,18 +54,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
     }
   };
 
-  const downloadCVButtonRef = useRef<HTMLButtonElement>(null);
   const downloadCoverLetterButtonRef = useRef<HTMLButtonElement>(null);
-
-  const downloadCVButtonProps = useButton(
-    {
-      onPress: () => {
-        // TODO: Implement CV download
-        console.log('Download CV');
-      },
-    },
-    downloadCVButtonRef
-  ).buttonProps;
 
   const downloadCoverLetterButtonProps = useButton(
     {
@@ -149,15 +138,6 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
               >
                 {dictionary.navigation.downloadCoverLetter}
               </motion.button>
-              <motion.button
-                {...(downloadCVButtonProps as any)}
-                ref={downloadCVButtonRef}
-                className="px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.96 }}
-              >
-                {dictionary.navigation.downloadCV}
-              </motion.button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -218,14 +198,6 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 whileTap={{ scale: 0.98 }}
               >
                 {dictionary.navigation.downloadCoverLetter}
-              </motion.button>
-              <motion.button
-                {...(downloadCVButtonProps as any)}
-                ref={downloadCVButtonRef}
-                className="w-full px-5 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-2xl transition-all duration-300 font-semibold shadow-apple-lg"
-                whileTap={{ scale: 0.98 }}
-              >
-                {dictionary.navigation.downloadCV}
               </motion.button>
             </div>
           </div>

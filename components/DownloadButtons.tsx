@@ -12,7 +12,10 @@ export function DownloadButtons() {
     setIsDownloading(format);
 
     try {
-      const response = await fetch(`/api/download/${format}${window.location.search}`);
+      // Get the current path to extract the language
+      const pathParts = window.location.pathname.split('/');
+      const lang = pathParts[1] || 'en'; // Default to 'en' if no language found
+      const response = await fetch(`/${lang}/api/download/${format}${window.location.search}`);
 
       if (!response.ok) {
         throw new Error('Download failed');
