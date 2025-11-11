@@ -275,13 +275,15 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     letter-spacing: -0.011em;
+    background: transparent;
   }
 
-  /* Smooth scrolling */
+  /* Add background color to html instead so AnimatedBackground can show */
   html {
+    @apply bg-background;
     scroll-behavior: smooth;
   }
 
