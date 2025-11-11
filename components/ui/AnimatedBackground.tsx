@@ -12,38 +12,38 @@ interface SectionTheme {
 
 const sectionThemes: Record<string, SectionTheme> = {
   hero: {
-    primaryColor: 'rgba(59, 130, 246, 0.15)', // primary blue
-    secondaryColor: 'rgba(139, 92, 246, 0.15)', // accent purple
+    primaryColor: 'rgba(59, 130, 246, 0.4)', // primary blue
+    secondaryColor: 'rgba(139, 92, 246, 0.4)', // accent purple
     shapeType: 'circles',
     intensity: 1,
   },
   metrics: {
-    primaryColor: 'rgba(59, 130, 246, 0.2)',
-    secondaryColor: 'rgba(16, 185, 129, 0.15)', // green
+    primaryColor: 'rgba(59, 130, 246, 0.45)',
+    secondaryColor: 'rgba(16, 185, 129, 0.4)', // green
     shapeType: 'geometric',
     intensity: 1.2,
   },
   experience: {
-    primaryColor: 'rgba(139, 92, 246, 0.15)',
-    secondaryColor: 'rgba(236, 72, 153, 0.1)', // pink
+    primaryColor: 'rgba(139, 92, 246, 0.4)',
+    secondaryColor: 'rgba(236, 72, 153, 0.35)', // pink
     shapeType: 'waves',
     intensity: 0.9,
   },
   projects: {
-    primaryColor: 'rgba(59, 130, 246, 0.18)',
-    secondaryColor: 'rgba(245, 158, 11, 0.12)', // orange
+    primaryColor: 'rgba(59, 130, 246, 0.45)',
+    secondaryColor: 'rgba(245, 158, 11, 0.35)', // orange
     shapeType: 'hexagons',
     intensity: 1.1,
   },
   skills: {
-    primaryColor: 'rgba(16, 185, 129, 0.15)',
-    secondaryColor: 'rgba(59, 130, 246, 0.15)',
+    primaryColor: 'rgba(16, 185, 129, 0.4)',
+    secondaryColor: 'rgba(59, 130, 246, 0.4)',
     shapeType: 'particles',
     intensity: 1,
   },
   default: {
-    primaryColor: 'rgba(59, 130, 246, 0.12)',
-    secondaryColor: 'rgba(139, 92, 246, 0.12)',
+    primaryColor: 'rgba(59, 130, 246, 0.3)',
+    secondaryColor: 'rgba(139, 92, 246, 0.3)',
     shapeType: 'circles',
     intensity: 0.8,
   },
@@ -85,9 +85,9 @@ export function AnimatedBackground() {
   }, []);
 
   // Parallax transforms
-  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-80%']);
-  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', '60%']);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
 
   // Mouse parallax
@@ -122,13 +122,18 @@ export function AnimatedBackground() {
           </linearGradient>
 
           <radialGradient id="radial1">
-            <stop offset="0%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 0.8 }} />
+            <stop offset="0%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 1 }} />
             <stop offset="100%" style={{ stopColor: currentTheme.primaryColor, stopOpacity: 0 }} />
+          </radialGradient>
+
+          <radialGradient id="radial2">
+            <stop offset="0%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: currentTheme.secondaryColor, stopOpacity: 0 }} />
           </radialGradient>
 
           {/* Blur filter */}
           <filter id="glow">
-            <feGaussianBlur stdDeviation="40" result="coloredBlur" />
+            <feGaussianBlur stdDeviation="50" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
@@ -139,52 +144,51 @@ export function AnimatedBackground() {
         {/* Dynamic geometric shapes based on section */}
         {currentTheme.shapeType === 'circles' && (
           <>
-            <motion.circle
+            <circle
               cx="20%"
               cy="20%"
               r="150"
               fill="url(#radial1)"
               filter="url(#glow)"
-              style={{ y: y1 }}
+              opacity="0.8"
             >
-              <animate attributeName="r" values="150;200;150" dur="6s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.3;0.6;0.3" dur="6s" repeatCount="indefinite" />
-            </motion.circle>
+              <animate attributeName="r" values="150;250;150" dur="8s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="20%;25%;20%" dur="10s" repeatCount="indefinite" />
+            </circle>
 
-            <motion.circle
+            <circle
               cx="80%"
               cy="40%"
               r="200"
-              fill="url(#radial1)"
+              fill="url(#radial2)"
               filter="url(#glow)"
-              style={{ y: y2 }}
+              opacity="0.7"
             >
-              <animate attributeName="r" values="200;250;200" dur="8s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.2;0.5;0.2" dur="8s" repeatCount="indefinite" />
-            </motion.circle>
+              <animate attributeName="r" values="200;300;200" dur="10s" repeatCount="indefinite" />
+              <animate attributeName="cx" values="80%;75%;80%" dur="12s" repeatCount="indefinite" />
+            </circle>
 
-            <motion.circle
+            <circle
               cx="50%"
               cy="70%"
               r="180"
               fill="url(#radial1)"
               filter="url(#glow)"
-              style={{ y: y3 }}
+              opacity="0.6"
             >
-              <animate attributeName="r" values="180;220;180" dur="10s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.25;0.5;0.25" dur="10s" repeatCount="indefinite" />
-            </motion.circle>
+              <animate attributeName="r" values="180;280;180" dur="12s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="70%;65%;70%" dur="14s" repeatCount="indefinite" />
+            </circle>
           </>
         )}
 
         {currentTheme.shapeType === 'hexagons' && (
           <>
-            <motion.path
+            <path
               d="M 300 200 L 400 250 L 400 350 L 300 400 L 200 350 L 200 250 Z"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.4"
-              style={{ y: y1 }}
+              opacity="0.7"
             >
               <animateTransform
                 attributeName="transform"
@@ -194,14 +198,14 @@ export function AnimatedBackground() {
                 dur="20s"
                 repeatCount="indefinite"
               />
-            </motion.path>
+              <animate attributeName="opacity" values="0.5;0.9;0.5" dur="6s" repeatCount="indefinite" />
+            </path>
 
-            <motion.path
+            <path
               d="M 900 400 L 1000 450 L 1000 550 L 900 600 L 800 550 L 800 450 Z"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.3"
-              style={{ y: y2 }}
+              opacity="0.6"
             >
               <animateTransform
                 attributeName="transform"
@@ -211,54 +215,54 @@ export function AnimatedBackground() {
                 dur="25s"
                 repeatCount="indefinite"
               />
-            </motion.path>
+              <animate attributeName="opacity" values="0.4;0.8;0.4" dur="8s" repeatCount="indefinite" />
+            </path>
           </>
         )}
 
         {currentTheme.shapeType === 'waves' && (
           <>
-            <motion.path
-              d="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 600 L 0 600 Z"
+            <path
+              d="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.15"
+              opacity="0.5"
             >
               <animate
                 attributeName="d"
-                values="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 600 L 0 600 Z;
-                        M 0 400 Q 400 500 800 400 T 1600 400 L 1600 600 L 0 600 Z;
-                        M 0 400 Q 400 300 800 400 T 1600 400 L 1600 600 L 0 600 Z"
+                values="M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z;
+                        M 0 400 Q 400 500 800 400 T 1600 400 L 1600 800 L 0 800 Z;
+                        M 0 400 Q 400 300 800 400 T 1600 400 L 1600 800 L 0 800 Z"
                 dur="8s"
                 repeatCount="indefinite"
               />
-            </motion.path>
+            </path>
 
-            <motion.path
-              d="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 500 L 0 500 Z"
+            <path
+              d="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.1"
+              opacity="0.4"
             >
               <animate
                 attributeName="d"
-                values="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 500 L 0 500 Z;
-                        M 0 300 Q 400 400 800 300 T 1600 300 L 1600 500 L 0 500 Z;
-                        M 0 300 Q 400 200 800 300 T 1600 300 L 1600 500 L 0 500 Z"
+                values="M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z;
+                        M 0 300 Q 400 400 800 300 T 1600 300 L 1600 700 L 0 700 Z;
+                        M 0 300 Q 400 200 800 300 T 1600 300 L 1600 700 L 0 700 Z"
                 dur="12s"
                 repeatCount="indefinite"
               />
-            </motion.path>
+            </path>
           </>
         )}
 
         {currentTheme.shapeType === 'geometric' && (
           <>
-            <motion.polygon
+            <polygon
               points="200,100 300,200 200,300 100,200"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.3"
-              style={{ y: y1 }}
+              opacity="0.6"
             >
               <animateTransform
                 attributeName="transform"
@@ -268,18 +272,18 @@ export function AnimatedBackground() {
                 dur="15s"
                 repeatCount="indefinite"
               />
-            </motion.polygon>
+              <animate attributeName="opacity" values="0.4;0.8;0.4" dur="5s" repeatCount="indefinite" />
+            </polygon>
 
-            <motion.rect
+            <rect
               x="700"
               y="400"
               width="200"
               height="200"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.25"
+              opacity="0.5"
               rx="20"
-              style={{ y: y2 }}
             >
               <animateTransform
                 attributeName="transform"
@@ -289,14 +293,14 @@ export function AnimatedBackground() {
                 dur="20s"
                 repeatCount="indefinite"
               />
-            </motion.rect>
+              <animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" repeatCount="indefinite" />
+            </rect>
 
-            <motion.polygon
+            <polygon
               points="1200,600 1300,650 1250,750 1150,750 1100,650"
               fill="url(#grad1)"
               filter="url(#glow)"
-              opacity="0.2"
-              style={{ y: y3 }}
+              opacity="0.5"
             >
               <animateTransform
                 attributeName="transform"
@@ -306,30 +310,31 @@ export function AnimatedBackground() {
                 dur="18s"
                 repeatCount="indefinite"
               />
-            </motion.polygon>
+              <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" repeatCount="indefinite" />
+            </polygon>
           </>
         )}
 
         {currentTheme.shapeType === 'particles' && (
           <>
-            {[...Array(20)].map((_, i) => (
+            {[...Array(30)].map((_, i) => (
               <circle
                 key={i}
-                cx={`${Math.random() * 100}%`}
-                cy={`${Math.random() * 100}%`}
-                r={Math.random() * 3 + 1}
+                cx={`${(i * 7) % 100}%`}
+                cy={`${(i * 11) % 100}%`}
+                r={Math.random() * 4 + 2}
                 fill={i % 2 === 0 ? currentTheme.primaryColor : currentTheme.secondaryColor}
-                opacity="0.6"
+                opacity="0.7"
               >
                 <animate
                   attributeName="cy"
-                  values={`${Math.random() * 100}%;${Math.random() * 100}%;${Math.random() * 100}%`}
+                  values={`${(i * 11) % 100}%;${((i * 11) + 20) % 100}%;${(i * 11) % 100}%`}
                   dur={`${10 + Math.random() * 10}s`}
                   repeatCount="indefinite"
                 />
                 <animate
                   attributeName="opacity"
-                  values="0.3;0.8;0.3"
+                  values="0.4;1;0.4"
                   dur={`${3 + Math.random() * 3}s`}
                   repeatCount="indefinite"
                 />
@@ -341,15 +346,15 @@ export function AnimatedBackground() {
 
       {/* Framer Motion animated gradients with mouse parallax */}
       <motion.div
-        className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] rounded-full opacity-20 blur-3xl"
+        className="absolute -top-1/4 -left-1/4 w-[1000px] h-[1000px] rounded-full blur-3xl"
         style={{
           background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, transparent 70%)`,
           y: y1,
           x: mousePosition.x,
+          opacity: 0.6 * currentTheme.intensity,
         }}
         animate={{
-          scale: [1, 1.2 * currentTheme.intensity, 1],
-          opacity: [0.15 * currentTheme.intensity, 0.3 * currentTheme.intensity, 0.15 * currentTheme.intensity],
+          scale: [1, 1.3, 1],
         }}
         transition={{
           duration: 8,
@@ -359,15 +364,15 @@ export function AnimatedBackground() {
       />
 
       <motion.div
-        className="absolute top-1/3 -right-1/4 w-[700px] h-[700px] rounded-full opacity-20 blur-3xl"
+        className="absolute top-1/3 -right-1/4 w-[900px] h-[900px] rounded-full blur-3xl"
         style={{
           background: `radial-gradient(circle, ${currentTheme.secondaryColor} 0%, transparent 70%)`,
           y: y2,
           x: -mousePosition.x * 0.5,
+          opacity: 0.5 * currentTheme.intensity,
         }}
         animate={{
-          scale: [1, 1.3 * currentTheme.intensity, 1],
-          opacity: [0.15 * currentTheme.intensity, 0.35 * currentTheme.intensity, 0.15 * currentTheme.intensity],
+          scale: [1, 1.4, 1],
         }}
         transition={{
           duration: 10,
@@ -378,15 +383,15 @@ export function AnimatedBackground() {
       />
 
       <motion.div
-        className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-15 blur-3xl"
+        className="absolute bottom-1/4 left-1/3 w-[800px] h-[800px] rounded-full blur-3xl"
         style={{
           background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, transparent 70%)`,
           y: y3,
           x: mousePosition.x * 0.7,
+          opacity: 0.4 * currentTheme.intensity,
         }}
         animate={{
-          scale: [1, 1.15 * currentTheme.intensity, 1],
-          opacity: [0.1 * currentTheme.intensity, 0.25 * currentTheme.intensity, 0.1 * currentTheme.intensity],
+          scale: [1, 1.2, 1],
         }}
         transition={{
           duration: 12,
@@ -398,7 +403,7 @@ export function AnimatedBackground() {
 
       {/* Rotating gradient mesh */}
       <motion.div
-        className="absolute top-1/2 left-1/2 w-[1000px] h-[1000px] -translate-x-1/2 -translate-y-1/2 opacity-10"
+        className="absolute top-1/2 left-1/2 w-[1200px] h-[1200px] -translate-x-1/2 -translate-y-1/2 opacity-20"
         style={{
           background: `conic-gradient(from 0deg, ${currentTheme.primaryColor}, ${currentTheme.secondaryColor}, ${currentTheme.primaryColor})`,
           rotate,
@@ -407,7 +412,7 @@ export function AnimatedBackground() {
 
       {/* Subtle grid overlay */}
       <div
-        className="absolute inset-0 opacity-[0.015]"
+        className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
           backgroundSize: '80px 80px',
@@ -415,7 +420,7 @@ export function AnimatedBackground() {
       />
 
       {/* Radial gradient vignette */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/60" />
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/40" />
     </div>
   );
 }
