@@ -25,7 +25,7 @@ interface ProfilePageProps {
 
 export function ProfilePage({ content, dictionary, coverLetterOpen = false }: ProfilePageProps) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground">
       <ScrollProgress />
       <Navigation dictionary={dictionary} />
       <DownloadButtons />

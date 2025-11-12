@@ -57,7 +57,7 @@ export default async function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="antialiased bg-background text-foreground">
+      <body className="antialiased text-foreground">
         <AnimatedBackground />
         {children}
       </body>
