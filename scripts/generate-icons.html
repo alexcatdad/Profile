@@ -147,7 +147,7 @@
       ctx.restore();
     }
 
-    function downloadIcon(canvasId, filename) {
+    function _downloadIcon(canvasId, filename) {
       const canvas = document.getElementById(canvasId);
       const link = document.createElement('a');
       link.download = filename;

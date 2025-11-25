@@ -1,15 +1,14 @@
 #!/usr/bin/env bun
 
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import { readFile, writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { fetchJDAsMarkdown, extractCompanyName } from '../lib/jd-fetcher';
-import { createLLMClient } from '../lib/llm-client';
-import { generateCoverLetter } from '../lib/cover-letter-generator';
-import type { JSONResume } from '../types/json-resume';
-import type { RoleType } from '../lib/role-filter';
-import type { CoverLetterTemplate } from '../types/content';
+import { generateCoverLetter } from '../src/lib/cover-letter-generator';
+import { extractCompanyName, fetchJDAsMarkdown } from '../src/lib/jd-fetcher';
+import { createLLMClient } from '../src/lib/llm-client';
+import type { RoleType } from '../src/lib/role-filter';
+import type { JSONResume } from '../src/types/json-resume';
 
 const program = new Command();
 
@@ -104,7 +103,12 @@ program
       }
 
       console.log('📄 Loading resume...');
-      const resumePath = join(process.cwd(), 'artifacts', 'alex_alexandrescu_master_resume.json');
+      const resumePath = join(
+        process.cwd(),
+        'src',
+        'artifacts',
+        'alex_alexandrescu_master_resume.json'
+      );
       const resumeData = await readFile(resumePath, 'utf-8');
       const resume: JSONResume = JSON.parse(resumeData);
 
@@ -121,11 +125,10 @@ program
       // Generate output filename
       const dateStr = new Date().toISOString().split('T')[0];
       const companySlug = companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const outputDir = join(process.cwd(), 'artifacts', 'cover-letters');
+      const outputDir = join(process.cwd(), 'src', 'artifacts', 'cover-letters');
       await mkdir(outputDir, { recursive: true });
 
-      const outputPath =
-        options.output || join(outputDir, `${companySlug}-${dateStr}.json`);
+      const outputPath = options.output || join(outputDir, `${companySlug}-${dateStr}.json`);
 
       console.log(`💾 Saving cover letter to ${outputPath}...`);
       await writeFile(outputPath, JSON.stringify(coverLetter, null, 2), 'utf-8');
@@ -145,4 +148,3 @@ program
   });
 
 program.parse();
-

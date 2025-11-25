@@ -27,10 +27,7 @@
       "purpose": "any"
     }
   ],
-  "categories": [
-    "business",
-    "productivity"
-  ],
+  "categories": ["business", "productivity"],
   "shortcuts": [
     {
       "name": "View Projects",
