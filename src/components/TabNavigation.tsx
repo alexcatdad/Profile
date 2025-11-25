@@ -26,7 +26,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
           <button
             key={tab.id}
             className={cn(
-              'relative flex-1 rounded-xl px-4 py-2 transition-colors duration-200',
+              'relative flex-1 rounded-xl px-4 py-2 transition-all duration-200',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60',
               isActive
                 ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-apple dark:from-emerald-500 dark:to-emerald-600'
@@ -37,6 +37,12 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             aria-pressed={isActive}
           >
             {tab.label}
+            {isActive && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-emerald-500/80 to-emerald-600/80 shadow-apple dark:from-emerald-500/80 dark:to-emerald-600/80"
+              />
+            )}
           </button>
         );
       })}

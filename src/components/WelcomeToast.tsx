@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { getAccessData } from '@/lib/storage';
 
@@ -19,18 +18,14 @@ export function WelcomeToast() {
   }, []);
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -50, x: '-50%' }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          transition={{ duration: 0.3 }}
-          className="fixed top-4 left-1/2 z-50 glass-strong border border-border shadow-lg rounded-lg px-6 py-4"
-        >
-          <p className="text-card-foreground">Welcome back, {name}!</p>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      className={`fixed top-4 left-1/2 z-50 -translate-x-1/2 transform-gpu transition-all duration-300 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 -translate-y-4'
+      }`}
+    >
+      <div className="glass-strong border border-border shadow-lg rounded-lg px-6 py-4">
+        <p className="text-card-foreground">Welcome back, {name}!</p>
+      </div>
+    </div>
   );
 }

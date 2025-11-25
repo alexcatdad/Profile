@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { Loader2, MessageCircle, Send, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useResumeHighlight } from '@/hooks/useResumeHighlight';
@@ -181,144 +180,135 @@ export function ResumeChat({ resume }: ResumeChatProps) {
 
   return (
     <div className="fixed bottom-8 left-8 z-50">
-      <AnimatePresence>
-        {/* Chat Panel */}
-        {isOpen && (
-          <motion.div
-            className="absolute bottom-20 left-0 flex h-[600px] w-[400px] flex-col rounded-3xl border border-border bg-card/95 shadow-apple-lg backdrop-blur supports-[backdrop-filter]:bg-card/90 dark:border-white/10 dark:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-border px-4 py-3 dark:border-white/10">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-accent dark:text-[#45caff]" />
-                <h3 className="text-sm font-semibold text-foreground dark:text-white">Resume Q&A</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#ff47c0]/60"
-                aria-label="Close chat"
-              >
-                <X className="h-4 w-4" />
-              </button>
+      {isOpen && (
+        <div className="absolute bottom-20 left-0 flex h-[600px] w-[400px] flex-col rounded-3xl border border-border bg-card/95 shadow-apple-lg backdrop-blur transition-all duration-200 supports-[backdrop-filter]:bg-card/90 dark:border-white/10 dark:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-border px-4 py-3 dark:border-white/10">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-accent dark:text-[#45caff]" />
+              <h3 className="text-sm font-semibold text-foreground dark:text-white">Resume Q&A</h3>
             </div>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#ff47c0]/60"
+              aria-label="Close chat"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              {isInitializing ? (
-                <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-accent dark:text-[#45caff]" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-foreground dark:text-white">
-                      {initText || 'Loading AI model...'}
-                    </p>
-                    <div className="h-1.5 w-48 overflow-hidden rounded-full bg-secondary dark:bg-white/10">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width] dark:from-[#ff47c0] dark:to-[#45caff]"
-                        style={{ width: `${initProgress * 100}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground dark:text-zinc-400">{Math.round(initProgress * 100)}%</p>
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            {isInitializing ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
+                <Loader2 className="h-8 w-8 animate-spin text-accent dark:text-[#45caff]" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-foreground dark:text-white">
+                    {initText || 'Loading AI model...'}
+                  </p>
+                  <div className="h-1.5 w-48 overflow-hidden rounded-full bg-secondary dark:bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width] dark:from-[#ff47c0] dark:to-[#45caff]"
+                      style={{ width: `${initProgress * 100}%` }}
+                    />
                   </div>
-                </div>
-              ) : messages.length === 0 ? (
-                <div className="flex flex-col gap-2 py-8 text-center">
-                  <p className="text-sm text-muted-foreground dark:text-zinc-300">Ask me anything about Alex's resume!</p>
-                  <p className="text-xs text-muted-foreground/80 dark:text-zinc-500">
-                    Try: "What's his experience with Next.js?"
+                  <p className="text-xs text-muted-foreground dark:text-zinc-400">
+                    {Math.round(initProgress * 100)}%
                   </p>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {messages.map((message) => (
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="flex flex-col gap-2 py-8 text-center">
+                <p className="text-sm text-muted-foreground dark:text-zinc-300">
+                  Ask me anything about Alex's resume!
+                </p>
+                <p className="text-xs text-muted-foreground/80 dark:text-zinc-500">
+                  Try: "What's his experience with Next.js?"
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={cn(
+                      'flex flex-col gap-2',
+                      message.role === 'user' ? 'items-end' : 'items-start'
+                    )}
+                  >
                     <div
-                      key={message.id}
                       className={cn(
-                        'flex flex-col gap-2',
-                        message.role === 'user' ? 'items-end' : 'items-start'
+                        'max-w-[85%] rounded-2xl px-4 py-2 text-sm',
+                        message.role === 'user'
+                          ? 'bg-gradient-to-r from-primary to-accent text-white dark:from-[#ff47c0] dark:to-[#45caff]'
+                          : 'bg-secondary text-foreground dark:bg-white/[0.04] dark:text-zinc-200'
                       )}
                     >
-                      <div
-                        className={cn(
-                          'max-w-[85%] rounded-2xl px-4 py-2 text-sm',
-                          message.role === 'user'
-                            ? 'bg-gradient-to-r from-primary to-accent text-white dark:from-[#ff47c0] dark:to-[#45caff]'
-                            : 'bg-secondary text-foreground dark:bg-white/[0.04] dark:text-zinc-200'
-                        )}
-                      >
-                        <p className="whitespace-pre-wrap break-words">{message.content}</p>
-                      </div>
-                      {message.sections && message.sections.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {message.sections.map((section) => (
-                            <button
-                              key={section}
-                              type="button"
-                              onClick={() => handleSectionClick(section)}
-                              className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-accent transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 dark:border-white/20 dark:bg-black/30 dark:text-[#45caff] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#45caff]/60"
-                            >
-                              {sectionLabels[section]}
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                      <p className="whitespace-pre-wrap break-words">{message.content}</p>
                     </div>
-                  ))}
-                  {isLoading && (
-                    <div className="flex items-start gap-2">
-                      <div className="rounded-2xl bg-secondary px-4 py-2 dark:bg-white/[0.04]">
-                        <Loader2 className="h-4 w-4 animate-spin text-accent dark:text-[#45caff]" />
+                    {message.sections && message.sections.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {message.sections.map((section) => (
+                          <button
+                            key={section}
+                            type="button"
+                            onClick={() => handleSectionClick(section)}
+                            className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-accent transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 dark:border-white/20 dark:bg-black/30 dark:text-[#45caff] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#45caff]/60"
+                          >
+                            {sectionLabels[section]}
+                          </button>
+                        ))}
                       </div>
+                    )}
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="flex items-start gap-2">
+                    <div className="rounded-2xl bg-secondary px-4 py-2 dark:bg-white/[0.04]">
+                      <Loader2 className="h-4 w-4 animate-spin text-accent dark:text-[#45caff]" />
                     </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
-            </div>
-
-            {/* Input Area */}
-            {!isInitializing && (
-              <div className="border-t border-border p-4 dark:border-white/10">
-                <div className="flex gap-2">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Ask about the resume..."
-                    disabled={isLoading}
-                    className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-[#45caff]/50 dark:focus:ring-[#45caff]/20"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleSend}
-                    disabled={!input.trim() || isLoading}
-                    className="rounded-xl bg-gradient-to-r from-primary to-accent p-2 text-white transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:from-[#ff47c0] dark:to-[#45caff] dark:focus-visible:ring-[#ff47c0]/60"
-                    aria-label="Send message"
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
-                </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
               </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
 
-      {/* Floating Chat Bubble */}
-      <motion.button
+          {/* Input Area */}
+          {!isInitializing && (
+            <div className="border-t border-border p-4 dark:border-white/10">
+              <div className="flex gap-2">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask about the resume..."
+                  disabled={isLoading}
+                  className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-[#45caff]/50 dark:focus:ring-[#45caff]/20"
+                />
+                <button
+                  type="button"
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                  className="rounded-xl bg-gradient-to-r from-primary to-accent p-2 text-white transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:from-[#ff47c0] dark:to-[#45caff] dark:focus-visible:ring-[#ff47c0]/60"
+                  aria-label="Send message"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
+        style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` }}
         aria-label={isOpen ? 'Close resume chat' : 'Open resume chat'}
         aria-expanded={isOpen}
       >
@@ -327,7 +317,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
         ) : (
           <MessageCircle className="w-6 h-6 text-white" />
         )}
-      </motion.button>
+      </button>
     </div>
   );
 }

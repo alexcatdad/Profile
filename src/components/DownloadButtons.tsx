@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { Download, FileCode2, FileText, Loader2, Sparkles, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { buildDownloadFileName } from '@/lib/download-utils';
@@ -86,31 +85,29 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
       <output className="sr-only" aria-live="polite">
         {statusMessage}
       </output>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="absolute bottom-20 right-0 flex flex-col gap-3"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
+
+      <div
+        className={`absolute bottom-20 right-0 flex flex-col gap-3 transition-all duration-200 ${
+          isOpen ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-5'
+        }`}
+      >
+        {isOpen && activeRoleLabel && (
+          <output
+            className="glass-subtle flex items-center gap-2 rounded-2xl border border-border px-4 py-2 text-xs font-semibold text-foreground shadow-apple dark:border-white/10 dark:text-zinc-200"
+            aria-live="polite"
           >
-            {activeRoleLabel && (
-              <output
-                className="glass-subtle flex items-center gap-2 rounded-2xl border border-border px-4 py-2 text-xs font-semibold text-foreground shadow-apple dark:border-white/10 dark:text-zinc-200"
-                aria-live="polite"
-              >
-                <Sparkles className="h-4 w-4 text-accent dark:text-[#45caff]" />
-                Focused for {activeRoleLabel}
-              </output>
-            )}
-            <motion.button
+            <Sparkles className="h-4 w-4 text-accent dark:text-[#45caff]" />
+            Focused for {activeRoleLabel}
+          </output>
+        )}
+        {isOpen && (
+          <>
+            <button
+              type="button"
               onClick={() => handleDownload('pdf')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border hover:border-primary/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple dark:border-white/10 dark:hover:border-[#ff47c0]/60"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 hover:-translate-x-1 hover:scale-[1.01] hover:border-primary/60 shadow-apple dark:border-white/10 dark:hover:border-[#ff47c0]/60"
               aria-busy={isDownloading === 'pdf'}
-              whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
-              whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
               <span className="text-sm font-bold text-foreground whitespace-nowrap dark:text-zinc-100">
                 {isDownloading === 'pdf' ? 'Generating...' : 'Download PDF'}
@@ -122,15 +119,14 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
                   <FileText className="w-5 h-5 text-white" />
                 )}
               </div>
-            </motion.button>
+            </button>
 
-            <motion.button
+            <button
+              type="button"
               onClick={() => handleDownload('markdown')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border hover:border-accent/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple dark:border-white/10 dark:hover:border-[#45caff]/60"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 hover:-translate-x-1 hover:scale-[1.01] hover:border-accent/60 shadow-apple dark:border-white/10 dark:hover:border-[#45caff]/60"
               aria-busy={isDownloading === 'markdown'}
-              whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
-              whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
               <span className="text-sm font-bold text-foreground whitespace-nowrap dark:text-zinc-100">
                 {isDownloading === 'markdown' ? 'Generating...' : 'Download Markdown'}
@@ -142,19 +138,17 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
                   <FileCode2 className="w-5 h-5 text-white" />
                 )}
               </div>
-            </motion.button>
-          </motion.div>
+            </button>
+          </>
         )}
-      </AnimatePresence>
+      </div>
 
-      <motion.button
+      <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isDownloading !== null}
         className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40 disabled:cursor-not-allowed disabled:opacity-50"
-        whileHover={isDownloading === null ? { scale: 1.1 } : {}}
-        whileTap={isDownloading === null ? { scale: 0.9 } : {}}
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
+        style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` }}
         aria-label={isOpen ? 'Close download menu' : 'Open download menu'}
         aria-expanded={isOpen}
         aria-busy={isDownloading !== null}
@@ -166,7 +160,7 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
         ) : (
           <Download className="w-6 h-6 text-white" />
         )}
-      </motion.button>
+      </button>
     </div>
   );
 }

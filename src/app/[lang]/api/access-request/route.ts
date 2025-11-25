@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { getMongoDb } from '@/lib/mongoClient';
 
 const accessRequestSchema = z.object({
   name: z.string().min(2).max(100),
@@ -12,9 +13,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = accessRequestSchema.parse(body);
 
-    // TODO: Store in database or send notification
-    // For now, just log and return success
-    console.log('Access request received:', {
+    const db = await getMongoDb();
+
+    const collection = db.collection('access-requests');
+    await collection.insertOne({
       name: validated.name,
       email: validated.email,
       company: validated.company,

@@ -1,11 +1,26 @@
-import { useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 export function useCountUp(end: number, duration = 2000, enabled = true) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true });
   const hasAnimated = useRef(false);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!enabled || !isInView || hasAnimated.current) return;

@@ -1,7 +1,6 @@
 'use client';
 
 import { useButton } from '@react-aria/button';
-import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import type { ComponentPropsWithoutRef } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -94,11 +93,8 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
   ).buttonProps as ComponentPropsWithoutRef<'button'>;
 
   return (
-    <motion.nav
+    <nav
       aria-label="Primary profile navigation"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
       className={`relative z-50 transition-all duration-500 ${
         isScrolled
           ? 'glass-strong shadow-apple-lg border-b border-border dark:border-white/10'
@@ -107,69 +103,56 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <motion.button
+          <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-2xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent hover:from-accent hover:to-primary transition-all duration-500"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
+            className="text-2xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent transition-transform duration-200 hover:scale-105"
           >
             Portfolio
-          </motion.button>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1" role="menubar">
             {visibleLinks.map((link) => (
-              <motion.button
+              <button
                 key={link.id}
                 type="button"
                 onClick={() => scrollToSection(link.id)}
-                className={`relative px-5 py-2.5 rounded-2xl font-semibold text-sm transition-all duration-300 ${
+                className={`relative px-5 py-2.5 rounded-2xl font-semibold text-sm transition-all duration-200 ${
                   activeSection === link.id
                     ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 aria-current={activeSection === link.id ? 'true' : undefined}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.96 }}
               >
                 {link.label}
                 {activeSection === link.id && (
-                  <motion.div
-                    className="absolute inset-0 glass rounded-2xl -z-10 shadow-apple"
-                    layoutId="activeSection"
-                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 -z-10 rounded-2xl glass shadow-apple"
                   />
                 )}
-              </motion.button>
+              </button>
             ))}
           </div>
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
-            <motion.button
-              {...(() => {
-                // biome-ignore lint/suspicious/noExplicitAny: onDrag is causing type conflict
-                const { onDrag, onDragEnd, ...rest } = downloadCoverLetterButtonProps as any;
-                return rest;
-              })()}
+            <button
+              {...downloadCoverLetterButtonProps}
               ref={downloadCoverLetterButtonRef}
-              className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary text-foreground"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.96 }}
+              className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-transform duration-200 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:-translate-y-0.5 hover:text-primary text-foreground"
             >
               {dictionary.navigation.downloadCoverLetter}
-            </motion.button>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <motion.button
+          <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-3 rounded-2xl glass hover:glass-strong transition-all duration-300 shadow-apple"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
+            className="lg:hidden p-3 rounded-2xl glass hover:glass-strong transition-transform duration-200 shadow-apple"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -177,59 +160,47 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
             ) : (
               <Menu className="h-5 w-5 text-foreground" />
             )}
-          </motion.button>
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <motion.div
-        initial={false}
-        animate={{
-          height: isMobileMenuOpen ? 'auto' : 0,
-          opacity: isMobileMenuOpen ? 1 : 0,
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="lg:hidden overflow-hidden border-t border-border dark:border-white/10 glass-strong"
+      <div
+        className={`lg:hidden border-t border-border dark:border-white/10 glass-strong transition-all duration-300 ${
+          isMobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 overflow-hidden opacity-0'
+        }`}
       >
         <div className="px-6 py-6 space-y-2">
-          {visibleLinks.map((link, index) => (
-            <motion.button
+          {visibleLinks.map((link) => (
+            <button
               key={link.id}
               type="button"
               onClick={() => scrollToSection(link.id)}
-              className={`w-full text-left px-5 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+              className={`w-full text-left px-5 py-3 rounded-2xl font-semibold transition-colors duration-200 ${
                 activeSection === link.id
                   ? 'text-primary glass shadow-apple'
                   : 'text-muted-foreground hover:text-foreground hover:glass-subtle'
               }`}
               aria-current={activeSection === link.id ? 'true' : undefined}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: isMobileMenuOpen ? 1 : 0, x: isMobileMenuOpen ? 0 : -20 }}
-              transition={{ delay: index * 0.05 }}
             >
               {link.label}
-            </motion.button>
+            </button>
           ))}
           <div className="pt-4 mt-4 border-t border-border dark:border-white/10 space-y-3">
             <div className="flex items-center justify-between px-5 py-3 glass rounded-2xl">
               <span className="text-sm font-semibold text-muted-foreground">Theme</span>
               <ThemeToggle />
             </div>
-            <motion.button
-              {...(() => {
-                // biome-ignore lint/suspicious/noExplicitAny: onDrag is causing type conflict
-                const { onDrag, onDragEnd, ...rest } = downloadCoverLetterButtonProps as any;
-                return rest;
-              })()}
+            <button
+              {...downloadCoverLetterButtonProps}
               ref={downloadCoverLetterButtonRef}
-              className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-left shadow-apple text-foreground"
-              whileTap={{ scale: 0.98 }}
+              className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-transform duration-200 font-semibold text-left shadow-apple text-foreground"
             >
               {dictionary.navigation.downloadCoverLetter}
-            </motion.button>
+            </button>
           </div>
         </div>
-      </motion.div>
-    </motion.nav>
+      </div>
+    </nav>
   );
 }

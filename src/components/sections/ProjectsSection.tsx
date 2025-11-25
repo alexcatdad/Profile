@@ -1,3 +1,5 @@
+'use client';
+
 import { Code2 } from 'lucide-react';
 import type { Project } from '@/types/json-resume';
 
@@ -29,16 +31,25 @@ export function ProjectsSection({ projects, highlighted = false }: ProjectsSecti
         {projects.map((project, index) => (
           <article
             key={`${project.name ?? 'project'}-${index}`}
-            className="interactive-card flex h-full flex-col rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-200"
+            className="interactive-card flex h-full flex-col rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-200"
           >
-            {project.name && <h3 className="text-xl font-semibold text-foreground dark:text-white">{project.name}</h3>}
+            {project.name && (
+              <h3 className="text-xl font-semibold text-foreground dark:text-white">
+                {project.name}
+              </h3>
+            )}
             {project.description && (
-              <p className="mt-2 text-sm text-muted-foreground dark:text-zinc-400">{project.description}</p>
+              <p className="mt-2 text-sm text-muted-foreground dark:text-zinc-400">
+                {project.description}
+              </p>
             )}
             {project.highlights && project.highlights.length > 0 && (
               <ul className="mt-3 space-y-2 text-xs text-muted-foreground dark:text-zinc-300">
                 {project.highlights.slice(0, 3).map((highlight) => (
-                  <li key={highlight} className="flex items-start gap-2">
+                  <li
+                    key={`${project.name ?? 'project'}-${highlight}`}
+                    className="flex items-start gap-2"
+                  >
                     <span className="mt-0.5 text-accent">•</span>
                     <span>{highlight}</span>
                   </li>
@@ -49,7 +60,7 @@ export function ProjectsSection({ projects, highlighted = false }: ProjectsSecti
               <div className="mt-4 flex flex-wrap gap-2">
                 {project.keywords.map((keyword) => (
                   <span
-                    key={keyword}
+                    key={`${project.name ?? 'project'}-${keyword}`}
                     className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-primary dark:border-white/10 dark:bg-black/30 dark:text-[#f6a7ff]"
                   >
                     {keyword}
@@ -62,7 +73,7 @@ export function ProjectsSection({ projects, highlighted = false }: ProjectsSecti
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-pulse mt-4 text-xs font-semibold text-accent"
+                className="link-pulse mt-4 text-xs font-semibold text-accent transition-transform hover:translate-x-1"
               >
                 View project
                 <span aria-hidden="true">↗</span>

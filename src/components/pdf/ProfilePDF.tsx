@@ -191,7 +191,8 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
     : '';
   const linkedInProfile = basics.profiles?.find((p) => p.network === 'LinkedIn');
   const quantifiable = resume._custom?.quantifiableMetrics;
-  
+  const displayTitle = roleLabel || basics.label;
+
   const metrics = [
     quantifiable?.yearsExperience
       ? { label: 'Experience', value: `${quantifiable.yearsExperience}+ Years` }
@@ -215,7 +216,7 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
             {/* Left Main Column */}
             <View style={styles.mainColumn}>
               {/* Title Moved Here */}
-              {basics.label && <Text style={styles.title}>{basics.label}</Text>}
+              {displayTitle && <Text style={styles.title}>{displayTitle}</Text>}
 
               {/* Summary */}
               {basics.summary && (
@@ -230,7 +231,11 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Experience</Text>
                   {resume.work.map((work, index) => (
-                    <View key={index} style={styles.item} wrap={false}>
+                    <View
+                      key={`${work.name ?? 'experience'}-${work.position ?? 'role'}-${work.startDate ?? index}`}
+                      style={styles.item}
+                      wrap={false}
+                    >
                       <View style={styles.itemHeader}>
                         <Text style={styles.itemTitle}>{work.position}</Text>
                         <Text style={styles.itemMeta}>
@@ -241,8 +246,11 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                       {work.summary && <Text style={styles.itemDescription}>{work.summary}</Text>}
                       {work.highlights && (
                         <View>
-                          {work.highlights.slice(0, 4).map((highlight, i) => (
-                            <View key={i} style={styles.bulletRow}>
+                          {work.highlights.slice(0, 4).map((highlight) => (
+                            <View
+                              key={`${work.name ?? 'experience'}-${highlight}`}
+                              style={styles.bulletRow}
+                            >
                               <Text style={styles.bullet}>•</Text>
                               <Text style={styles.bulletText}>{highlight}</Text>
                             </View>
@@ -259,7 +267,11 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Key Projects</Text>
                   {resume.projects.slice(0, 3).map((project, index) => (
-                    <View key={index} style={styles.item} wrap={false}>
+                    <View
+                      key={`${project.name ?? 'project'}-${project.startDate ?? index}`}
+                      style={styles.item}
+                      wrap={false}
+                    >
                       <View style={styles.itemHeader}>
                         <Text style={styles.itemTitle}>{project.name}</Text>
                       </View>
@@ -268,8 +280,11 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                       )}
                       {project.highlights && (
                         <View>
-                          {project.highlights.slice(0, 2).map((highlight, i) => (
-                            <View key={i} style={styles.bulletRow}>
+                          {project.highlights.slice(0, 2).map((highlight) => (
+                            <View
+                              key={`${project.name ?? 'project'}-${highlight}`}
+                              style={styles.bulletRow}
+                            >
                               <Text style={styles.bullet}>•</Text>
                               <Text style={styles.bulletText}>{highlight}</Text>
                             </View>
@@ -308,8 +323,8 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                   <Text style={styles.sectionTitle}>Skills</Text>
                   <View style={styles.skillsRow}>
                     {resume.skills.flatMap((skill) =>
-                      (skill.keywords || []).slice(0, 6).map((keyword, i) => (
-                        <Text key={`${skill.name}-${i}`} style={styles.skillTag}>
+                      (skill.keywords || []).slice(0, 6).map((keyword) => (
+                        <Text key={`${skill.name ?? 'skill'}-${keyword}`} style={styles.skillTag}>
                           {keyword}
                         </Text>
                       ))
@@ -323,7 +338,10 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
                 <View style={styles.sidebarSection}>
                   <Text style={styles.sectionTitle}>Education</Text>
                   {resume.education.map((edu, index) => (
-                    <View key={index} style={{ marginBottom: 8 }}>
+                    <View
+                      key={`${edu.institution ?? 'education'}-${edu.startDate ?? edu.endDate ?? index}`}
+                      style={{ marginBottom: 8 }}
+                    >
                       <Text style={{ fontSize: 9.5, fontWeight: 'bold', color: '#111827' }}>
                         {edu.institution}
                       </Text>
@@ -342,8 +360,8 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
               {metrics.length > 0 && (
                 <View style={styles.sidebarSection}>
                   <Text style={styles.sectionTitle}>Metrics</Text>
-                  {metrics.map((metric, index) => (
-                    <View key={index} style={styles.metricItem}>
+                  {metrics.map((metric) => (
+                    <View key={metric.label} style={styles.metricItem}>
                       <Text style={styles.metricValue}>{metric.value}</Text>
                       <Text style={styles.metricLabel}>{metric.label}</Text>
                     </View>
@@ -354,12 +372,12 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
           </View>
         </View>
 
-        <Text 
-          style={styles.footer} 
-          render={({ pageNumber, totalPages }) => (
+        <Text
+          style={styles.footer}
+          render={({ pageNumber, totalPages }) =>
             `${basics.name} — Generated via Portfolio • ${new Date().toLocaleDateString()} • Page ${pageNumber} of ${totalPages}`
-          )} 
-          fixed 
+          }
+          fixed
         />
       </Page>
     </Document>

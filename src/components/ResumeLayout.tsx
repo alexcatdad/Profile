@@ -205,14 +205,18 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-primary dark:text-[#f6a7ff]">
             Snapshot
           </p>
-          <p className="mt-3 text-base text-foreground/90 dark:text-zinc-100/90">{resume.basics?.summary}</p>
+          <p className="mt-3 text-base text-foreground/90 dark:text-zinc-100/90">
+            {resume.basics?.summary}
+          </p>
         </div>
         {companyPreferences?.primary && (
           <div className="w-full rounded-2xl border border-border bg-secondary/40 px-4 py-3 text-sm text-muted-foreground shadow-apple md:w-auto dark:border-white/15 dark:bg-black/40 dark:text-zinc-200">
             <p className="font-semibold text-foreground dark:text-white">Currently focused on</p>
             <p className="text-primary dark:text-[#f6a7ff]">{companyPreferences.primary}</p>
             {companyPreferences.secondary && (
-              <p className="text-xs text-muted-foreground/80 dark:text-zinc-400">Secondary: {companyPreferences.secondary}</p>
+              <p className="text-xs text-muted-foreground/80 dark:text-zinc-400">
+                Secondary: {companyPreferences.secondary}
+              </p>
             )}
           </div>
         )}
@@ -230,8 +234,14 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary dark:text-[#f6a7ff]">
             {metric.label}
           </p>
-          <p className="mt-2 text-3xl font-semibold text-foreground dark:text-white">{metric.value}</p>
-          {metric.caption && <p className="mt-1 text-sm text-muted-foreground dark:text-zinc-400">{metric.caption}</p>}
+          <p className="mt-2 text-3xl font-semibold text-foreground dark:text-white">
+            {metric.value}
+          </p>
+          {metric.caption && (
+            <p className="mt-1 text-sm text-muted-foreground dark:text-zinc-400">
+              {metric.caption}
+            </p>
+          )}
         </div>
       ))}
     </section>
@@ -249,15 +259,18 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
               className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200"
             >
               <p className="font-semibold text-primary dark:text-[#f6a7ff]">{role.label}</p>
-              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">{role.summaryFocus}</p>
+              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">
+                {role.summaryFocus}
+              </p>
             </div>
           ))}
 
           {quantifiable?.companyTypes && quantifiable.companyTypes.length > 0 && (
-            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200"
-            >
+            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200">
               <p className="font-semibold text-primary dark:text-[#f6a7ff]">Company types</p>
-              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">{quantifiable.companyTypes.join(' • ')}</p>
+              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">
+                {quantifiable.companyTypes.join(' • ')}
+              </p>
             </div>
           )}
 
@@ -300,9 +313,17 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
               key={`${pub.name ?? 'publication'}-${index}`}
               className="hover-lift rounded-3xl border border-border bg-secondary/30 p-5 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200"
             >
-              {pub.name && <h3 className="text-lg font-semibold text-foreground dark:text-white">{pub.name}</h3>}
-              {pub.publisher && <p className="text-accent text-xs dark:text-[#45caff]">{pub.publisher}</p>}
-              {pub.summary && <p className="mt-2 text-muted-foreground dark:text-zinc-300">{pub.summary}</p>}
+              {pub.name && (
+                <h3 className="text-lg font-semibold text-foreground dark:text-white">
+                  {pub.name}
+                </h3>
+              )}
+              {pub.publisher && (
+                <p className="text-accent text-xs dark:text-[#45caff]">{pub.publisher}</p>
+              )}
+              {pub.summary && (
+                <p className="mt-2 text-muted-foreground dark:text-zinc-300">{pub.summary}</p>
+              )}
             </article>
           ))}
         </div>

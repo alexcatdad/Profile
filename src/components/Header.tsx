@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowUpRight, Globe, Mail, MapPin, UserRound } from 'lucide-react';
 import type { Basics } from '@/types/json-resume';
 
@@ -32,14 +34,18 @@ export function Header({ basics }: HeaderProps) {
   const featuredProfile = basics.profiles?.[0];
 
   return (
-    <header className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
+    <header className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03] transition-all duration-300">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           {basics.name && (
-            <h1 className="text-3xl font-semibold text-foreground md:text-4xl dark:text-white">{basics.name}</h1>
+            <h1 className="text-3xl font-semibold text-foreground md:text-4xl dark:text-white">
+              {basics.name}
+            </h1>
           )}
           {basics.label && (
-            <p className="text-lg font-medium text-emerald-600 dark:text-emerald-300/90">{basics.label}</p>
+            <p className="text-lg font-medium text-emerald-600 dark:text-emerald-300/90 transition-opacity">
+              {basics.label}
+            </p>
           )}
           <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground dark:text-zinc-400">
             {location && (
@@ -72,22 +78,23 @@ export function Header({ basics }: HeaderProps) {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {contactItems.map((item) => {
             const Icon = item.icon;
+            const sharedProps = {
+              className:
+                'group flex items-center gap-3 rounded-2xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground transition dark:border-white/10 dark:bg-white/5 dark:text-zinc-200',
+            };
             return item.href ? (
               <a
                 key={item.label}
                 href={item.href}
                 target={item.href.startsWith('http') ? '_blank' : undefined}
                 rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="group flex items-center gap-3 rounded-2xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground transition hover:border-emerald-500/40 hover:text-emerald-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:border-emerald-400/40 dark:hover:text-emerald-200"
+                className={`${sharedProps.className} hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:border-emerald-400/40 dark:hover:text-emerald-200`}
               >
                 <Icon className="h-4 w-4 text-emerald-500 transition group-hover:scale-110 dark:text-emerald-300" />
                 <span className="truncate">{item.label}</span>
               </a>
             ) : (
-              <div
-                key={item.label}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:text-zinc-200"
-              >
+              <div key={item.label} className={sharedProps.className}>
                 <Icon className="h-4 w-4 text-emerald-500 dark:text-emerald-300" />
                 <span className="truncate">{item.label}</span>
               </div>

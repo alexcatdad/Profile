@@ -1,3 +1,5 @@
+'use client';
+
 import { Layers3 } from 'lucide-react';
 import type { Skill } from '@/types/json-resume';
 
@@ -22,17 +24,23 @@ export function SkillsSection({ skills, highlighted = false }: SkillsSectionProp
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-600/80 dark:text-emerald-200/80">
             Core skills
           </p>
-          <h2 className="text-2xl font-semibold text-foreground dark:text-white">Technical range</h2>
+          <h2 className="text-2xl font-semibold text-foreground dark:text-white">
+            Technical range
+          </h2>
         </div>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
         {skills.map((skill, index) => (
           <article
             key={`${skill.name ?? 'skill'}-${index}`}
-            className="interactive-card rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple dark:border-white/10 dark:bg-gradient-to-br dark:from-white/[0.04] dark:to-transparent dark:text-zinc-200"
+            className="interactive-card rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-gradient-to-br dark:from-white/[0.04] dark:to-transparent dark:text-zinc-200"
           >
             <div className="mb-3 flex items-center justify-between gap-4">
-              {skill.name && <h3 className="text-lg font-semibold text-foreground dark:text-white">{skill.name}</h3>}
+              {skill.name && (
+                <h3 className="text-lg font-semibold text-foreground dark:text-white">
+                  {skill.name}
+                </h3>
+              )}
               {skill.level && (
                 <span className="rounded-full border border-emerald-500/50 px-3 py-1 text-xs text-emerald-600 dark:border-emerald-400/50 dark:text-emerald-200">
                   {skill.level}
