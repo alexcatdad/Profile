@@ -3,11 +3,17 @@ import type { Skill } from '@/types/json-resume';
 
 interface SkillsSectionProps {
   skills: Skill[];
+  highlighted?: boolean;
 }
 
-export function SkillsSection({ skills }: SkillsSectionProps) {
+export function SkillsSection({ skills, highlighted = false }: SkillsSectionProps) {
   return (
-    <section className="mb-12" aria-label="Skills">
+    <section
+      className="mb-12"
+      aria-label="Skills"
+      data-resume-section="skills"
+      data-highlighted={highlighted}
+    >
       <div className="mb-6 flex items-center gap-3">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
           <Layers3 className="h-6 w-6" />

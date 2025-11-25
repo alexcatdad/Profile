@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Download, FileCode2, FileText, Sparkles, X } from 'lucide-react';
+import { Download, FileCode2, FileText, Loader2, Sparkles, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { buildDownloadFileName } from '@/lib/download-utils';
 import { getRoleFromSearchParams } from '@/lib/role-filter';
@@ -42,37 +42,39 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
   const handleDownload = async (format: 'pdf' | 'markdown') => {
     setIsDownloading(format);
 
-    try {
-      const pathParts = window.location.pathname.split('/');
-      const lang = pathParts[1] || 'en';
-      const response = await fetch(`/${lang}/api/download/${format}${window.location.search}`);
+    // Start download in background - don't await, let it run async
+    (async () => {
+      try {
+        const pathParts = window.location.pathname.split('/');
+        const lang = pathParts[1] || 'en';
+        const response = await fetch(`/${lang}/api/download/${format}${window.location.search}`);
 
-      if (!response.ok) {
-        throw new Error('Download failed');
+        if (!response.ok) {
+          throw new Error('Download failed');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const role = getRoleFromSearchParams(new URLSearchParams(window.location.search));
+        a.download = buildDownloadFileName({
+          basics,
+          targetRoles,
+          role,
+          format,
+        });
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Failed to download file. Please try again.');
+      } finally {
+        setIsDownloading(null);
       }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      const role = getRoleFromSearchParams(new URLSearchParams(window.location.search));
-      a.download = buildDownloadFileName({
-        basics,
-        targetRoles,
-        role,
-        format,
-      });
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Download error:', error);
-      alert('Failed to download file. Please try again.');
-    } finally {
-      setIsDownloading(null);
-      setIsOpen(false);
-    }
+    })();
   };
 
   if (!mounted) {
@@ -107,14 +109,18 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
               disabled={isDownloading !== null}
               className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#ff47c0]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
               aria-busy={isDownloading === 'pdf'}
-              whileHover={{ scale: 1.05, x: -5 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
+              whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
               <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
                 {isDownloading === 'pdf' ? 'Generating...' : 'Download PDF'}
               </span>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] shadow-lg">
-                <FileText className="w-5 h-5 text-white" />
+                {isDownloading === 'pdf' ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-white" />
+                ) : (
+                  <FileText className="w-5 h-5 text-white" />
+                )}
               </div>
             </motion.button>
 
@@ -123,14 +129,18 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
               disabled={isDownloading !== null}
               className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#45caff]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
               aria-busy={isDownloading === 'markdown'}
-              whileHover={{ scale: 1.05, x: -5 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
+              whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
               <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
                 {isDownloading === 'markdown' ? 'Generating...' : 'Download Markdown'}
               </span>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#45caff] via-[#7c6bff] to-[#ff47c0] shadow-lg">
-                <FileCode2 className="w-5 h-5 text-white" />
+                {isDownloading === 'markdown' ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-white" />
+                ) : (
+                  <FileCode2 className="w-5 h-5 text-white" />
+                )}
               </div>
             </motion.button>
           </motion.div>
@@ -139,15 +149,19 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
 
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        disabled={isDownloading !== null}
+        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40 disabled:cursor-not-allowed disabled:opacity-50"
+        whileHover={isDownloading === null ? { scale: 1.1 } : {}}
+        whileTap={isDownloading === null ? { scale: 0.9 } : {}}
         animate={{ rotate: isOpen ? 180 : 0 }}
         transition={{ duration: 0.3 }}
         aria-label={isOpen ? 'Close download menu' : 'Open download menu'}
         aria-expanded={isOpen}
+        aria-busy={isDownloading !== null}
       >
-        {isOpen ? (
+        {isDownloading !== null ? (
+          <Loader2 className="w-6 h-6 animate-spin text-white" />
+        ) : isOpen ? (
           <X className="w-6 h-6 text-white" />
         ) : (
           <Download className="w-6 h-6 text-white" />

@@ -7,6 +7,7 @@ interface PersonalSectionProps {
   languages?: Language[];
   certificates?: Certificate[];
   formatDate: (date?: string) => string;
+  highlighted?: boolean;
 }
 
 export function PersonalSection({
@@ -16,9 +17,10 @@ export function PersonalSection({
   languages,
   certificates,
   formatDate,
+  highlighted = false,
 }: PersonalSectionProps) {
   return (
-    <>
+    <div data-resume-section="personal" data-highlighted={highlighted}>
       {/* Volunteer */}
       {volunteer && volunteer.length > 0 && (
         <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
@@ -147,6 +149,6 @@ export function PersonalSection({
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

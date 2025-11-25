@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { JSONResume } from '@/types/json-resume';
+import { useResumeHighlight } from '@/hooks/useResumeHighlight';
 import { Header } from './Header';
 import { ExperienceSection } from './sections/ExperienceSection';
 import { PersonalSection } from './sections/PersonalSection';
@@ -58,6 +59,8 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
     publications: null,
     personal: null,
   });
+
+  const { isHighlighted } = useResumeHighlight();
 
   const formatDate = (date?: string) => {
     if (!date) return 'Present';
@@ -365,31 +368,8 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
       <div className="mx-auto max-w-5xl">
         <Header basics={resume.basics} />
 
-        <div className="sticky top-0 z-40 -mx-4 md:-mx-8 px-4 pb-4 md:px-8">
-          <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-background/90 px-4 py-4 shadow-apple backdrop-blur supports-[backdrop-filter]:bg-background/70">
-            {resume.basics && (
-              <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-sm text-zinc-200 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-[#f6a7ff]/80">Profile</p>
-                  <p className="text-lg font-semibold text-white">{resume.basics.name}</p>
-                  {resume.basics.label && (
-                    <p className="text-sm text-emerald-300/90">{resume.basics.label}</p>
-                  )}
-                </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  {basicsLocation && (
-                    <span className="rounded-full border border-white/10 px-3 py-1 text-zinc-100">
-                      {basicsLocation}
-                    </span>
-                  )}
-                  {resume.basics.pronouns && (
-                    <span className="rounded-full border border-white/10 px-3 py-1 text-zinc-100">
-                      {resume.basics.pronouns}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
+        <div className={cn('sticky top-20 z-40 -mx-4 md:-mx-8 px-4 md:px-8', showStickyContext && 'pb-4')}>
+          <div className={cn('mx-auto max-w-5xl rounded-3xl border border-white/10 bg-background/90 px-4 shadow-apple backdrop-blur supports-[backdrop-filter]:bg-background/70', showStickyContext ? 'py-4' : 'pt-4 pb-0')}>
             <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
             {showStickyContext && (
@@ -436,18 +416,28 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
 
         {(activeTab === 'full' || activeTab === 'skills') &&
           hasSkills &&
-          wrapSection('skills', <SkillsSection skills={resume.skills ?? []} />)}
+          wrapSection(
+            'skills',
+            <SkillsSection skills={resume.skills ?? []} highlighted={isHighlighted('skills')} />
+          )}
 
         {(activeTab === 'full' || activeTab === 'experience') &&
           hasExperience &&
           wrapSection(
             'experience',
-            <ExperienceSection work={resume.work ?? []} formatDate={formatDate} />
+            <ExperienceSection
+              work={resume.work ?? []}
+              formatDate={formatDate}
+              highlighted={isHighlighted('experience')}
+            />
           )}
 
         {(activeTab === 'full' || activeTab === 'projects') &&
           hasProjects &&
-          wrapSection('projects', <ProjectsSection projects={resume.projects ?? []} />)}
+          wrapSection(
+            'projects',
+            <ProjectsSection projects={resume.projects ?? []} highlighted={isHighlighted('projects')} />
+          )}
 
         {publicationsSection && wrapSection('publications', publicationsSection)}
 
@@ -462,6 +452,7 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
               languages={resume.languages}
               certificates={resume.certificates}
               formatDate={formatDate}
+              highlighted={isHighlighted('personal')}
             />
           )}
 

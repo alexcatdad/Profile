@@ -3,11 +3,17 @@ import type { Project } from '@/types/json-resume';
 
 interface ProjectsSectionProps {
   projects: Project[];
+  highlighted?: boolean;
 }
 
-export function ProjectsSection({ projects }: ProjectsSectionProps) {
+export function ProjectsSection({ projects, highlighted = false }: ProjectsSectionProps) {
   return (
-    <section className="mb-12" aria-label="Projects">
+    <section
+      className="mb-12"
+      aria-label="Projects"
+      data-resume-section="projects"
+      data-highlighted={highlighted}
+    >
       <div className="mb-6 flex items-center gap-3">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff47c0]/15 text-[#45caff]">
           <Code2 className="h-6 w-6" />

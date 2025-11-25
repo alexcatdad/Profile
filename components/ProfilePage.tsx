@@ -4,6 +4,7 @@ import { CoverLetterModalWrapper } from './CoverLetterModalWrapper';
 import { DownloadButtons } from './DownloadButtons';
 import { Navigation } from './Navigation';
 import { ResumeLayout } from './ResumeLayout';
+import { ResumeChat } from './ResumeChat';
 import { ScrollProgress } from './ScrollProgress';
 
 interface ProfilePageProps {
@@ -14,7 +15,7 @@ interface ProfilePageProps {
 
 export function ProfilePage({ resume, dictionary, coverLetterOpen = false }: ProfilePageProps) {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
       <ScrollProgress />
       <div
         className="pointer-events-none absolute inset-0 neo-grid opacity-50"
@@ -41,6 +42,7 @@ export function ProfilePage({ resume, dictionary, coverLetterOpen = false }: Pro
           resume={resume}
           dictionary={dictionary}
         />
+        <ResumeChat resume={resume} />
       </div>
     </div>
   );

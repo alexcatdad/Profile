@@ -4,6 +4,7 @@ import type { Work } from '@/types/json-resume';
 interface ExperienceSectionProps {
   work: Work[];
   formatDate: (date?: string) => string;
+  highlighted?: boolean;
 }
 
 const parseDate = (date?: string) => {
@@ -25,9 +26,18 @@ const getDuration = (start?: string, end?: string) => {
   return `${years > 0 ? `${years}y ` : ''}${remainder > 0 ? `${remainder}m` : ''}`.trim();
 };
 
-export function ExperienceSection({ work, formatDate }: ExperienceSectionProps) {
+export function ExperienceSection({
+  work,
+  formatDate,
+  highlighted = false,
+}: ExperienceSectionProps) {
   return (
-    <section className="mb-12" aria-label="Experience timeline">
+    <section
+      className="mb-12"
+      aria-label="Experience timeline"
+      data-resume-section="experience"
+      data-highlighted={highlighted}
+    >
       <div className="mb-6 flex items-center gap-3">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff47c0]/15 text-[#45caff]">
           <BriefcaseBusiness className="h-6 w-6" />
