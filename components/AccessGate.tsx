@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
+import type { Basics } from '@/types/json-resume';
 import { getAccessData } from '@/lib/storage';
-import type { Profile } from '@/types/content';
 import { AccessModal } from './AccessModal';
 import { WelcomeToast } from './WelcomeToast';
 
 interface AccessGateProps {
   dictionary: Dictionary;
-  profile: Profile;
+  basics?: Basics;
   children: React.ReactNode;
 }
 
-export function AccessGate({ dictionary, profile, children }: AccessGateProps) {
+export function AccessGate({ dictionary, basics, children }: AccessGateProps) {
   const [hasAccess, setHasAccess] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
@@ -31,8 +31,8 @@ export function AccessGate({ dictionary, profile, children }: AccessGateProps) {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
       </div>
     );
   }
@@ -43,9 +43,9 @@ export function AccessGate({ dictionary, profile, children }: AccessGateProps) {
         isOpen={true}
         onClose={handleAccessGranted}
         dictionary={dictionary}
-        profileName={profile.name}
-        profileTitle={profile.title}
-        headshot={profile.headshot}
+        profileName={basics?.name || ''}
+        profileTitle={basics?.label || ''}
+        headshot={basics?.image || ''}
       />
     );
   }

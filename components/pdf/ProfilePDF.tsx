@@ -1,562 +1,487 @@
 import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
-import type { ContentData } from '@/types/content';
+import type { JSONResume } from '@/types/json-resume';
 
-// Compact, beautiful PDF styles matching the website aesthetic
 const styles = StyleSheet.create({
   page: {
-    padding: 48,
+    padding: 42,
     fontFamily: 'Helvetica',
     fontSize: 10,
     lineHeight: 1.5,
-    color: '#1a1a1a',
-    backgroundColor: '#ffffff',
+    color: '#0f172a',
+    backgroundColor: '#f6f8fb',
   },
-  // Header Section
-  header: {
-    marginBottom: 24,
-    paddingBottom: 20,
-    borderBottom: '3pt solid #3B82F6',
-    backgroundColor: '#F0F9FF',
-    padding: 20,
-    borderRadius: 8,
+  headerCard: {
+    backgroundColor: '#0f172a',
+    color: '#f8fafc',
+    borderRadius: 18,
+    padding: 24,
+    marginBottom: 20,
   },
   name: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 6,
-    color: '#1a1a1a',
-    letterSpacing: -1,
+    fontSize: 28,
+    fontWeight: 700,
+    marginBottom: 4,
   },
   title: {
-    fontSize: 14,
-    color: '#3B82F6',
-    marginBottom: 10,
-    fontWeight: 'bold',
+    fontSize: 13,
+    color: '#4ade80',
+    fontWeight: 600,
+  },
+  roleTag: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#4ade80',
+    fontSize: 9,
+    fontWeight: 600,
+    color: '#f8fafc',
   },
   contactRow: {
     flexDirection: 'row',
-    gap: 16,
-    fontSize: 9,
-    color: '#6B7280',
     flexWrap: 'wrap',
+    marginTop: 14,
   },
   contactItem: {
+    color: '#e2e8f0',
     marginRight: 12,
+    marginBottom: 6,
+    fontSize: 9,
+    textDecoration: 'none',
   },
-  // Section Headers
+  twoColumn: {
+    flexDirection: 'row',
+  },
+  columnMain: {
+    flex: 1.8,
+  },
+  columnAside: {
+    flex: 1,
+    marginLeft: 18,
+  },
+  sectionCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginTop: 20,
-    marginBottom: 10,
-    paddingBottom: 6,
-    borderBottom: '2pt solid #E5E7EB',
-    letterSpacing: -0.5,
+    fontSize: 11,
+    letterSpacing: 1,
+    fontWeight: 700,
+    color: '#0f172a',
+    marginBottom: 8,
     textTransform: 'uppercase',
   },
-  // Summary
   summary: {
     fontSize: 10,
-    lineHeight: 1.6,
-    color: '#374151',
-    marginBottom: 16,
-    textAlign: 'justify',
+    color: '#1e293b',
   },
-  // Skills with visual proficiency bars
-  skillsContainer: {
-    marginBottom: 16,
-  },
-  skillCategory: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: '#3B82F6',
-    marginTop: 8,
-    marginBottom: 6,
-  },
-  skillItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  skillName: {
-    fontSize: 9,
-    color: '#4B5563',
-    width: 120,
-  },
-  skillBarContainer: {
-    flex: 1,
-    height: 6,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-  skillBarFill: {
-    height: '100%',
-    backgroundColor: '#3B82F6',
-  },
-  // Experience
-  experienceItem: {
-    marginBottom: 16,
+  metricCard: {
+    borderRadius: 14,
     padding: 12,
-    backgroundColor: '#F9FAFB',
-    borderRadius: 6,
-    borderLeft: '4pt solid #3B82F6',
+    backgroundColor: '#0f172a',
+    marginBottom: 10,
   },
-  experienceHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 6,
+  metricValue: {
+    fontSize: 16,
+    fontWeight: 700,
+    color: '#f8fafc',
   },
-  experienceLeft: {
-    flex: 1,
+  metricLabel: {
+    fontSize: 9,
+    color: '#cbd5f5',
+  },
+  experienceItem: {
+    borderLeftWidth: 3,
+    borderLeftColor: '#10b981',
+    paddingLeft: 12,
+    marginBottom: 14,
   },
   jobTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 2,
+    fontSize: 11,
+    fontWeight: 700,
+    color: '#0f172a',
   },
   company: {
     fontSize: 10,
-    color: '#3B82F6',
-    fontWeight: 'bold',
-    marginBottom: 4,
+    color: '#10b981',
+    fontWeight: 600,
   },
-  experienceRight: {
-    alignItems: 'flex-end',
-  },
-  dates: {
+  dateRow: {
     fontSize: 9,
-    color: '#6B7280',
-    marginBottom: 2,
+    color: '#475569',
+    marginTop: 2,
   },
-  location: {
+  highlight: {
     fontSize: 9,
-    color: '#6B7280',
+    color: '#1e293b',
+    marginTop: 4,
   },
-  durationBar: {
-    height: 4,
-    backgroundColor: '#3B82F6',
-    borderRadius: 2,
-    marginTop: 8,
-    marginBottom: 8,
-  },
-  bulletPoints: {
-    marginTop: 6,
-  },
-  bulletPoint: {
-    fontSize: 9,
-    color: '#374151',
-    marginBottom: 4,
-    lineHeight: 1.6,
-  },
-  technologies: {
+  tagRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 5,
     marginTop: 6,
   },
-  techTag: {
-    fontSize: 7,
-    color: '#3B82F6',
-    backgroundColor: '#EFF6FF',
-    padding: '3 8',
-    borderRadius: 4,
-    border: '1pt solid #BFDBFE',
-  },
-  // Projects
-  projectItem: {
-    marginBottom: 14,
-    padding: 12,
-    backgroundColor: '#FAF5FF',
+  tag: {
+    fontSize: 8,
+    color: '#0f172a',
+    backgroundColor: '#e2fbe2',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     borderRadius: 6,
-    borderLeft: '4pt solid #8B5CF6',
-  },
-  projectHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
+    marginRight: 4,
     marginBottom: 4,
   },
-  projectBadge: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#8B5CF6',
-    alignItems: 'center',
-    justifyContent: 'center',
+  skillCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    padding: 12,
+    marginBottom: 10,
+    backgroundColor: '#fbfdff',
   },
-  projectBadgeText: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+  skillName: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: '#0f172a',
+  },
+  skillKeywords: {
+    fontSize: 9,
+    color: '#475569',
+    marginTop: 4,
+  },
+  achievementsList: {
+    marginTop: 6,
+  },
+  achievementItem: {
+    fontSize: 9,
+    color: '#1e293b',
+    marginBottom: 4,
+  },
+  projectCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#d4dbe8',
+    padding: 14,
+    marginBottom: 14,
   },
   projectName: {
     fontSize: 11,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    flex: 1,
+    fontWeight: 700,
+    color: '#0f172a',
+    marginBottom: 4,
   },
   projectDescription: {
     fontSize: 9,
-    color: '#4B5563',
-    lineHeight: 1.6,
-    marginBottom: 6,
+    color: '#1f2937',
   },
-  projectLink: {
-    fontSize: 8,
-    color: '#3B82F6',
-    textDecoration: 'none',
-  },
-  // Education
   educationItem: {
-    marginBottom: 12,
-    padding: 10,
-    backgroundColor: '#F0FDF4',
-    borderRadius: 6,
-    borderLeft: '4pt solid #10B981',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    padding: 12,
+    marginBottom: 10,
   },
   degree: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 3,
+    fontSize: 10,
+    fontWeight: 700,
+    color: '#0f172a',
   },
   institution: {
-    fontSize: 10,
-    color: '#10B981',
-    marginBottom: 2,
-    fontWeight: 'bold',
-  },
-  educationDate: {
     fontSize: 9,
-    color: '#6B7280',
+    color: '#0f6f9c',
+    marginTop: 2,
   },
-  // Metrics
-  metricsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-    gap: 12,
-  },
-  metricBox: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#F0F9FF',
-    borderRadius: 6,
-    border: '2pt solid #3B82F6',
-  },
-  metricIconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#3B82F6',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  metricIcon: {
-    fontSize: 18,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  metricValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#3B82F6',
-    marginBottom: 4,
-  },
-  metricLabel: {
-    fontSize: 8,
-    color: '#6B7280',
-    textAlign: 'center',
-  },
-  // Achievements
-  achievementItem: {
-    marginBottom: 12,
-    padding: 10,
-    backgroundColor: '#FFFBEB',
-    borderRadius: 6,
-    borderLeft: '4pt solid #F59E0B',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 8,
-  },
-  achievementBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#F59E0B',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  achievementIcon: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  achievementContent: {
-    flex: 1,
-  },
-  achievementTitle: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 3,
-  },
-  achievementDescription: {
-    fontSize: 9,
-    color: '#4B5563',
-    lineHeight: 1.6,
-  },
-  // Footer
   footer: {
-    position: 'absolute',
-    bottom: 30,
-    left: 48,
-    right: 48,
-    borderTop: '1pt solid #E5E7EB',
-    paddingTop: 10,
     fontSize: 8,
-    color: '#9CA3AF',
+    color: '#64748b',
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#e2e8f0',
+    paddingTop: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  // Stats inline
-  statsRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-  },
-  statValue: {
-    fontSize: 9,
-    fontWeight: 'bold',
-    color: '#8B5CF6',
-  },
-  statLabel: {
-    fontSize: 8,
-    color: '#6B7280',
   },
 });
 
 interface ProfilePDFProps {
-  content: ContentData;
+  resume: JSONResume;
+  roleLabel?: string;
 }
 
-export function ProfilePDF({ content }: ProfilePDFProps) {
-  const { profile, experience, projects, skills, education, certifications, metrics, achievements } = content;
+const parseDate = (date?: string) => {
+  if (!date) return null;
+  const [year, month = '01'] = date.split('-');
+  return new Date(Number(year), Number(month) - 1 || 0);
+};
 
-  // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) {
-      acc[skill.category] = [];
-    }
-    acc[skill.category].push(skill.name);
-    return acc;
-  }, {} as Record<string, string[]>);
+const formatDate = (date?: string) => {
+  if (!date) return 'Present';
+  const parsed = parseDate(date);
+  if (!parsed) return 'Present';
+  return parsed.toLocaleString('en', { month: 'short', year: 'numeric' });
+};
+
+const formatDuration = (start?: string, end?: string) => {
+  const startDate = parseDate(start);
+  if (!startDate) return null;
+  const endDate = parseDate(end) ?? new Date();
+  const months =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth());
+  const years = Math.floor(months / 12);
+  const remainder = months % 12;
+  const parts = [];
+  if (years > 0) parts.push(`${years}y`);
+  if (remainder > 0) parts.push(`${remainder}m`);
+  return parts.join(' ');
+};
+
+export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
+  const basics = resume.basics || {};
+  const location = basics.location
+    ? `${basics.location.city || ''}${basics.location.city && basics.location.countryCode ? ', ' : ''}${basics.location.countryCode || ''}`
+    : '';
+  const linkedInProfile = basics.profiles?.find((p) => p.network === 'LinkedIn');
+  const quantifiable = resume._custom?.quantifiableMetrics;
+
+  const metrics = [
+    quantifiable?.yearsExperience
+      ? {
+          label: 'Years shipping products',
+          value: `${quantifiable.yearsExperience}+`,
+        }
+      : null,
+    quantifiable?.teamsLed
+      ? {
+          label: 'Teams led',
+          value: `${quantifiable.teamsLed}`,
+        }
+      : null,
+    quantifiable?.remoteYears
+      ? {
+          label: 'Remote-first',
+          value: `${quantifiable.remoteYears}+ yrs`,
+        }
+      : null,
+    resume._custom?.companyPreferences?.primary
+      ? {
+          label: 'Preferred environment',
+          value: resume._custom.companyPreferences.primary,
+        }
+      : null,
+  ].filter((metric): metric is { label: string; value: string } => Boolean(metric));
+
+  const achievements = resume._custom?.keyAchievements || [];
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.name}>{profile.name}</Text>
-          <Text style={styles.title}>{profile.title}</Text>
+        <View style={styles.headerCard}>
+          {basics.name && <Text style={styles.name}>{basics.name}</Text>}
+          {basics.label && <Text style={styles.title}>{basics.label}</Text>}
+          {roleLabel && <Text style={styles.roleTag}>{roleLabel} profile</Text>}
           <View style={styles.contactRow}>
-            <Text style={styles.contactItem}>{profile.contact.email}</Text>
-            {profile.contact.phone && <Text style={styles.contactItem}>{profile.contact.phone}</Text>}
-            <Text style={styles.contactItem}>{profile.location}</Text>
-            {profile.social.linkedin && <Link src={profile.social.linkedin} style={styles.contactItem}>LinkedIn</Link>}
+            {basics.email && <Text style={styles.contactItem}>{basics.email}</Text>}
+            {location && <Text style={styles.contactItem}>{location}</Text>}
+            {linkedInProfile && (
+              <Link src={linkedInProfile.url} style={styles.contactItem}>
+                LinkedIn
+              </Link>
+            )}
+            {basics.url && (
+              <Link src={basics.url} style={styles.contactItem}>
+                Portfolio
+              </Link>
+            )}
           </View>
         </View>
 
-        {/* Summary */}
-        <Text style={styles.sectionTitle}>Professional Summary</Text>
-        <Text style={styles.summary}>{profile.summary.join(' ')}</Text>
-
-        {/* Metrics with visual icons */}
-        {metrics && metrics.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>Key Metrics</Text>
-            <View style={styles.metricsRow}>
-              {metrics.slice(0, 4).map((metric, idx) => {
-                // Icon symbols for each metric
-                const icons = ['★', '▲', '●', '◆'];
-                return (
-                  <View key={metric.id} style={styles.metricBox}>
-                    <View style={styles.metricIconCircle}>
-                      <Text style={styles.metricIcon}>{icons[idx % icons.length]}</Text>
-                    </View>
-                    <Text style={styles.metricValue}>
-                      {metric.prefix}{metric.value}{metric.suffix}
-                    </Text>
-                    <Text style={styles.metricLabel}>{metric.label}</Text>
+        <View style={styles.twoColumn}>
+          <View style={styles.columnMain}>
+            {basics.summary && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Snapshot</Text>
+                <Text style={styles.summary}>{basics.summary}</Text>
+              </View>
+            )}
+            {resume.work && resume.work.length > 0 && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Experience</Text>
+                {resume.work.slice(0, 5).map((exp, index) => (
+                  <View key={index} style={styles.experienceItem}>
+                    {exp.position && <Text style={styles.jobTitle}>{exp.position}</Text>}
+                    {exp.name && <Text style={styles.company}>{exp.name}</Text>}
+                    {(exp.startDate || exp.endDate) && (
+                      <Text style={styles.dateRow}>
+                        {formatDate(exp.startDate)} — {formatDate(exp.endDate)}{' '}
+                        {formatDuration(exp.startDate, exp.endDate)
+                          ? `• ${formatDuration(exp.startDate, exp.endDate)}`
+                          : ''}
+                      </Text>
+                    )}
+                    {exp.summary && <Text style={styles.highlight}>{exp.summary}</Text>}
+                    {exp.highlights && exp.highlights.length > 0 && (
+                      <View>
+                        {exp.highlights.slice(0, 3).map((highlight, hIndex) => (
+                          <Text key={hIndex} style={styles.highlight}>
+                            • {highlight}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                    {exp.keywords && exp.keywords.length > 0 && (
+                      <View style={styles.tagRow}>
+                        {exp.keywords.slice(0, 6).map((keyword, kIndex) => (
+                          <Text key={kIndex} style={styles.tag}>
+                            {keyword}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
                   </View>
-                );
-              })}
-            </View>
-          </View>
-        )}
-
-        {/* Skills with visual proficiency bars */}
-        <Text style={styles.sectionTitle}>Technical Skills</Text>
-        <View style={styles.skillsContainer}>
-          {Object.entries(skillsByCategory).slice(0, 6).map(([category, skillNames]) => (
-            <View key={category}>
-              <Text style={styles.skillCategory}>{category}</Text>
-              {skillNames.slice(0, 5).map((skillName, idx) => {
-                // Calculate proficiency (90-100% for first skills, decreasing)
-                const proficiency = Math.max(70, 100 - idx * 5);
-                return (
-                  <View key={skillName} style={styles.skillItem}>
-                    <Text style={styles.skillName}>{skillName}</Text>
-                    <View style={styles.skillBarContainer}>
-                      <View style={[styles.skillBarFill, { width: `${proficiency}%` }]} />
-                    </View>
-                  </View>
-                );
-              })}
-            </View>
-          ))}
-        </View>
-
-        {/* Experience */}
-        <Text style={styles.sectionTitle}>Professional Experience</Text>
-        {experience.slice(0, 3).map((exp, expIdx) => {
-          // Calculate duration for visual timeline bar (longer tenure = wider bar)
-          const durationWidth = Math.min(100, 50 + expIdx * 15) + '%';
-
-          return (
-            <View key={exp.id} style={styles.experienceItem}>
-              <View style={styles.experienceHeader}>
-                <View style={styles.experienceLeft}>
-                  <Text style={styles.jobTitle}>● {exp.position}</Text>
-                  <Text style={styles.company}>{exp.company}</Text>
-                </View>
-                <View style={styles.experienceRight}>
-                  <Text style={styles.dates}>
-                    {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-                  </Text>
-                  <Text style={styles.location}>📍 {exp.location}</Text>
-                </View>
-              </View>
-              {/* Visual duration timeline bar */}
-              <View style={[styles.durationBar, { width: durationWidth }]} />
-              <View style={styles.bulletPoints}>
-                {exp.description.slice(0, 2).map((desc, idx) => (
-                  <Text key={idx} style={styles.bulletPoint}>• {desc}</Text>
-                ))}
-              </View>
-              {exp.technologies && exp.technologies.length > 0 && (
-                <View style={styles.technologies}>
-                  {exp.technologies.slice(0, 6).map((tech) => (
-                    <Text key={tech} style={styles.techTag}>{tech}</Text>
-                  ))}
-                </View>
-              )}
-            </View>
-          );
-        })}
-
-        {/* Page break for second page */}
-      </Page>
-
-      <Page size="A4" style={styles.page}>
-        {/* Projects with badges */}
-        <Text style={styles.sectionTitle}>Featured Projects</Text>
-        {projects.slice(0, 4).map((project, projIdx) => (
-          <View key={project.id} style={styles.projectItem}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <View style={styles.projectHeader}>
-                <View style={styles.projectBadge}>
-                  <Text style={styles.projectBadgeText}>{projIdx + 1}</Text>
-                </View>
-                <Text style={styles.projectName}>{project.name}</Text>
-              </View>
-              {(project.stars !== undefined || project.downloads !== undefined) && (
-                <View style={styles.statsRow}>
-                  {project.stars !== undefined && (
-                    <View style={styles.statItem}>
-                      <Text style={styles.statValue}>★ {project.stars}</Text>
-                    </View>
-                  )}
-                  {project.downloads !== undefined && (
-                    <View style={styles.statItem}>
-                      <Text style={styles.statValue}>↓ {project.downloads}</Text>
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-            <Text style={styles.projectDescription}>{project.description}</Text>
-            {project.technologies && project.technologies.length > 0 && (
-              <View style={styles.technologies}>
-                {project.technologies.slice(0, 6).map((tech) => (
-                  <Text key={tech} style={styles.techTag}>{tech}</Text>
                 ))}
               </View>
             )}
           </View>
-        ))}
 
-        {/* Achievements with badges */}
-        {achievements && achievements.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>Key Achievements</Text>
-            {achievements.slice(0, 3).map((achievement, achIdx) => {
-              const achievementIcons = ['🏆', '⭐', '🎯'];
-              return (
-                <View key={achievement.id} style={styles.achievementItem}>
-                  <View style={styles.achievementBadge}>
-                    <Text style={styles.achievementIcon}>{achievementIcons[achIdx % achievementIcons.length]}</Text>
+          <View style={styles.columnAside}>
+            {metrics.length > 0 && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Impact metrics</Text>
+                {metrics.map((metric, index) => (
+                  <View key={index} style={styles.metricCard}>
+                    <Text style={styles.metricValue}>{metric.value}</Text>
+                    <Text style={styles.metricLabel}>{metric.label}</Text>
                   </View>
-                  <View style={styles.achievementContent}>
-                    <Text style={styles.achievementTitle}>{achievement.title}</Text>
-                    <Text style={styles.achievementDescription}>{achievement.description}</Text>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        )}
-
-        {/* Education */}
-        <Text style={styles.sectionTitle}>Education</Text>
-        {education.map((edu) => (
-          <View key={edu.id} style={styles.educationItem}>
-            <Text style={styles.degree}>{edu.degree} - {edu.field}</Text>
-            <Text style={styles.institution}>{edu.institution}</Text>
-            <Text style={styles.educationDate}>
-              {edu.startDate} - {edu.current ? 'Present' : edu.endDate}
-            </Text>
-          </View>
-        ))}
-        {certifications && certifications.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>Certifications</Text>
-            {certifications.slice(0, 4).map((cert) => (
-              <View key={cert.id} style={styles.educationItem}>
-                <Text style={styles.degree}>{cert.name}</Text>
-                <Text style={styles.institution}>{cert.issuer}</Text>
-                <Text style={styles.educationDate}>{cert.issueDate}</Text>
+                ))}
               </View>
-            ))}
-          </View>
-        )}
+            )}
 
-        {/* Footer */}
+            {resume.skills && resume.skills.length > 0 && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Core skills</Text>
+                {resume.skills.slice(0, 4).map((skill, index) => (
+                  <View key={index} style={styles.skillCard}>
+                    {skill.name && (
+                      <Text style={styles.skillName}>
+                        {skill.name}
+                        {skill.level ? ` • ${skill.level}` : ''}
+                      </Text>
+                    )}
+                    {skill.keywords && skill.keywords.length > 0 && (
+                      <Text style={styles.skillKeywords}>{skill.keywords.join(' • ')}</Text>
+                    )}
+                    {skill.practicalApplications && skill.practicalApplications.length > 0 && (
+                      <View style={styles.achievementsList}>
+                        {skill.practicalApplications.slice(0, 2).map((useCase, useIndex) => (
+                          <Text key={useIndex} style={styles.achievementItem}>
+                            ↳ {useCase}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {achievements.length > 0 && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Highlights</Text>
+                <View style={styles.achievementsList}>
+                  {achievements.slice(0, 5).map((achievement, index) => (
+                    <Text key={index} style={styles.achievementItem}>
+                      • {achievement}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+        </View>
+
         <View style={styles.footer}>
           <Text>Generated on {new Date().toLocaleDateString()}</Text>
-          <Text>Professional Profile • {profile.name}</Text>
+          {basics.name && <Text>{basics.name} • Professional Profile</Text>}
         </View>
       </Page>
+
+      {(resume.projects || resume.education || resume.certificates) && (
+        <Page size="A4" style={styles.page}>
+          {resume.projects && resume.projects.length > 0 && (
+            <View style={styles.sectionCard}>
+              <Text style={styles.sectionTitle}>Featured projects</Text>
+              {resume.projects.slice(0, 4).map((project, index) => (
+                <View key={index} style={styles.projectCard}>
+                  {project.name && <Text style={styles.projectName}>{project.name}</Text>}
+                  {project.description && (
+                    <Text style={styles.projectDescription}>{project.description}</Text>
+                  )}
+                  {project.highlights && project.highlights.length > 0 && (
+                    <View style={styles.achievementsList}>
+                      {project.highlights.slice(0, 3).map((item, hIndex) => (
+                        <Text key={hIndex} style={styles.achievementItem}>
+                          • {item}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                  {project.keywords && project.keywords.length > 0 && (
+                    <View style={styles.tagRow}>
+                      {project.keywords.slice(0, 6).map((keyword, kIndex) => (
+                        <Text key={kIndex} style={styles.tag}>
+                          {keyword}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
+
+          {(resume.education && resume.education.length > 0) || (resume.certificates && resume.certificates.length > 0) ? (
+            <View style={styles.sectionCard}>
+              <Text style={styles.sectionTitle}>Education & Certifications</Text>
+              {resume.education?.map((edu, index) => (
+                <View key={`edu-${index}`} style={styles.educationItem}>
+                  {edu.studyType && (
+                    <Text style={styles.degree}>
+                      {edu.studyType}
+                      {edu.area ? ` • ${edu.area}` : ''}
+                    </Text>
+                  )}
+                  {edu.institution && <Text style={styles.institution}>{edu.institution}</Text>}
+                  {(edu.startDate || edu.endDate) && (
+                    <Text style={styles.metricLabel}>
+                      {formatDate(edu.startDate)} — {formatDate(edu.endDate)}
+                    </Text>
+                  )}
+                </View>
+              ))}
+
+              {resume.certificates?.map((cert, index) => (
+                <View key={`cert-${index}`} style={styles.educationItem}>
+                  {cert.name && <Text style={styles.degree}>{cert.name}</Text>}
+                  {cert.issuer && <Text style={styles.institution}>{cert.issuer}</Text>}
+                  {cert.date && <Text style={styles.metricLabel}>{cert.date}</Text>}
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          <View style={styles.footer}>
+            <Text>Generated on {new Date().toLocaleDateString()}</Text>
+            {basics.name && <Text>{basics.name} • Professional Profile</Text>}
+          </View>
+        </Page>
+      )}
     </Document>
   );
 }

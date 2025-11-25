@@ -169,19 +169,21 @@ export function AccessModal({
 
                   <div className="relative glass-strong shadow-apple-xl rounded-3xl p-6 sm:p-8 md:p-10">
                     <div className="text-center mb-6 sm:mb-8">
-                      <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                        className="relative inline-block mb-4"
-                      >
-                        <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full blur-xl opacity-30" />
-                        <img
-                          src={headshot}
-                          alt={profileName}
-                          className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto object-cover shadow-apple-lg ring-4 ring-white/30 dark:ring-white/10"
-                        />
-                      </motion.div>
+                      {headshot && (
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+                          className="relative inline-block mb-4"
+                        >
+                          <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full blur-xl opacity-30" />
+                          <img
+                            src={headshot}
+                            alt={profileName}
+                            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto object-cover shadow-apple-lg ring-4 ring-white/30 dark:ring-white/10"
+                          />
+                        </motion.div>
+                      )}
                       <h2
                         id="access-modal-title"
                         className="text-2xl sm:text-3xl font-extrabold mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"

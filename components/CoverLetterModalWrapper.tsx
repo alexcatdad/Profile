@@ -3,18 +3,19 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
-import type { CoverLetterTemplate } from '@/types/content';
+import type { JSONResume } from '@/types/json-resume';
+import { generateCoverLetterTemplate } from '@/lib/cover-letter-helper';
 import { CoverLetterModal } from './CoverLetterModal';
 
 interface CoverLetterModalWrapperProps {
   initialOpen: boolean;
-  template: CoverLetterTemplate;
+  resume: JSONResume;
   dictionary: Dictionary;
 }
 
 export function CoverLetterModalWrapper({
   initialOpen,
-  template,
+  resume,
   dictionary,
 }: CoverLetterModalWrapperProps) {
   const [isOpen, setIsOpen] = useState(initialOpen);
@@ -38,6 +39,8 @@ export function CoverLetterModalWrapper({
       router.replace(newUrl);
     }
   }, [searchParams, router]);
+
+  const template = generateCoverLetterTemplate(resume);
 
   return (
     <CoverLetterModal

@@ -2,21 +2,19 @@ import { Suspense } from 'react';
 import { getDictionary } from '@/app/dictionaries';
 import { AccessGate } from '@/components/AccessGate';
 import { ProfilePage } from '@/components/ProfilePage';
-import { loadContent } from '@/lib/content-loader';
-import { filterContentByRole, getRoleFromSearchParams } from '@/lib/role-filter';
+import { loadResume } from '@/lib/content-loader';
+import { filterResumeByRole, getRoleFromSearchParams } from '@/lib/role-filter';
 
 function ProfilePageWrapper({
-  content,
+  resume,
   dictionary,
   coverLetterOpen,
 }: {
-  content: Awaited<ReturnType<typeof loadContent>>;
+  resume: Awaited<ReturnType<typeof loadResume>>;
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
   coverLetterOpen: boolean;
 }) {
-  return (
-    <ProfilePage content={content} dictionary={dictionary} coverLetterOpen={coverLetterOpen} />
-  );
+  return <ProfilePage resume={resume} dictionary={dictionary} coverLetterOpen={coverLetterOpen} />;
 }
 
 export default async function Page({
@@ -35,12 +33,12 @@ export default async function Page({
   const { lang } = await params;
   const search = await searchParams;
   const dictionary = await getDictionary(lang as 'en' | 'nl');
-  let content = await loadContent();
+  let resume = await loadResume();
 
   // Apply role-based filtering if role parameter is present
   const role = getRoleFromSearchParams(search);
   if (role !== 'all') {
-    content = filterContentByRole(content, role);
+    resume = filterResumeByRole(resume, role);
   }
 
   const coverLetterOpen =
@@ -51,13 +49,9 @@ export default async function Page({
     search.cl === 'true';
 
   return (
-    <AccessGate dictionary={dictionary} profile={content.profile}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProfilePageWrapper
-          content={content}
-          dictionary={dictionary}
-          coverLetterOpen={coverLetterOpen}
-        />
+    <AccessGate dictionary={dictionary} basics={resume.basics}>
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-100">Loading...</div>}>
+        <ProfilePageWrapper resume={resume} dictionary={dictionary} coverLetterOpen={coverLetterOpen} />
       </Suspense>
     </AccessGate>
   );

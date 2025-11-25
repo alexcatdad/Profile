@@ -1,84 +1,40 @@
 import type { Dictionary } from '@/app/dictionaries/en';
-import type { ContentData } from '@/types/content';
-import { CoverLetterModalWrapper } from './CoverLetterModalWrapper';
-import { Navigation } from './Navigation';
-import { ScrollProgress } from './ScrollProgress';
+import type { JSONResume } from '@/types/json-resume';
+import { ResumeLayout } from './ResumeLayout';
 import { DownloadButtons } from './DownloadButtons';
-import { ContactSection } from './sections/ContactSection';
-import { EducationSection } from './sections/EducationSection';
-import { ExperienceSection } from './sections/ExperienceSection';
-import { HeroSection } from './sections/HeroSection';
-import { ProjectsSection } from './sections/ProjectsSection';
-import { SkillsSection } from './sections/SkillsSection';
-import { SummarySection } from './sections/SummarySection';
-import { MetricsSection } from './sections/MetricsSection';
-import { AchievementsSection } from './sections/AchievementsSection';
-import { TestimonialsSection } from './sections/TestimonialsSection';
-import { AwardsSection } from './sections/AwardsSection';
-import { PublicationsSection } from './sections/PublicationsSection';
+import { ScrollProgress } from './ScrollProgress';
+import { CoverLetterModalWrapper } from './CoverLetterModalWrapper';
 
 interface ProfilePageProps {
-  content: ContentData;
+  resume: JSONResume;
   dictionary: Dictionary;
   coverLetterOpen?: boolean;
 }
 
-export function ProfilePage({ content, dictionary, coverLetterOpen = false }: ProfilePageProps) {
+export function ProfilePage({ resume, dictionary, coverLetterOpen = false }: ProfilePageProps) {
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <ScrollProgress />
-      <Navigation dictionary={dictionary} />
-      <DownloadButtons />
-      <main role="main" aria-label="Profile content">
-        <HeroSection profile={content.profile} dictionary={dictionary} />
-        <SummarySection profile={content.profile} experience={content.experience} />
-
-        {/* Metrics Dashboard - Showcase key statistics */}
-        {content.metrics && content.metrics.length > 0 && (
-          <MetricsSection metrics={content.metrics} />
-        )}
-
-        <SkillsSection
-          skills={content.skills}
-          experience={content.experience}
-          dictionary={dictionary}
-        />
-
-        {/* Key Achievements */}
-        {content.achievements && content.achievements.length > 0 && (
-          <AchievementsSection achievements={content.achievements} />
-        )}
-
-        <ExperienceSection experience={content.experience} dictionary={dictionary} />
-        <ProjectsSection projects={content.projects} dictionary={dictionary} />
-
-        {/* Publications */}
-        {content.publications && content.publications.length > 0 && (
-          <PublicationsSection publications={content.publications} />
-        )}
-
-        {/* Testimonials */}
-        {content.testimonials && content.testimonials.length > 0 && (
-          <TestimonialsSection testimonials={content.testimonials} />
-        )}
-
-        {/* Awards */}
-        {content.awards && content.awards.length > 0 && (
-          <AwardsSection awards={content.awards} />
-        )}
-
-        <EducationSection
-          education={content.education}
-          certifications={content.certifications}
-          dictionary={dictionary}
-        />
-        <ContactSection profile={content.profile} dictionary={dictionary} />
-      </main>
-      <CoverLetterModalWrapper
-        initialOpen={coverLetterOpen}
-        template={content.coverLetterTemplate}
-        dictionary={dictionary}
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(56,189,248,0.18),_transparent_55%)]"
+        aria-hidden="true"
       />
+      <div className="pointer-events-none absolute inset-0 bg-grid-overlay opacity-15" aria-hidden="true" />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-[-30%] h-[520px] bg-gradient-to-b from-emerald-500/20 via-transparent to-transparent blur-3xl"
+        aria-hidden="true"
+      />
+      <div className="relative z-10">
+        <DownloadButtons basics={resume.basics} targetRoles={resume._custom?.targetRoles} />
+        <main aria-label="Resume content">
+          <ResumeLayout resume={resume} />
+        </main>
+        <CoverLetterModalWrapper
+          initialOpen={coverLetterOpen}
+          resume={resume}
+          dictionary={dictionary}
+        />
+      </div>
     </div>
   );
 }

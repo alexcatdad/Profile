@@ -1,189 +1,99 @@
-'use client';
-
-import { motion, useInView } from 'framer-motion';
-import { Briefcase, Calendar, MapPin } from 'lucide-react';
-import { useRef } from 'react';
-import type { Dictionary } from '@/app/dictionaries/en';
-import type { WorkExperience } from '@/types/content';
+import { BriefcaseBusiness } from 'lucide-react';
+import type { Work } from '@/types/json-resume';
 
 interface ExperienceSectionProps {
-  experience: WorkExperience[];
-  dictionary: Dictionary;
+  work: Work[];
+  formatDate: (date?: string) => string;
 }
 
-export function ExperienceSection({ experience, dictionary }: ExperienceSectionProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+const parseDate = (date?: string) => {
+  if (!date) return null;
+  const [year, month = '01'] = date.split('-');
+  return new Date(Number(year), Number(month) - 1 || 0);
+};
 
+const getDuration = (start?: string, end?: string) => {
+  const startDate = parseDate(start);
+  if (!startDate) return null;
+  const endDate = parseDate(end) ?? new Date();
+  const months =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth());
+  const years = Math.floor(months / 12);
+  const remainder = months % 12;
+  if (years <= 0 && remainder <= 0) return null;
+  return `${years > 0 ? `${years}y ` : ''}${remainder > 0 ? `${remainder}m` : ''}`.trim();
+};
+
+export function ExperienceSection({ work, formatDate }: ExperienceSectionProps) {
   return (
-    <section id="experience" ref={ref} className="py-24 sm:py-32 px-6 sm:px-8 lg:px-12">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <motion.div
-          className="mb-20 sm:mb-24"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.div
-            className="inline-flex items-center gap-2 mb-6 text-sm font-semibold text-primary"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.2 }}
-          >
-            <Briefcase className="w-4 h-4" />
-            <span>Professional Journey</span>
-          </motion.div>
-
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-none tracking-tight">
-            <span className="gradient-text-hero">{dictionary.navigation.experience}</span>
-          </h2>
-
-          <motion.p
-            className="text-xl sm:text-2xl text-muted-foreground max-w-3xl"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4 }}
-          >
-            Building impactful solutions across diverse challenges
-          </motion.p>
-        </motion.div>
-
-        {/* Infographic Timeline */}
-        <div className="relative">
-          {/* Visual timeline line with gradient */}
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent to-primary/20 rounded-full" />
-
-          <div className="space-y-16">
-            {experience.map((exp, index) => (
-              <motion.div
-                key={exp.id}
-                className="relative pl-12 sm:pl-16"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.1,
-                }}
-              >
-                {/* Animated timeline dot with pulse */}
-                <motion.div
-                  className="absolute left-0 top-2 -translate-x-1/2 z-10"
-                  initial={{ scale: 0 }}
-                  animate={isInView ? { scale: 1 } : {}}
-                  transition={{ delay: index * 0.1 + 0.3, type: "spring" }}
-                >
-                  <div className="relative">
-                    <div className="w-4 h-4 rounded-full bg-primary ring-4 ring-background shadow-lg" />
-                    <div className="absolute inset-0 w-4 h-4 rounded-full bg-primary animate-ping opacity-20" />
-                  </div>
-                </motion.div>
-
-                {/* Content with infographic elements */}
-                <div className="space-y-6 p-8 glass-subtle rounded-2xl shadow-apple border border-border/50 hover:border-primary/30 transition-all duration-300">
-                  {/* Header with infographic elements */}
-                  <div className="space-y-4">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
-                            {index + 1}
-                          </span>
-                          <h3 className="text-2xl sm:text-3xl font-black">
-                            {exp.position}
-                          </h3>
-                        </div>
-                        <p className="text-lg font-bold text-primary mb-3">
-                          {exp.company}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span>{exp.location}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5" />
-                            <span>
-                              {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      {exp.logo && (
-                        <motion.img
-                          src={exp.logo}
-                          alt={`${exp.company} logo`}
-                          className="w-16 h-16 object-contain rounded-xl border border-border p-2 glass-subtle"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                          transition={{ delay: index * 0.1 + 0.4 }}
-                        />
-                      )}
-                    </div>
-
-                    {/* Visual duration bar */}
-                    <motion.div
-                      className="relative h-2 bg-border/30 rounded-full overflow-hidden"
-                      initial={{ scaleX: 0 }}
-                      animate={isInView ? { scaleX: 1 } : {}}
-                      transition={{ delay: index * 0.1 + 0.5, duration: 0.8 }}
-                      style={{ transformOrigin: 'left' }}
-                    >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary"
-                        initial={{ x: '-100%' }}
-                        animate={isInView ? { x: 0 } : {}}
-                        transition={{ delay: index * 0.1 + 0.6, duration: 1 }}
-                      />
-                    </motion.div>
-                  </div>
-
-                  {/* Description with enhanced bullets */}
-                  <ul className="space-y-3 text-base text-muted-foreground">
-                    {exp.description.map((desc, descIndex) => (
-                      <motion.li
-                        key={desc}
-                        className="flex items-start gap-3 group"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{
-                          duration: 0.4,
-                          delay: index * 0.1 + descIndex * 0.05
-                        }}
-                      >
-                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-primary/60 mt-2 group-hover:bg-primary group-hover:scale-125 transition-all" />
-                        <span className="leading-relaxed">{desc}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-
-                  {/* Technologies with visual badges */}
-                  {exp.technologies && exp.technologies.length > 0 && (
-                    <div className="space-y-3 pt-4">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                        <div className="w-1 h-1 rounded-full bg-primary" />
-                        <span>Tech Stack</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.technologies.map((tech, techIdx) => (
-                          <motion.span
-                            key={tech}
-                            className="px-3 py-1.5 text-xs font-semibold text-primary/80 bg-primary/5 border border-primary/20 rounded-full hover:bg-primary/10 hover:border-primary/40 hover:scale-105 transition-all cursor-default shadow-sm"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ delay: index * 0.1 + 0.7 + techIdx * 0.03 }}
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+    <section className="mb-12" aria-label="Experience timeline">
+      <div className="mb-6 flex items-center gap-3">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
+          <BriefcaseBusiness className="h-6 w-6" />
+        </span>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-200/80">
+            Experience
+          </p>
+          <h2 className="text-2xl font-semibold text-white">Impact timeline</h2>
         </div>
+      </div>
+      <div className="relative ps-6 before:absolute before:left-3 before:top-3 before:h-[calc(100%-12px)] before:w-px before:bg-gradient-to-b before:from-emerald-400/60 before:via-white/10 before:to-transparent">
+        {work.map((job) => (
+          <article
+            key={`${job.name}-${job.position}-${job.startDate}`}
+            className="relative mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-apple"
+          >
+            <span className="absolute -left-1 top-6 flex h-6 w-6 items-center justify-center rounded-full border border-emerald-400/50 bg-emerald-500/20 text-xs font-semibold text-emerald-200">
+              {job.name?.[0] ?? '•'}
+            </span>
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                {job.position && <h3 className="text-lg font-semibold text-white">{job.position}</h3>}
+                {job.name && <p className="text-sm text-emerald-300">{job.name}</p>}
+              </div>
+              <div className="text-sm text-zinc-400">
+                <p>
+                  {formatDate(job.startDate)} — {formatDate(job.endDate)}
+                </p>
+                {getDuration(job.startDate, job.endDate) && (
+                  <p className="text-xs text-zinc-500">{getDuration(job.startDate, job.endDate)}</p>
+                )}
+                {job.teamSize && (
+                  <p className="mt-1 rounded-full border border-white/10 px-3 py-1 text-xs text-zinc-300">
+                    Team: {job.teamSize}
+                  </p>
+                )}
+              </div>
+            </div>
+            {job.summary && (
+              <p className="mt-3 text-sm text-zinc-300">{job.summary}</p>
+            )}
+            {job.highlights && job.highlights.length > 0 && (
+              <ul className="mt-4 space-y-2 text-sm text-zinc-200">
+                {job.highlights.map((highlight) => (
+                  <li key={highlight} className="flex items-start gap-2">
+                    <span className="mt-1 text-emerald-300">•</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {job.keywords && job.keywords.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {job.keywords.map((keyword) => (
+                  <span
+                    key={keyword}
+                    className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-zinc-300"
+                  >
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
       </div>
     </section>
   );

@@ -1,23 +1,34 @@
-import type { ContentData } from '@/types/content';
+import type { JSONResume } from '@/types/json-resume';
 
-export function generateMarkdown(content: ContentData): string {
-  const { profile, experience, projects, skills, education, certifications, metrics, achievements, awards, publications } = content;
-
+export function generateMarkdown(resume: JSONResume): string {
   const sections: string[] = [];
+  const basics = resume.basics || {};
 
   // Header
-  sections.push(`# ${profile.name}`);
-  sections.push(`## ${profile.title}`);
-  sections.push('');
-  sections.push(`📧 ${profile.contact.email} | 📍 ${profile.location}${profile.contact.phone ? ` | 📱 ${profile.contact.phone}` : ''}`);
+  if (basics.name) {
+    sections.push(`# ${basics.name}`);
+  }
+  if (basics.label) {
+    sections.push(`## ${basics.label}`);
+  }
   sections.push('');
 
-  // Links
-  if (profile.social.linkedin || profile.social.github || profile.social.twitter) {
-    const links: string[] = [];
-    if (profile.social.linkedin) links.push(`[LinkedIn](${profile.social.linkedin})`);
-    if (profile.social.github) links.push(`[GitHub](${profile.social.github})`);
-    if (profile.social.twitter) links.push(`[Twitter](${profile.social.twitter})`);
+  // Contact info
+  const contactParts: string[] = [];
+  if (basics.email) contactParts.push(`📧 ${basics.email}`);
+  if (basics.location) {
+    const location = `${basics.location.city || ''}${basics.location.city && basics.location.countryCode ? ', ' : ''}${basics.location.countryCode || ''}`;
+    if (location) contactParts.push(`📍 ${location}`);
+  }
+  if (basics.phone) contactParts.push(`📱 ${basics.phone}`);
+  if (contactParts.length > 0) {
+    sections.push(contactParts.join(' | '));
+    sections.push('');
+  }
+
+  // Profiles
+  if (basics.profiles && basics.profiles.length > 0) {
+    const links = basics.profiles.map((p) => `[${p.network}](${p.url})`);
     sections.push(links.join(' • '));
     sections.push('');
   }
@@ -25,144 +36,125 @@ export function generateMarkdown(content: ContentData): string {
   sections.push('---');
   sections.push('');
 
-  // Professional Summary
-  sections.push('## Professional Summary');
-  sections.push('');
-  sections.push(profile.summary.join('\n\n'));
-  sections.push('');
-
-  // Metrics
-  if (metrics && metrics.length > 0) {
-    sections.push('## Key Metrics');
+  // Summary
+  if (basics.summary) {
+    sections.push('## Professional Summary');
     sections.push('');
-    metrics.forEach((metric) => {
-      sections.push(`**${metric.label}**: ${metric.prefix || ''}${metric.value}${metric.suffix || ''}`);
-    });
+    sections.push(basics.summary);
     sections.push('');
   }
 
   // Skills
-  sections.push('## Technical Skills');
-  sections.push('');
-
-  // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) {
-      acc[skill.category] = [];
-    }
-    acc[skill.category].push(skill.name);
-    return acc;
-  }, {} as Record<string, string[]>);
-
-  Object.entries(skillsByCategory).forEach(([category, skillNames]) => {
-    sections.push(`### ${category}`);
-    sections.push(skillNames.join(' • '));
-    sections.push('');
-  });
-
-  // Professional Experience
-  sections.push('## Professional Experience');
-  sections.push('');
-
-  experience.forEach((exp) => {
-    sections.push(`### ${exp.position}`);
-    sections.push(`**${exp.company}** • ${exp.location}`);
-    sections.push(`*${exp.startDate} - ${exp.current ? 'Present' : exp.endDate}*`);
+  if (resume.skills && resume.skills.length > 0) {
+    sections.push('## Technical Skills');
     sections.push('');
 
-    exp.description.forEach((desc) => {
-      sections.push(`- ${desc}`);
-    });
-    sections.push('');
-
-    if (exp.technologies && exp.technologies.length > 0) {
-      sections.push(`**Technologies**: ${exp.technologies.join(', ')}`);
-      sections.push('');
-    }
-  });
-
-  // Projects
-  sections.push('## Featured Projects');
-  sections.push('');
-
-  projects.forEach((project) => {
-    sections.push(`### ${project.name}`);
-    sections.push('');
-    sections.push(project.description);
-    sections.push('');
-
-    if (project.stars !== undefined || project.downloads !== undefined) {
-      const stats: string[] = [];
-      if (project.stars !== undefined) stats.push(`⭐ ${project.stars} stars`);
-      if (project.downloads !== undefined) stats.push(`📥 ${project.downloads} downloads`);
-      sections.push(stats.join(' • '));
-      sections.push('');
-    }
-
-    if (project.technologies && project.technologies.length > 0) {
-      sections.push(`**Technologies**: ${project.technologies.join(', ')}`);
-      sections.push('');
-    }
-
-    if (project.githubUrl) {
-      sections.push(`🔗 [View on GitHub](${project.githubUrl})`);
-      sections.push('');
-    }
-  });
-
-  // Achievements
-  if (achievements && achievements.length > 0) {
-    sections.push('## Key Achievements');
-    sections.push('');
-
-    achievements.forEach((achievement) => {
-      sections.push(`### ${achievement.title}`);
-      if (achievement.date) {
-        sections.push(`*${new Date(achievement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}*`);
-      }
-      sections.push('');
-      sections.push(achievement.description);
-      sections.push('');
-
-      if (achievement.metric) {
-        sections.push(`**Impact**: ${achievement.metric.value} ${achievement.metric.label}`);
+    resume.skills.forEach((skill) => {
+      if (skill.name) {
+        sections.push(`### ${skill.name}`);
+        if (skill.level) {
+          sections.push(`*${skill.level}*`);
+        }
+        if (skill.keywords && skill.keywords.length > 0) {
+          sections.push(skill.keywords.join(' • '));
+        }
         sections.push('');
       }
     });
   }
 
-  // Awards
-  if (awards && awards.length > 0) {
-    sections.push('## Awards & Recognition');
+  // Professional Experience
+  if (resume.work && resume.work.length > 0) {
+    sections.push('## Professional Experience');
     sections.push('');
 
-    awards.forEach((award) => {
-      sections.push(`### ${award.title}`);
-      sections.push(`**${award.issuer}** • ${award.date}`);
+    resume.work.forEach((exp) => {
+      if (exp.position) {
+        sections.push(`### ${exp.position}`);
+      }
+      if (exp.name) {
+        sections.push(`**${exp.name}**`);
+      }
+      if (exp.startDate || exp.endDate) {
+        const start = exp.startDate ? exp.startDate.split('-')[0] : '';
+        const end = exp.endDate ? exp.endDate.split('-')[0] : 'Present';
+        sections.push(`*${start} - ${end}*`);
+      }
       sections.push('');
-      if (award.description) {
-        sections.push(award.description);
+
+      if (exp.summary) {
+        sections.push(exp.summary);
         sections.push('');
       }
 
-      if (award.url) {
-        sections.push(`🔗 [View Award](${award.url})`);
+      if (exp.highlights && exp.highlights.length > 0) {
+        exp.highlights.forEach((h) => {
+          sections.push(`- ${h}`);
+        });
+        sections.push('');
+      }
+
+      if (exp.keywords && exp.keywords.length > 0) {
+        sections.push(`**Technologies**: ${exp.keywords.join(', ')}`);
+        sections.push('');
+      }
+    });
+  }
+
+  // Projects
+  if (resume.projects && resume.projects.length > 0) {
+    sections.push('## Featured Projects');
+    sections.push('');
+
+    resume.projects.forEach((project) => {
+      if (project.name) {
+        sections.push(`### ${project.name}`);
+      }
+      sections.push('');
+
+      if (project.description) {
+        sections.push(project.description);
+        sections.push('');
+      }
+
+      if (project.highlights && project.highlights.length > 0) {
+        project.highlights.forEach((h) => {
+          sections.push(`- ${h}`);
+        });
+        sections.push('');
+      }
+
+      if (project.keywords && project.keywords.length > 0) {
+        sections.push(`**Technologies**: ${project.keywords.join(', ')}`);
+        sections.push('');
+      }
+
+      if (project.url) {
+        sections.push(`🔗 [View Project](${project.url})`);
         sections.push('');
       }
     });
   }
 
   // Publications
-  if (publications && publications.length > 0) {
+  if (resume.publications && resume.publications.length > 0) {
     sections.push('## Publications');
     sections.push('');
 
-    publications.forEach((pub) => {
-      sections.push(`### ${pub.title}`);
-      sections.push(`**${pub.publisher}** • ${pub.date} • ${pub.type}`);
+    resume.publications.forEach((pub) => {
+      if (pub.name) {
+        sections.push(`### ${pub.name}`);
+      }
+      if (pub.publisher) {
+        sections.push(`**${pub.publisher}**`);
+      }
+      if (pub.releaseDate) {
+        sections.push(`*${pub.releaseDate}*`);
+      }
       sections.push('');
-      if (pub.description) {
-        sections.push(pub.description);
+
+      if (pub.summary) {
+        sections.push(pub.summary);
         sections.push('');
       }
 
@@ -174,28 +166,40 @@ export function generateMarkdown(content: ContentData): string {
   }
 
   // Education
-  sections.push('## Education');
-  sections.push('');
-
-  education.forEach((edu) => {
-    sections.push(`### ${edu.degree} - ${edu.field}`);
-    sections.push(`**${edu.institution}**`);
-    sections.push(`*${edu.startDate} - ${edu.current ? 'Present' : edu.endDate}*`);
+  if (resume.education && resume.education.length > 0) {
+    sections.push('## Education');
     sections.push('');
-  });
 
-  // Certifications
-  if (certifications && certifications.length > 0) {
+    resume.education.forEach((edu) => {
+      if (edu.studyType && edu.area) {
+        sections.push(`### ${edu.studyType} - ${edu.area}`);
+      }
+      if (edu.institution) {
+        sections.push(`**${edu.institution}**`);
+      }
+      if (edu.startDate || edu.endDate) {
+        const start = edu.startDate ? edu.startDate.split('-')[0] : '';
+        const end = edu.endDate ? edu.endDate.split('-')[0] : 'Present';
+        sections.push(`*${start} - ${end}*`);
+      }
+      sections.push('');
+    });
+  }
+
+  // Certificates
+  if (resume.certificates && resume.certificates.length > 0) {
     sections.push('## Certifications');
     sections.push('');
 
-    certifications.forEach((cert) => {
-      sections.push(`- **${cert.name}** - ${cert.issuer} (${cert.issueDate})`);
-      if (cert.credentialId) {
-        sections.push(`  - Credential ID: ${cert.credentialId}`);
-      }
-      if (cert.url) {
-        sections.push(`  - [Verify](${cert.url})`);
+    resume.certificates.forEach((cert) => {
+      if (cert.name && cert.issuer) {
+        sections.push(`- **${cert.name}** - ${cert.issuer}`);
+        if (cert.date) {
+          sections.push(`  - Date: ${cert.date}`);
+        }
+        if (cert.url) {
+          sections.push(`  - [Verify](${cert.url})`);
+        }
       }
     });
     sections.push('');
@@ -204,7 +208,9 @@ export function generateMarkdown(content: ContentData): string {
   // Footer
   sections.push('---');
   sections.push('');
-  sections.push(`*Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}*`);
+  sections.push(
+    `*Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}*`
+  );
 
   return sections.join('\n');
 }
