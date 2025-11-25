@@ -19,7 +19,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   ];
 
   return (
-    <div className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-2 text-sm font-semibold text-zinc-400">
+    <div className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-border bg-secondary/50 p-2 text-sm font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-400">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -27,10 +27,10 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             key={tab.id}
             className={cn(
               'relative flex-1 rounded-xl px-4 py-2 transition-colors duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60',
               isActive
-                ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-apple'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-apple dark:from-emerald-500 dark:to-emerald-600'
+                : 'text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white'
             )}
             type="button"
             onClick={() => onTabChange(tab.id)}

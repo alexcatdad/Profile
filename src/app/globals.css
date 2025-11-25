@@ -72,25 +72,25 @@
   }
 
   html.light {
-    --background: #ffffff;
-    --foreground: #0a0a0a;
-    --card: rgba(255, 255, 255, 0.98);
-    --card-foreground: #0a0a0a;
-    --popover: rgba(255, 255, 255, 0.99);
-    --popover-foreground: #0a0a0a;
-    --primary: #d6007a;
+    --background: #fdfcff;
+    --foreground: #09090b;
+    --card: rgba(255, 255, 255, 0.75);
+    --card-foreground: #09090b;
+    --popover: rgba(255, 255, 255, 0.95);
+    --popover-foreground: #09090b;
+    --primary: #db2777;
     --primary-foreground: #ffffff;
-    --secondary: #f5f5f5;
-    --secondary-foreground: #0a0a0a;
-    --muted: rgba(0, 0, 0, 0.06);
-    --muted-foreground: #404040;
-    --accent: #0088cc;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: rgba(0, 0, 0, 0.04);
+    --muted-foreground: #52525b;
+    --accent: #0ea5e9;
     --accent-foreground: #ffffff;
-    --destructive: #d6002f;
+    --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: rgba(0, 0, 0, 0.12);
+    --border: rgba(0, 0, 0, 0.08);
     --input: rgba(0, 0, 0, 0.08);
-    --ring: rgba(214, 0, 122, 0.5);
+    --ring: rgba(219, 39, 119, 0.5);
   }
 
   html.dark {
@@ -115,13 +115,10 @@
     --ring: rgba(255, 71, 192, 0.45);
   }
 
-  * {
-    @apply border-zinc-800;
-  }
-
-  html.light * {
-    @apply border-zinc-200;
-  }
+  /*
+   * Removed @apply border-border; from here as it caused Tailwind to fail.
+   * Components should explicitly use border-border.
+   */
 
   html {
     scroll-behavior: smooth;
@@ -133,24 +130,24 @@
 
   html.light {
     @apply bg-white;
-    background-color: #ffffff;
+    background-color: #fdfcff;
   }
 
   body {
-    @apply text-zinc-100 antialiased;
+    color: var(--foreground);
+    @apply antialiased;
     background: radial-gradient(circle at top, rgba(75, 201, 255, 0.1), transparent 45%),
       radial-gradient(circle at 20% 20%, rgba(255, 71, 192, 0.16), transparent 35%),
-      #030109;
+      var(--background);
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     letter-spacing: -0.011em;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   html.light body {
-    @apply text-zinc-950;
-    background: radial-gradient(circle at top, rgba(75, 201, 255, 0.03), transparent 45%),
-      radial-gradient(circle at 20% 20%, rgba(255, 71, 192, 0.04), transparent 35%),
-      #ffffff;
+    background: radial-gradient(circle at top, rgba(14, 165, 233, 0.08), transparent 45%),
+      radial-gradient(circle at 20% 20%, rgba(219, 39, 119, 0.08), transparent 35%),
+      var(--background);
   }
 
   .sr-only {
@@ -176,11 +173,13 @@
 
   /* Selection styles */
   ::selection {
-    @apply bg-emerald-500/20 text-zinc-100;
+    background-color: theme('colors.emerald.500 / 20%');
+    color: var(--foreground);
   }
 
   html.light ::selection {
-    @apply bg-emerald-500/30 text-zinc-900;
+    background-color: theme('colors.emerald.500 / 30%');
+    color: var(--foreground);
   }
 
   /* Typography */
@@ -188,11 +187,7 @@
     font-weight: 700;
     letter-spacing: -0.022em;
     line-height: 1.1;
-    @apply text-zinc-100;
-  }
-
-  html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
-    @apply text-zinc-950;
+    color: var(--foreground);
   }
 
   h1 {
@@ -211,72 +206,7 @@
   p {
     line-height: 1.6;
     letter-spacing: -0.011em;
-    @apply text-zinc-300;
-  }
-
-  html.light p {
-    @apply text-zinc-800;
-  }
-
-  /* Override hardcoded text colors for light mode */
-  html.light .text-white {
-    color: rgb(9 9 11); /* zinc-950 */
-  }
-
-  html.light .text-zinc-100 {
-    color: rgb(24 24 27); /* zinc-900 */
-  }
-
-  html.light .text-zinc-200 {
-    color: rgb(39 39 42); /* zinc-800 */
-  }
-
-  html.light .text-zinc-300 {
-    color: rgb(63 63 70); /* zinc-700 */
-  }
-
-  html.light .text-zinc-400 {
-    color: rgb(82 82 91); /* zinc-600 */
-  }
-
-  html.light .text-zinc-500 {
-    color: rgb(113 113 122); /* zinc-500 */
-  }
-
-  /* Override emerald colors for better contrast in light mode */
-  html.light .text-emerald-200 {
-    color: rgb(4 120 87); /* emerald-700 */
-  }
-
-  html.light .text-emerald-300 {
-    color: rgb(5 150 105); /* emerald-600 */
-  }
-
-  html.light .text-emerald-300\/90 {
-    color: rgb(5 150 105);
-  }
-
-  /* Override specific hex colors - these need to be more specific */
-  html.light [class*="text-[#45caff"] {
-    color: #0066aa;
-  }
-
-  html.light [class*="text-[#f6a7ff"] {
-    color: #8b2db8;
-  }
-
-  /* Override background colors with opacity for light mode */
-  html.light [class*="bg-white/"] {
-    background-color: rgba(9, 9, 11, 0.05);
-  }
-
-  html.light [class*="bg-black/"] {
-    background-color: rgba(9, 9, 11, 0.1);
-  }
-
-  /* Override border colors with opacity for light mode */
-  html.light [class*="border-white/"] {
-    border-color: rgba(9, 9, 11, 0.15);
+    color: var(--muted-foreground);
   }
 }
 
@@ -292,11 +222,11 @@
   }
 
   html.light .glass {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(250, 250, 250, 0.75));
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+    border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 25px 60px -16px rgba(0, 0, 0, 0.15);
+      0 25px 60px -16px rgba(0, 0, 0, 0.08);
   }
 
   .glass-subtle {
@@ -310,11 +240,11 @@
   }
 
   html.light .glass-subtle {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(250, 250, 250, 0.6));
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(0, 0, 0, 0.04);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      0 20px 45px -20px rgba(0, 0, 0, 0.1);
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 20px 45px -20px rgba(0, 0, 0, 0.05);
   }
 
   .glass-strong {
@@ -328,11 +258,11 @@
   }
 
   html.light .glass-strong {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(250, 250, 250, 0.9));
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+    border: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 1),
-      0 40px 70px -30px rgba(0, 0, 0, 0.2);
+      0 40px 70px -30px rgba(0, 0, 0, 0.1);
   }
 
   .shadow-apple {
@@ -341,16 +271,34 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 
+  html.light .shadow-apple {
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
   .shadow-apple-lg {
     box-shadow:
       0 28px 60px rgba(7, 0, 18, 0.7),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 
+  html.light .shadow-apple-lg {
+    box-shadow:
+      0 28px 60px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
   .shadow-apple-xl {
     box-shadow:
       0 45px 90px rgba(0, 0, 0, 0.85),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  html.light .shadow-apple-xl {
+    box-shadow:
+      0 45px 90px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }
 
   .hover-lift {
@@ -368,6 +316,13 @@
     box-shadow: 0 25px 60px rgba(6, 0, 18, 0.6);
     border-color: rgba(255, 71, 192, 0.35);
     background: linear-gradient(145deg, rgba(8, 0, 22, 0.85), rgba(39, 9, 61, 0.65));
+  }
+
+  html.light .hover-lift:hover,
+  html.light .hover-lift:focus-visible {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.08);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.8));
   }
 
   .interactive-card {
@@ -394,6 +349,10 @@
     z-index: -2;
   }
 
+  html.light .interactive-card::before {
+    background: radial-gradient(circle at 20% 20%, rgba(219, 39, 119, 0.08), transparent 65%);
+  }
+
   .interactive-card::after {
     content: '';
     position: absolute;
@@ -406,6 +365,10 @@
     z-index: -1;
   }
 
+  html.light .interactive-card::after {
+    background: radial-gradient(circle at 20% 20%, rgba(219, 39, 119, 0.06), transparent 60%);
+  }
+
   .interactive-card:hover,
   .interactive-card:focus-visible {
     transform: translateY(-10px) scale(1.02);
@@ -416,15 +379,13 @@
     background: linear-gradient(135deg, rgba(9, 0, 25, 0.85), rgba(28, 6, 49, 0.6));
   }
 
-  .interactive-card:hover::after,
-  .interactive-card:focus-visible::after {
-    opacity: 1;
-    transform: translateY(-6px);
-  }
-
-  .interactive-card:hover::before,
-  .interactive-card:focus-visible::before {
-    opacity: 1;
+  html.light .interactive-card:hover,
+  html.light .interactive-card:focus-visible {
+    border-color: rgba(219, 39, 119, 0.3);
+    box-shadow:
+      0 35px 110px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 245, 0.8));
   }
 
   .link-pulse {

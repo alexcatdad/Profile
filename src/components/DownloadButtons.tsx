@@ -97,22 +97,22 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
           >
             {activeRoleLabel && (
               <output
-                className="glass-subtle flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-200 shadow-apple"
+                className="glass-subtle flex items-center gap-2 rounded-2xl border border-border px-4 py-2 text-xs font-semibold text-foreground shadow-apple dark:border-white/10 dark:text-zinc-200"
                 aria-live="polite"
               >
-                <Sparkles className="h-4 w-4 text-[#45caff]" />
+                <Sparkles className="h-4 w-4 text-accent dark:text-[#45caff]" />
                 Focused for {activeRoleLabel}
               </output>
             )}
             <motion.button
               onClick={() => handleDownload('pdf')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#ff47c0]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border hover:border-primary/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple dark:border-white/10 dark:hover:border-[#ff47c0]/60"
               aria-busy={isDownloading === 'pdf'}
               whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
               whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
-              <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
+              <span className="text-sm font-bold text-foreground whitespace-nowrap dark:text-zinc-100">
                 {isDownloading === 'pdf' ? 'Generating...' : 'Download PDF'}
               </span>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] shadow-lg">
@@ -127,12 +127,12 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
             <motion.button
               onClick={() => handleDownload('markdown')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#45caff]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-border hover:border-accent/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple dark:border-white/10 dark:hover:border-[#45caff]/60"
               aria-busy={isDownloading === 'markdown'}
               whileHover={isDownloading === null ? { scale: 1.05, x: -5 } : {}}
               whileTap={isDownloading === null ? { scale: 0.95 } : {}}
             >
-              <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
+              <span className="text-sm font-bold text-foreground whitespace-nowrap dark:text-zinc-100">
                 {isDownloading === 'markdown' ? 'Generating...' : 'Download Markdown'}
               </span>
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#45caff] via-[#7c6bff] to-[#ff47c0] shadow-lg">

@@ -23,30 +23,30 @@ export function PersonalSection({
     <div data-resume-section="personal" data-highlighted={highlighted}>
       {/* Volunteer */}
       {volunteer && volunteer.length > 0 && (
-        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
-          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-[#ff47c0]">▸</span> Volunteer
+        <section className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:border-white/10 dark:bg-white/[0.03]">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-foreground dark:text-white">
+            <span className="text-primary">▸</span> Volunteer
           </h2>
           <div className="space-y-4">
             {volunteer.map((v, i) => (
               <article
                 key={`${v.organization}-${i}`}
-                className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5"
+                className="hover-lift rounded-2xl border border-border bg-secondary/30 p-5 dark:border-white/10 dark:bg-black/30"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     {v.position && (
-                      <h3 className="text-lg font-semibold text-white">{v.position}</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white">{v.position}</h3>
                     )}
-                    {v.organization && <p className="text-sm text-[#45caff]">{v.organization}</p>}
+                    {v.organization && <p className="text-sm text-accent">{v.organization}</p>}
                   </div>
-                  <span className="text-sm text-zinc-400">
+                  <span className="text-sm text-muted-foreground dark:text-zinc-400">
                     {formatDate(v.startDate)} – {formatDate(v.endDate)}
                   </span>
                 </div>
-                {v.summary && <p className="mt-2 text-sm text-zinc-300">{v.summary}</p>}
+                {v.summary && <p className="mt-2 text-sm text-muted-foreground dark:text-zinc-300">{v.summary}</p>}
                 {v.highlights && v.highlights.length > 0 && (
-                  <ul className="mt-3 space-y-1 text-sm text-zinc-300">
+                  <ul className="mt-3 space-y-1 text-sm text-muted-foreground dark:text-zinc-300">
                     {v.highlights.map((h) => (
                       <li key={h}>• {h}</li>
                     ))}
@@ -60,19 +60,19 @@ export function PersonalSection({
 
       {/* Interests */}
       {interests && interests.length > 0 && (
-        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
-          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-[#ff47c0]">▸</span> Interests
+        <section className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:border-white/10 dark:bg-white/[0.03]">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-foreground dark:text-white">
+            <span className="text-primary">▸</span> Interests
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             {interests.map((int, i) => (
               <article
                 key={`${int.name}-${i}`}
-                className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5"
+                className="hover-lift rounded-2xl border border-border bg-secondary/30 p-5 dark:border-white/10 dark:bg-black/30"
               >
-                {int.name && <h3 className="mb-2 text-lg font-semibold text-white">{int.name}</h3>}
+                {int.name && <h3 className="mb-2 text-lg font-semibold text-foreground dark:text-white">{int.name}</h3>}
                 {int.keywords && int.keywords.length > 0 && (
-                  <ul className="space-y-1 text-sm text-zinc-300">
+                  <ul className="space-y-1 text-sm text-muted-foreground dark:text-zinc-300">
                     {int.keywords.map((kw) => (
                       <li key={kw}>{kw}</li>
                     ))}
@@ -86,24 +86,24 @@ export function PersonalSection({
 
       {/* Education & Languages */}
       {(education || languages || certificates) && (
-        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
-          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-[#ff47c0]">▸</span> Education & Languages
+        <section className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:border-white/10 dark:bg-white/[0.03]">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-foreground dark:text-white">
+            <span className="text-primary">▸</span> Education & Languages
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {education && education.length > 0 && (
-              <div className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5">
+              <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-5 dark:border-white/10 dark:bg-black/30">
                 {education.map((edu, i) => (
                   <div
                     key={`${edu.institution}-${i}`}
-                    className={i > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''}
+                    className={i > 0 ? 'mt-4 border-t border-border pt-4 dark:border-white/10' : ''}
                   >
                     {edu.studyType && (
-                      <h3 className="text-lg font-semibold text-white">{edu.studyType}</h3>
+                      <h3 className="text-lg font-semibold text-foreground dark:text-white">{edu.studyType}</h3>
                     )}
-                    {edu.institution && <p className="text-sm text-[#45caff]">{edu.institution}</p>}
+                    {edu.institution && <p className="text-sm text-accent">{edu.institution}</p>}
                     {edu.area && (
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-sm text-muted-foreground dark:text-zinc-400">
                         {edu.area}
                         {edu.endDate && ` · ${edu.endDate.split('-')[0]}`}
                       </p>
@@ -112,16 +112,16 @@ export function PersonalSection({
                 ))}
               </div>
             )}
-            <div className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5">
+            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-5 dark:border-white/10 dark:bg-black/30">
               {languages && languages.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Languages</h3>
+                  <h3 className="text-lg font-semibold text-foreground dark:text-white">Languages</h3>
                   <div className="mt-3 flex flex-col gap-2">
                     {languages.map((lang, i) => (
-                      <span key={`${lang.language}-${i}`} className="text-sm text-zinc-300">
+                      <span key={`${lang.language}-${i}`} className="text-sm text-muted-foreground dark:text-zinc-300">
                         {lang.language}{' '}
                         {lang.fluency && (
-                          <span className="text-xs text-zinc-400">({lang.fluency})</span>
+                          <span className="text-xs text-muted-foreground/80 dark:text-zinc-400">({lang.fluency})</span>
                         )}
                       </span>
                     ))}
@@ -131,15 +131,15 @@ export function PersonalSection({
               {certificates && certificates.length > 0 && (
                 <div
                   className={
-                    languages && languages.length > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''
+                    languages && languages.length > 0 ? 'mt-4 border-t border-border pt-4 dark:border-white/10' : ''
                   }
                 >
-                  <h3 className="text-lg font-semibold text-white">Certificates</h3>
-                  <ul className="mt-2 space-y-2 text-sm text-zinc-300">
+                  <h3 className="text-lg font-semibold text-foreground dark:text-white">Certificates</h3>
+                  <ul className="mt-2 space-y-2 text-sm text-muted-foreground dark:text-zinc-300">
                     {certificates.map((cert, i) => (
                       <li key={`${cert.name}-${i}`}>
                         {cert.name}
-                        {cert.issuer && <span className="text-zinc-500"> · {cert.issuer}</span>}
+                        {cert.issuer && <span className="text-muted-foreground/80 dark:text-zinc-500"> · {cert.issuer}</span>}
                       </li>
                     ))}
                   </ul>

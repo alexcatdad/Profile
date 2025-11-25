@@ -101,8 +101,8 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
       transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
       className={`relative z-50 transition-all duration-500 ${
         isScrolled
-          ? 'glass-strong shadow-apple-lg border-b border-white/10'
-          : 'glass-subtle border-b border-white/5 shadow-apple'
+          ? 'glass-strong shadow-apple-lg border-b border-border dark:border-white/10'
+          : 'glass-subtle border-b border-border dark:border-white/5 shadow-apple'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -155,7 +155,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 return rest;
               })()}
               ref={downloadCoverLetterButtonRef}
-              className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary"
+              className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:text-primary text-foreground"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.96 }}
             >
@@ -189,7 +189,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
           opacity: isMobileMenuOpen ? 1 : 0,
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="lg:hidden overflow-hidden border-t border-white/10 glass-strong"
+        className="lg:hidden overflow-hidden border-t border-border dark:border-white/10 glass-strong"
       >
         <div className="px-6 py-6 space-y-2">
           {visibleLinks.map((link, index) => (
@@ -210,7 +210,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
               {link.label}
             </motion.button>
           ))}
-          <div className="pt-4 mt-4 border-t border-white/10 space-y-3">
+          <div className="pt-4 mt-4 border-t border-border dark:border-white/10 space-y-3">
             <div className="flex items-center justify-between px-5 py-3 glass rounded-2xl">
               <span className="text-sm font-semibold text-muted-foreground">Theme</span>
               <ThemeToggle />
@@ -222,7 +222,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
                 return rest;
               })()}
               ref={downloadCoverLetterButtonRef}
-              className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-left shadow-apple"
+              className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-all duration-300 font-semibold text-left shadow-apple text-foreground"
               whileTap={{ scale: 0.98 }}
             >
               {dictionary.navigation.downloadCoverLetter}

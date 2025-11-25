@@ -185,22 +185,22 @@ export function ResumeChat({ resume }: ResumeChatProps) {
         {/* Chat Panel */}
         {isOpen && (
           <motion.div
-            className="absolute bottom-20 left-0 flex h-[600px] w-[400px] flex-col rounded-3xl border border-white/10 bg-background/95 shadow-apple-lg backdrop-blur supports-[backdrop-filter]:bg-background/90"
+            className="absolute bottom-20 left-0 flex h-[600px] w-[400px] flex-col rounded-3xl border border-border bg-card/95 shadow-apple-lg backdrop-blur supports-[backdrop-filter]:bg-card/90 dark:border-white/10 dark:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3 dark:border-white/10">
               <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-[#45caff]" />
-                <h3 className="text-sm font-semibold text-white">Resume Q&A</h3>
+                <MessageCircle className="h-5 w-5 text-accent dark:text-[#45caff]" />
+                <h3 className="text-sm font-semibold text-foreground dark:text-white">Resume Q&A</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff47c0]/60"
+                className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#ff47c0]/60"
                 aria-label="Close chat"
               >
                 <X className="h-4 w-4" />
@@ -211,24 +211,24 @@ export function ResumeChat({ resume }: ResumeChatProps) {
             <div className="flex-1 overflow-y-auto px-4 py-4">
               {isInitializing ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-[#45caff]" />
+                  <Loader2 className="h-8 w-8 animate-spin text-accent dark:text-[#45caff]" />
                   <div className="space-y-1">
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-sm font-medium text-foreground dark:text-white">
                       {initText || 'Loading AI model...'}
                     </p>
-                    <div className="h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
+                    <div className="h-1.5 w-48 overflow-hidden rounded-full bg-secondary dark:bg-white/10">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#ff47c0] to-[#45caff] transition-[width]"
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width] dark:from-[#ff47c0] dark:to-[#45caff]"
                         style={{ width: `${initProgress * 100}%` }}
                       />
                     </div>
-                    <p className="text-xs text-zinc-400">{Math.round(initProgress * 100)}%</p>
+                    <p className="text-xs text-muted-foreground dark:text-zinc-400">{Math.round(initProgress * 100)}%</p>
                   </div>
                 </div>
               ) : messages.length === 0 ? (
                 <div className="flex flex-col gap-2 py-8 text-center">
-                  <p className="text-sm text-zinc-300">Ask me anything about Alex's resume!</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-sm text-muted-foreground dark:text-zinc-300">Ask me anything about Alex's resume!</p>
+                  <p className="text-xs text-muted-foreground/80 dark:text-zinc-500">
                     Try: "What's his experience with Next.js?"
                   </p>
                 </div>
@@ -246,8 +246,8 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                         className={cn(
                           'max-w-[85%] rounded-2xl px-4 py-2 text-sm',
                           message.role === 'user'
-                            ? 'bg-gradient-to-r from-[#ff47c0] to-[#45caff] text-white'
-                            : 'bg-white/[0.04] text-zinc-200'
+                            ? 'bg-gradient-to-r from-primary to-accent text-white dark:from-[#ff47c0] dark:to-[#45caff]'
+                            : 'bg-secondary text-foreground dark:bg-white/[0.04] dark:text-zinc-200'
                         )}
                       >
                         <p className="whitespace-pre-wrap break-words">{message.content}</p>
@@ -259,7 +259,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                               key={section}
                               type="button"
                               onClick={() => handleSectionClick(section)}
-                              className="rounded-full border border-white/20 bg-black/30 px-3 py-1 text-xs text-[#45caff] transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#45caff]/60"
+                              className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-accent transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 dark:border-white/20 dark:bg-black/30 dark:text-[#45caff] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#45caff]/60"
                             >
                               {sectionLabels[section]}
                             </button>
@@ -270,8 +270,8 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                   ))}
                   {isLoading && (
                     <div className="flex items-start gap-2">
-                      <div className="rounded-2xl bg-white/[0.04] px-4 py-2">
-                        <Loader2 className="h-4 w-4 animate-spin text-[#45caff]" />
+                      <div className="rounded-2xl bg-secondary px-4 py-2 dark:bg-white/[0.04]">
+                        <Loader2 className="h-4 w-4 animate-spin text-accent dark:text-[#45caff]" />
                       </div>
                     </div>
                   )}
@@ -282,7 +282,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
 
             {/* Input Area */}
             {!isInitializing && (
-              <div className="border-t border-white/10 p-4">
+              <div className="border-t border-border p-4 dark:border-white/10">
                 <div className="flex gap-2">
                   <input
                     ref={inputRef}
@@ -292,13 +292,13 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                     onKeyDown={handleKeyDown}
                     placeholder="Ask about the resume..."
                     disabled={isLoading}
-                    className="flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-sm text-white placeholder:text-zinc-500 focus:border-[#45caff]/50 focus:outline-none focus:ring-2 focus:ring-[#45caff]/20 disabled:opacity-50"
+                    className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-[#45caff]/50 dark:focus:ring-[#45caff]/20"
                   />
                   <button
                     type="button"
                     onClick={handleSend}
                     disabled={!input.trim() || isLoading}
-                    className="rounded-xl bg-gradient-to-r from-[#ff47c0] to-[#45caff] p-2 text-white transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff47c0]/60"
+                    className="rounded-xl bg-gradient-to-r from-primary to-accent p-2 text-white transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:from-[#ff47c0] dark:to-[#45caff] dark:focus-visible:ring-[#ff47c0]/60"
                     aria-label="Send message"
                   >
                     <Send className="h-4 w-4" />
