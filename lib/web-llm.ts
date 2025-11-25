@@ -21,11 +21,12 @@ export class WebLLMService {
   private isLoading = false;
   private resumeContext: string = '';
   private modelId: string;
+  // Store the onProgress callback if needed, though passing it to initialize is fine
 
   constructor(private resume: JSONResume, options: WebLLMOptions = {}) {
     // MLC Web-LLM model ID - must match exactly from https://mlc.ai/models
     // Using smaller model that's more likely to be in default model list
-    this.modelId = options.model || 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
+    this.modelId = options.model || 'SmolLM2-360M-Instruct-q4f16_1-MLC';
     this.resumeContext = this.buildResumeContext(resume);
   }
 
@@ -111,15 +112,10 @@ export class WebLLMService {
     this.isLoading = true;
 
     try {
-      // MLC Web-LLM CreateMLCEngine - use config object with model URL
-      // Model URL format: https://huggingface.co/mlc-ai/{model-id}
-      const modelUrl = this.modelId.startsWith('http')
-        ? this.modelId
-        : `https://huggingface.co/mlc-ai/${this.modelId}`;
-
+      // Use the model ID directly; CreateMLCEngine will handle fetching configuration.
       const engine = await CreateMLCEngine(
         {
-          model: modelUrl,
+          model: this.modelId, // FIX: Use the ID directly
         },
         {
           initProgressCallback: (report) => {
@@ -157,6 +153,7 @@ export class WebLLMService {
       throw new Error('Engine not initialized. Call initialize() first.');
     }
 
+    // System prompt is good - it clearly instructs the LLM on its role and the required output format.
     const systemPrompt = `You are a helpful assistant that answers questions about Alex Alexandrescu's resume. 
 When answering, identify which resume sections are relevant to the question. 
 After your answer, list the relevant sections as a JSON array: ["experience", "skills", "projects", "personal"].
@@ -212,27 +209,36 @@ Sections: ["section1", "section2"]`;
    * Parse section references from LLM response
    */
   private parseSections(response: string): Array<'experience' | 'skills' | 'projects' | 'personal'> {
-    const sections: Array<'experience' | 'skills' | 'projects' | 'personal'> = [];
     const validSections: Array<'experience' | 'skills' | 'projects' | 'personal'> = [
       'experience',
       'skills',
       'projects',
       'personal',
     ];
+    let sections: Array<'experience' | 'skills' | 'projects' | 'personal'> = [];
+    
+    // FIX: Robust JSON parsing
+    // Try to find the 'Sections: ["..."]' part
+    const sectionsMatch = response.match(/Sections:\s*(\[.*?\])/is);
 
-    // Try to find JSON array in response
-    const jsonMatch = response.match(/\["([^"]+)"(?:,\s*"([^"]+)")*(?:\s*,\s*"([^"]+)")*(?:\s*,\s*"([^"]+)")*\]/);
-    if (jsonMatch) {
-      const found = jsonMatch[0]
-        .match(/"([^"]+)"/g)
-        ?.map((m) => m.replace(/"/g, ''))
-        .filter((s): s is typeof validSections[number] => validSections.includes(s as any));
-      if (found) {
-        sections.push(...found);
+    if (sectionsMatch && sectionsMatch[1]) {
+      const jsonString = sectionsMatch[1];
+      try {
+        const parsedArray = JSON.parse(jsonString) as unknown;
+
+        if (Array.isArray(parsedArray)) {
+          // Filter the parsed array to ensure all elements are valid section keys
+          sections = parsedArray.filter(
+            (s): s is typeof validSections[number] =>
+              typeof s === 'string' && validSections.includes(s as any)
+          );
+        }
+      } catch (e) {
+        // Parsing failed, proceed to keyword matching fallback
       }
     }
 
-    // Fallback: keyword matching
+    // Fallback: keyword matching (only runs if JSON parsing did not find valid sections)
     if (sections.length === 0) {
       const lowerResponse = response.toLowerCase();
       if (lowerResponse.includes('experience') || lowerResponse.includes('work') || lowerResponse.includes('job')) {
@@ -260,17 +266,18 @@ Sections: ["section1", "section2"]`;
    * Clean the answer by removing section markers
    */
   private cleanAnswer(answer: string): string {
-    // Remove JSON array at the end if present
-    return answer.replace(/\s*Sections:\s*\[.*?\]/gi, '').replace(/\s*\[.*?\]\s*$/s, '').trim();
+    // Remove 'Sections: [...]' or standalone JSON array at the end if present
+    // The s flag is important for the dot to match newlines
+    return answer.replace(/\s*Sections:\s*\[.*?\]\s*$/si, '').replace(/\s*\[.*?\]\s*$/s, '').trim();
   }
 
   /**
    * Dispose of the engine
    */
   dispose(): void {
-    // MLC Web-LLM doesn't expose a dispose method, but we can nullify the reference
+    // MLC Web-LLM does not expose a public synchronous dispose method,
+    // but nullifying the reference helps garbage collection.
     this.engine = null;
     this.isLoading = false;
   }
 }
-
