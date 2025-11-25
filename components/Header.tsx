@@ -32,7 +32,7 @@ export function Header({ basics }: HeaderProps) {
   const featuredProfile = basics.profiles?.[0];
 
   return (
-    <header className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple-lg backdrop-blur-xl">
+    <header className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple-lg backdrop-blur-xl">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           {basics.name && (
@@ -98,4 +98,3 @@ export function Header({ basics }: HeaderProps) {
     </header>
   );
 }
-

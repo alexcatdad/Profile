@@ -37,9 +37,13 @@
     "granted": "Toegang verleend!"
   },
   "navigation": {
+    "overview": "Overzicht",
+    "metrics": "Kerncijfers",
     "skills": "Vaardigheden",
     "experience": "Ervaring",
     "projects": "Projecten",
+    "publications": "Publicaties",
+    "personal": "Persoonlijk",
     "education": "Opleiding",
     "contact": "Contact",
     "downloadCV": "CV downloaden",

@@ -29,29 +29,31 @@ export function ExperienceSection({ work, formatDate }: ExperienceSectionProps) 
   return (
     <section className="mb-12" aria-label="Experience timeline">
       <div className="mb-6 flex items-center gap-3">
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ff47c0]/15 text-[#45caff]">
           <BriefcaseBusiness className="h-6 w-6" />
         </span>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-200/80">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#f6a7ff]/80">
             Experience
           </p>
           <h2 className="text-2xl font-semibold text-white">Impact timeline</h2>
         </div>
       </div>
-      <div className="relative ps-6 before:absolute before:left-3 before:top-3 before:h-[calc(100%-12px)] before:w-px before:bg-gradient-to-b before:from-emerald-400/60 before:via-white/10 before:to-transparent">
+      <div className="relative ps-6 before:absolute before:left-3 before:top-3 before:h-[calc(100%-12px)] before:w-px before:bg-gradient-to-b before:from-[#ff47c0]/60 before:via-white/10 before:to-transparent">
         {work.map((job) => (
           <article
             key={`${job.name}-${job.position}-${job.startDate}`}
-            className="relative mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-apple"
+            className="interactive-card relative mb-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-apple focus-within:outline-none"
           >
-            <span className="absolute -left-1 top-6 flex h-6 w-6 items-center justify-center rounded-full border border-emerald-400/50 bg-emerald-500/20 text-xs font-semibold text-emerald-200">
+            <span className="absolute -left-1 top-6 flex h-6 w-6 items-center justify-center rounded-full border border-[#ff47c0]/40 bg-[#ff47c0]/15 text-xs font-semibold text-[#f6a7ff]">
               {job.name?.[0] ?? '•'}
             </span>
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
-                {job.position && <h3 className="text-lg font-semibold text-white">{job.position}</h3>}
-                {job.name && <p className="text-sm text-emerald-300">{job.name}</p>}
+                {job.position && (
+                  <h3 className="text-lg font-semibold text-white">{job.position}</h3>
+                )}
+                {job.name && <p className="text-sm text-[#45caff]">{job.name}</p>}
               </div>
               <div className="text-sm text-zinc-400">
                 <p>
@@ -67,14 +69,12 @@ export function ExperienceSection({ work, formatDate }: ExperienceSectionProps) 
                 )}
               </div>
             </div>
-            {job.summary && (
-              <p className="mt-3 text-sm text-zinc-300">{job.summary}</p>
-            )}
+            {job.summary && <p className="mt-3 text-sm text-zinc-300">{job.summary}</p>}
             {job.highlights && job.highlights.length > 0 && (
               <ul className="mt-4 space-y-2 text-sm text-zinc-200">
                 {job.highlights.map((highlight) => (
                   <li key={highlight} className="flex items-start gap-2">
-                    <span className="mt-1 text-emerald-300">•</span>
+                    <span className="mt-1 text-[#45caff]">•</span>
                     <span>{highlight}</span>
                   </li>
                 ))}

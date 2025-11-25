@@ -23,7 +23,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         {skills.map((skill, index) => (
           <article
             key={`${skill.name ?? 'skill'}-${index}`}
-            className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-5 text-sm text-zinc-200 shadow-apple"
+            className="interactive-card rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-5 text-sm text-zinc-200 shadow-apple"
           >
             <div className="mb-3 flex items-center justify-between gap-4">
               {skill.name && <h3 className="text-lg font-semibold text-white">{skill.name}</h3>}
@@ -47,7 +47,9 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
             )}
             {skill.practicalApplications && skill.practicalApplications.length > 0 && (
               <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-zinc-300">
-                <p className="font-semibold uppercase tracking-[0.3em] text-emerald-200">In practice</p>
+                <p className="font-semibold uppercase tracking-[0.3em] text-emerald-200">
+                  In practice
+                </p>
                 <ul className="mt-2 space-y-1">
                   {skill.practicalApplications.map((application) => (
                     <li key={application}>↳ {application}</li>

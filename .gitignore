@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated cover letters
+artifacts/cover-letters/*.json
+!artifacts/cover-letters/.gitkeep

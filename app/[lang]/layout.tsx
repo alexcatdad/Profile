@@ -9,8 +9,22 @@ export async function generateStaticParams() {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Professional Profile',
-    description: 'Professional developer profile and CV showcasing experience, projects, and skills',
+    description:
+      'Professional developer profile and CV showcasing experience, projects, and skills',
     manifest: '/manifest.webmanifest',
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+      googleBot: {
+        index: false,
+        follow: false,
+        noimageindex: true,
+        'max-snippet': -1,
+        'max-image-preview': 'none',
+        'max-video-preview': -1,
+      },
+    },
     appleWebApp: {
       capable: true,
       statusBarStyle: 'default',
@@ -22,9 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
         { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
         { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
       ],
-      apple: [
-        { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
-      ],
+      apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
     },
   };
 }
@@ -56,9 +68,7 @@ export default async function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="antialiased text-foreground">
-        {children}
-      </body>
+      <body className="antialiased text-foreground">{children}</body>
     </html>
   );
 }

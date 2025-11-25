@@ -1,11 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Download, FileText, FileCode2, X, Sparkles } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import type { Basics, CustomExtensions } from '@/types/json-resume';
-import { getRoleFromSearchParams } from '@/lib/role-filter';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Download, FileCode2, FileText, Sparkles, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { buildDownloadFileName } from '@/lib/download-utils';
+import { getRoleFromSearchParams } from '@/lib/role-filter';
+import type { Basics, CustomExtensions } from '@/types/json-resume';
 
 interface DownloadButtonsProps {
   basics?: Basics;
@@ -17,6 +17,11 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState<'pdf' | 'markdown' | null>(null);
   const [activeRoleLabel, setActiveRoleLabel] = useState<string | null>(null);
+  const statusMessage = isDownloading
+    ? `Preparing ${isDownloading === 'pdf' ? 'PDF' : 'Markdown'} download`
+    : isOpen
+      ? 'Download menu expanded'
+      : 'Download menu collapsed';
 
   useEffect(() => {
     setMounted(true);
@@ -76,6 +81,9 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
 
   return (
     <div className="fixed bottom-8 right-8 z-50">
+      <output className="sr-only" aria-live="polite">
+        {statusMessage}
+      </output>
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -86,22 +94,26 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
             transition={{ duration: 0.2 }}
           >
             {activeRoleLabel && (
-              <div className="glass-subtle rounded-2xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-200 shadow-apple flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-emerald-400" />
+              <output
+                className="glass-subtle flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-2 text-xs font-semibold text-zinc-200 shadow-apple"
+                aria-live="polite"
+              >
+                <Sparkles className="h-4 w-4 text-[#45caff]" />
                 Focused for {activeRoleLabel}
-              </div>
+              </output>
             )}
             <motion.button
               onClick={() => handleDownload('pdf')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-emerald-500/60 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-apple"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#ff47c0]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
+              aria-busy={isDownloading === 'pdf'}
               whileHover={{ scale: 1.05, x: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
                 {isDownloading === 'pdf' ? 'Generating...' : 'Download PDF'}
               </span>
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] shadow-lg">
                 <FileText className="w-5 h-5 text-white" />
               </div>
             </motion.button>
@@ -109,14 +121,15 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
             <motion.button
               onClick={() => handleDownload('markdown')}
               disabled={isDownloading !== null}
-              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-sky-400/60 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-apple"
+              className="group relative flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/10 hover:border-[#45caff]/60 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 shadow-apple"
+              aria-busy={isDownloading === 'markdown'}
               whileHover={{ scale: 1.05, x: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               <span className="text-sm font-bold text-zinc-100 whitespace-nowrap">
                 {isDownloading === 'markdown' ? 'Generating...' : 'Download Markdown'}
               </span>
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-500 shadow-lg">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#45caff] via-[#7c6bff] to-[#ff47c0] shadow-lg">
                 <FileCode2 className="w-5 h-5 text-white" />
               </div>
             </motion.button>
@@ -126,7 +139,7 @@ export function DownloadButtons({ basics, targetRoles }: DownloadButtonsProps) {
 
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 via-emerald-600 to-sky-500 hover:shadow-[0_15px_40px_rgba(16,185,129,0.55)] transition-all duration-300 shadow-apple-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/40"
+        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         animate={{ rotate: isOpen ? 180 : 0 }}

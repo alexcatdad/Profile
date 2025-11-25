@@ -1,4 +1,4 @@
-import type { Volunteer, Interest, Education, Language, Certificate } from '@/types/json-resume';
+import type { Certificate, Education, Interest, Language, Volunteer } from '@/types/json-resume';
 
 interface PersonalSectionProps {
   volunteer?: Volunteer[];
@@ -21,19 +21,22 @@ export function PersonalSection({
     <>
       {/* Volunteer */}
       {volunteer && volunteer.length > 0 && (
-        <section className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
+        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
           <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-emerald-400">▸</span> Volunteer
+            <span className="text-[#ff47c0]">▸</span> Volunteer
           </h2>
           <div className="space-y-4">
             {volunteer.map((v, i) => (
-              <article key={`${v.organization}-${i}`} className="rounded-2xl border border-white/10 bg-black/30 p-5">
+              <article
+                key={`${v.organization}-${i}`}
+                className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5"
+              >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    {v.position && <h3 className="text-lg font-semibold text-white">{v.position}</h3>}
-                    {v.organization && (
-                      <p className="text-sm text-emerald-300">{v.organization}</p>
+                    {v.position && (
+                      <h3 className="text-lg font-semibold text-white">{v.position}</h3>
                     )}
+                    {v.organization && <p className="text-sm text-[#45caff]">{v.organization}</p>}
                   </div>
                   <span className="text-sm text-zinc-400">
                     {formatDate(v.startDate)} – {formatDate(v.endDate)}
@@ -55,13 +58,16 @@ export function PersonalSection({
 
       {/* Interests */}
       {interests && interests.length > 0 && (
-        <section className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
+        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
           <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-emerald-400">▸</span> Interests
+            <span className="text-[#ff47c0]">▸</span> Interests
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             {interests.map((int, i) => (
-              <article key={`${int.name}-${i}`} className="rounded-2xl border border-white/10 bg-black/30 p-5">
+              <article
+                key={`${int.name}-${i}`}
+                className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5"
+              >
                 {int.name && <h3 className="mb-2 text-lg font-semibold text-white">{int.name}</h3>}
                 {int.keywords && int.keywords.length > 0 && (
                   <ul className="space-y-1 text-sm text-zinc-300">
@@ -78,21 +84,22 @@ export function PersonalSection({
 
       {/* Education & Languages */}
       {(education || languages || certificates) && (
-        <section className="mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
+        <section className="interactive-card mb-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-apple">
           <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
-            <span className="text-emerald-400">▸</span> Education & Languages
+            <span className="text-[#ff47c0]">▸</span> Education & Languages
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {education && education.length > 0 && (
-              <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
+              <div className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5">
                 {education.map((edu, i) => (
-                  <div key={`${edu.institution}-${i}`} className={i > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''}>
+                  <div
+                    key={`${edu.institution}-${i}`}
+                    className={i > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''}
+                  >
                     {edu.studyType && (
                       <h3 className="text-lg font-semibold text-white">{edu.studyType}</h3>
                     )}
-                    {edu.institution && (
-                      <p className="text-sm text-emerald-300">{edu.institution}</p>
-                    )}
+                    {edu.institution && <p className="text-sm text-[#45caff]">{edu.institution}</p>}
                     {edu.area && (
                       <p className="text-sm text-zinc-400">
                         {edu.area}
@@ -103,7 +110,7 @@ export function PersonalSection({
                 ))}
               </div>
             )}
-            <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
+            <div className="hover-lift rounded-2xl border border-white/10 bg-black/30 p-5">
               {languages && languages.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold text-white">Languages</h3>
@@ -120,7 +127,11 @@ export function PersonalSection({
                 </div>
               )}
               {certificates && certificates.length > 0 && (
-                <div className={languages && languages.length > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''}>
+                <div
+                  className={
+                    languages && languages.length > 0 ? 'mt-4 border-t border-white/10 pt-4' : ''
+                  }
+                >
                   <h3 className="text-lg font-semibold text-white">Certificates</h3>
                   <ul className="mt-2 space-y-2 text-sm text-zinc-300">
                     {certificates.map((cert, i) => (
@@ -139,4 +150,3 @@ export function PersonalSection({
     </>
   );
 }
-

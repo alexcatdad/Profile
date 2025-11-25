@@ -26,7 +26,7 @@ export function WelcomeToast() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 left-1/2 z-50 bg-card border border-border shadow-lg rounded-lg px-6 py-4"
+          className="fixed top-4 left-1/2 z-50 glass-strong border border-border shadow-lg rounded-lg px-6 py-4"
         >
           <p className="text-card-foreground">Welcome back, {name}!</p>
         </motion.div>

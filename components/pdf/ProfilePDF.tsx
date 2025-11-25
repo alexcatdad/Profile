@@ -3,207 +3,211 @@ import type { JSONResume } from '@/types/json-resume';
 
 const styles = StyleSheet.create({
   page: {
-    padding: 42,
+    padding: 36,
     fontFamily: 'Helvetica',
     fontSize: 10,
-    lineHeight: 1.5,
-    color: '#0f172a',
-    backgroundColor: '#f6f8fb',
+    lineHeight: 1.45,
+    backgroundColor: '#ffffff',
+    color: '#0b1220',
   },
-  headerCard: {
-    backgroundColor: '#0f172a',
-    color: '#f8fafc',
-    borderRadius: 18,
-    padding: 24,
-    marginBottom: 20,
+  header: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#e4e7ef',
+    paddingBottom: 12,
+    marginBottom: 14,
   },
   name: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 700,
-    marginBottom: 4,
+    letterSpacing: -0.2,
+    color: '#051027',
   },
   title: {
-    fontSize: 13,
-    color: '#4ade80',
-    fontWeight: 600,
+    fontSize: 11,
+    color: '#475467',
+    marginTop: 3,
   },
-  roleTag: {
+  badgeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: 8,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+  },
+  badge: {
+    fontSize: 8,
+    textTransform: 'uppercase',
+    color: '#1d3a5f',
+    backgroundColor: '#f1f5ff',
     borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    marginRight: 6,
+    marginBottom: 6,
     borderWidth: 1,
-    borderColor: '#4ade80',
-    fontSize: 9,
-    fontWeight: 600,
-    color: '#f8fafc',
+    borderColor: '#d4e0ff',
   },
   contactRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 14,
+    marginTop: 10,
   },
   contactItem: {
-    color: '#e2e8f0',
-    marginRight: 12,
-    marginBottom: 6,
     fontSize: 9,
+    color: '#5c6479',
+    marginRight: 12,
+    marginBottom: 4,
     textDecoration: 'none',
   },
-  twoColumn: {
-    flexDirection: 'row',
-  },
-  columnMain: {
-    flex: 1.8,
-  },
-  columnAside: {
-    flex: 1,
-    marginLeft: 18,
+  section: {
+    marginBottom: 14,
   },
   sectionCard: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 16,
+    backgroundColor: '#f8f9fb',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#edf0f7',
+    padding: 12,
   },
   sectionTitle: {
-    fontSize: 11,
-    letterSpacing: 1,
-    fontWeight: 700,
-    color: '#0f172a',
-    marginBottom: 8,
+    fontSize: 9,
     textTransform: 'uppercase',
+    letterSpacing: 1.4,
+    color: '#7a8197',
+    marginBottom: 6,
   },
-  summary: {
+  summaryText: {
     fontSize: 10,
-    color: '#1e293b',
+    color: '#0f172a',
+  },
+  metricGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
   },
   metricCard: {
-    borderRadius: 14,
-    padding: 12,
-    backgroundColor: '#0f172a',
-    marginBottom: 10,
+    width: '48%',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#e2e6f1',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 8,
+    marginRight: '4%',
   },
   metricValue: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 700,
-    color: '#f8fafc',
+    color: '#051027',
   },
   metricLabel: {
-    fontSize: 9,
-    color: '#cbd5f5',
+    fontSize: 8.5,
+    color: '#606575',
+    marginTop: 2,
   },
   experienceItem: {
-    borderLeftWidth: 3,
-    borderLeftColor: '#10b981',
-    paddingLeft: 12,
-    marginBottom: 14,
+    paddingVertical: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecf3',
   },
   jobTitle: {
     fontSize: 11,
-    fontWeight: 700,
-    color: '#0f172a',
+    fontWeight: 600,
+    color: '#0b1220',
   },
   company: {
     fontSize: 10,
-    color: '#10b981',
-    fontWeight: 600,
-  },
-  dateRow: {
-    fontSize: 9,
-    color: '#475569',
+    color: '#2563eb',
     marginTop: 2,
   },
-  highlight: {
-    fontSize: 9,
-    color: '#1e293b',
+  dateRow: {
+    fontSize: 8.5,
+    color: '#667085',
+    marginTop: 2,
+  },
+  bulletList: {
     marginTop: 4,
+  },
+  bulletRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 3,
+  },
+  bulletSymbol: {
+    fontSize: 9,
+    marginRight: 4,
+    color: '#94a3b8',
+  },
+  bulletText: {
+    flex: 1,
+    fontSize: 9,
+    color: '#1f2933',
   },
   tagRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 6,
+    marginTop: 4,
   },
   tag: {
     fontSize: 8,
-    color: '#0f172a',
-    backgroundColor: '#e2fbe2',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    color: '#1d3a5f',
+    backgroundColor: '#eff4ff',
     borderRadius: 6,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
     marginRight: 4,
     marginBottom: 4,
-  },
-  skillCard: {
-    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    padding: 12,
-    marginBottom: 10,
-    backgroundColor: '#fbfdff',
+    borderColor: '#dfe8ff',
+  },
+  skillGroup: {
+    marginTop: 4,
   },
   skillName: {
     fontSize: 10,
-    fontWeight: 700,
-    color: '#0f172a',
+    fontWeight: 600,
+    color: '#0b1220',
   },
   skillKeywords: {
     fontSize: 9,
-    color: '#475569',
-    marginTop: 4,
+    color: '#4b5565',
+    marginTop: 2,
   },
-  achievementsList: {
-    marginTop: 6,
-  },
-  achievementItem: {
-    fontSize: 9,
-    color: '#1e293b',
-    marginBottom: 4,
-  },
-  projectCard: {
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#d4dbe8',
-    padding: 14,
-    marginBottom: 14,
+  projectItem: {
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eceff6',
   },
   projectName: {
-    fontSize: 11,
-    fontWeight: 700,
-    color: '#0f172a',
-    marginBottom: 4,
+    fontSize: 10.5,
+    fontWeight: 600,
+    color: '#0b1220',
   },
   projectDescription: {
     fontSize: 9,
-    color: '#1f2937',
+    color: '#374151',
+    marginTop: 2,
   },
   educationItem: {
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    padding: 12,
-    marginBottom: 10,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eceff6',
   },
   degree: {
     fontSize: 10,
-    fontWeight: 700,
-    color: '#0f172a',
+    fontWeight: 600,
+    color: '#0b1220',
   },
   institution: {
     fontSize: 9,
-    color: '#0f6f9c',
-    marginTop: 2,
+    color: '#475467',
+    marginTop: 1,
   },
   footer: {
     fontSize: 8,
-    color: '#64748b',
+    color: '#7a8197',
     marginTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
-    paddingTop: 8,
+    borderTopColor: '#e4e7ef',
+    paddingTop: 6,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -249,25 +253,18 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
     : '';
   const linkedInProfile = basics.profiles?.find((p) => p.network === 'LinkedIn');
   const quantifiable = resume._custom?.quantifiableMetrics;
+  const targetRoles = resume._custom?.targetRoles
+    ? Object.values(resume._custom.targetRoles).map((role) => role.label)
+    : [];
+  const achievements = resume._custom?.keyAchievements || [];
 
   const metrics = [
     quantifiable?.yearsExperience
-      ? {
-          label: 'Years shipping products',
-          value: `${quantifiable.yearsExperience}+`,
-        }
+      ? { label: 'Years shipping products', value: `${quantifiable.yearsExperience}+` }
       : null,
-    quantifiable?.teamsLed
-      ? {
-          label: 'Teams led',
-          value: `${quantifiable.teamsLed}`,
-        }
-      : null,
+    quantifiable?.teamsLed ? { label: 'Teams led', value: `${quantifiable.teamsLed}` } : null,
     quantifiable?.remoteYears
-      ? {
-          label: 'Remote-first',
-          value: `${quantifiable.remoteYears}+ yrs`,
-        }
+      ? { label: 'Remote-first', value: `${quantifiable.remoteYears}+ yrs` }
       : null,
     resume._custom?.companyPreferences?.primary
       ? {
@@ -277,15 +274,25 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
       : null,
   ].filter((metric): metric is { label: string; value: string } => Boolean(metric));
 
-  const achievements = resume._custom?.keyAchievements || [];
+  const forcePageBreakAfterExperience = (resume.work?.length ?? 0) > 3;
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.headerCard}>
+      <Page size="A4" style={styles.page} wrap>
+        <View style={styles.header}>
           {basics.name && <Text style={styles.name}>{basics.name}</Text>}
           {basics.label && <Text style={styles.title}>{basics.label}</Text>}
-          {roleLabel && <Text style={styles.roleTag}>{roleLabel} profile</Text>}
+          <View style={styles.badgeRow}>
+            {roleLabel && <Text style={styles.badge}>{roleLabel}</Text>}
+            {resume._custom?.companyPreferences?.primary && (
+              <Text style={styles.badge}>{resume._custom.companyPreferences.primary}</Text>
+            )}
+            {targetRoles.slice(0, 2).map((role, index) => (
+              <Text key={`${role}-${index}`} style={styles.badge}>
+                {role}
+              </Text>
+            ))}
+          </View>
           <View style={styles.contactRow}>
             {basics.email && <Text style={styles.contactItem}>{basics.email}</Text>}
             {location && <Text style={styles.contactItem}>{location}</Text>}
@@ -302,186 +309,167 @@ export function ProfilePDF({ resume, roleLabel }: ProfilePDFProps) {
           </View>
         </View>
 
-        <View style={styles.twoColumn}>
-          <View style={styles.columnMain}>
-            {basics.summary && (
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionTitle}>Snapshot</Text>
-                <Text style={styles.summary}>{basics.summary}</Text>
-              </View>
-            )}
-            {resume.work && resume.work.length > 0 && (
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionTitle}>Experience</Text>
-                {resume.work.slice(0, 5).map((exp, index) => (
-                  <View key={index} style={styles.experienceItem}>
-                    {exp.position && <Text style={styles.jobTitle}>{exp.position}</Text>}
-                    {exp.name && <Text style={styles.company}>{exp.name}</Text>}
-                    {(exp.startDate || exp.endDate) && (
-                      <Text style={styles.dateRow}>
-                        {formatDate(exp.startDate)} — {formatDate(exp.endDate)}{' '}
-                        {formatDuration(exp.startDate, exp.endDate)
-                          ? `• ${formatDuration(exp.startDate, exp.endDate)}`
-                          : ''}
-                      </Text>
-                    )}
-                    {exp.summary && <Text style={styles.highlight}>{exp.summary}</Text>}
-                    {exp.highlights && exp.highlights.length > 0 && (
-                      <View>
-                        {exp.highlights.slice(0, 3).map((highlight, hIndex) => (
-                          <Text key={hIndex} style={styles.highlight}>
-                            • {highlight}
-                          </Text>
-                        ))}
-                      </View>
-                    )}
-                    {exp.keywords && exp.keywords.length > 0 && (
-                      <View style={styles.tagRow}>
-                        {exp.keywords.slice(0, 6).map((keyword, kIndex) => (
-                          <Text key={kIndex} style={styles.tag}>
-                            {keyword}
-                          </Text>
-                        ))}
-                      </View>
-                    )}
-                  </View>
-                ))}
-              </View>
-            )}
+        {basics.summary && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Snapshot</Text>
+            <Text style={styles.summaryText}>{basics.summary}</Text>
           </View>
+        )}
 
-          <View style={styles.columnAside}>
-            {metrics.length > 0 && (
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionTitle}>Impact metrics</Text>
-                {metrics.map((metric, index) => (
-                  <View key={index} style={styles.metricCard}>
-                    <Text style={styles.metricValue}>{metric.value}</Text>
-                    <Text style={styles.metricLabel}>{metric.label}</Text>
-                  </View>
-                ))}
-              </View>
-            )}
-
-            {resume.skills && resume.skills.length > 0 && (
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionTitle}>Core skills</Text>
-                {resume.skills.slice(0, 4).map((skill, index) => (
-                  <View key={index} style={styles.skillCard}>
-                    {skill.name && (
-                      <Text style={styles.skillName}>
-                        {skill.name}
-                        {skill.level ? ` • ${skill.level}` : ''}
-                      </Text>
-                    )}
-                    {skill.keywords && skill.keywords.length > 0 && (
-                      <Text style={styles.skillKeywords}>{skill.keywords.join(' • ')}</Text>
-                    )}
-                    {skill.practicalApplications && skill.practicalApplications.length > 0 && (
-                      <View style={styles.achievementsList}>
-                        {skill.practicalApplications.slice(0, 2).map((useCase, useIndex) => (
-                          <Text key={useIndex} style={styles.achievementItem}>
-                            ↳ {useCase}
-                          </Text>
-                        ))}
-                      </View>
-                    )}
-                  </View>
-                ))}
-              </View>
-            )}
-
-            {achievements.length > 0 && (
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionTitle}>Highlights</Text>
-                <View style={styles.achievementsList}>
-                  {achievements.slice(0, 5).map((achievement, index) => (
-                    <Text key={index} style={styles.achievementItem}>
-                      • {achievement}
-                    </Text>
-                  ))}
+        {metrics.length > 0 && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Impact metrics</Text>
+            <View style={styles.metricGrid}>
+              {metrics.map((metric, index) => (
+                <View
+                  key={`${metric.label}-${index}`}
+                  style={[styles.metricCard, (index + 1) % 2 === 0 && { marginRight: 0 }]}
+                >
+                  <Text style={styles.metricValue}>{metric.value}</Text>
+                  <Text style={styles.metricLabel}>{metric.label}</Text>
                 </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {resume.skills && resume.skills.length > 0 && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Core skills</Text>
+            {resume.skills.slice(0, 5).map((skill, index) => (
+              <View key={index} style={styles.skillGroup}>
+                {skill.name && (
+                  <Text style={styles.skillName}>
+                    {skill.name}
+                    {skill.level ? ` • ${skill.level}` : ''}
+                  </Text>
+                )}
+                {skill.keywords && skill.keywords.length > 0 && (
+                  <Text style={styles.skillKeywords}>{skill.keywords.join(' • ')}</Text>
+                )}
+              </View>
+            ))}
+            {achievements.length > 0 && (
+              <View style={{ marginTop: 6 }}>
+                <Text style={styles.sectionTitle}>Highlights</Text>
+                {achievements.slice(0, 4).map((achievement, index) => (
+                  <View key={index} style={styles.bulletRow}>
+                    <Text style={styles.bulletSymbol}>•</Text>
+                    <Text style={styles.bulletText}>{achievement}</Text>
+                  </View>
+                ))}
               </View>
             )}
           </View>
-        </View>
+        )}
+
+        {resume.work && resume.work.length > 0 && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Experience</Text>
+            {resume.work.slice(0, 5).map((exp, index) => (
+              <View key={index} style={styles.experienceItem}>
+                {exp.position && <Text style={styles.jobTitle}>{exp.position}</Text>}
+                {exp.name && <Text style={styles.company}>{exp.name}</Text>}
+                {(exp.startDate || exp.endDate) && (
+                  <Text style={styles.dateRow}>
+                    {formatDate(exp.startDate)} — {formatDate(exp.endDate)}{' '}
+                    {formatDuration(exp.startDate, exp.endDate)
+                      ? `• ${formatDuration(exp.startDate, exp.endDate)}`
+                      : ''}
+                  </Text>
+                )}
+                {exp.summary && (
+                  <View style={styles.bulletList}>
+                    <View style={styles.bulletRow}>
+                      <Text style={styles.bulletSymbol}>•</Text>
+                      <Text style={styles.bulletText}>{exp.summary}</Text>
+                    </View>
+                  </View>
+                )}
+                {exp.highlights && exp.highlights.length > 0 && (
+                  <View style={styles.bulletList}>
+                    {exp.highlights.slice(0, 2).map((highlight, hIndex) => (
+                      <View key={hIndex} style={styles.bulletRow}>
+                        <Text style={styles.bulletSymbol}>•</Text>
+                        <Text style={styles.bulletText}>{highlight}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+                {exp.keywords && exp.keywords.length > 0 && (
+                  <View style={styles.tagRow}>
+                    {exp.keywords.slice(0, 6).map((keyword, kIndex) => (
+                      <Text key={kIndex} style={styles.tag}>
+                        {keyword}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {forcePageBreakAfterExperience && <View break />}
+
+        {resume.projects && resume.projects.length > 0 && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Projects</Text>
+            {resume.projects.slice(0, 5).map((project, index) => (
+              <View key={index} style={styles.projectItem}>
+                {project.name && <Text style={styles.projectName}>{project.name}</Text>}
+                {project.description && (
+                  <Text style={styles.projectDescription}>{project.description}</Text>
+                )}
+                {project.highlights && project.highlights.length > 0 && (
+                  <View style={styles.bulletList}>
+                    {project.highlights.slice(0, 2).map((item, hIndex) => (
+                      <View key={hIndex} style={styles.bulletRow}>
+                        <Text style={styles.bulletSymbol}>•</Text>
+                        <Text style={styles.bulletText}>{item}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {(resume.education?.length || resume.certificates?.length) && (
+          <View style={[styles.section, styles.sectionCard]}>
+            <Text style={styles.sectionTitle}>Education & Certifications</Text>
+            {resume.education?.slice(0, 3).map((edu, index) => (
+              <View key={`edu-${index}`} style={styles.educationItem}>
+                {edu.studyType && (
+                  <Text style={styles.degree}>
+                    {edu.studyType}
+                    {edu.area ? ` • ${edu.area}` : ''}
+                  </Text>
+                )}
+                {edu.institution && <Text style={styles.institution}>{edu.institution}</Text>}
+                {(edu.startDate || edu.endDate) && (
+                  <Text style={styles.dateRow}>
+                    {formatDate(edu.startDate)} — {formatDate(edu.endDate)}
+                  </Text>
+                )}
+              </View>
+            ))}
+            {resume.certificates?.slice(0, 3).map((cert, index) => (
+              <View key={`cert-${index}`} style={styles.educationItem}>
+                {cert.name && <Text style={styles.degree}>{cert.name}</Text>}
+                {cert.issuer && <Text style={styles.institution}>{cert.issuer}</Text>}
+                {cert.date && <Text style={styles.dateRow}>{cert.date}</Text>}
+              </View>
+            ))}
+          </View>
+        )}
 
         <View style={styles.footer}>
           <Text>Generated on {new Date().toLocaleDateString()}</Text>
           {basics.name && <Text>{basics.name} • Professional Profile</Text>}
         </View>
       </Page>
-
-      {(resume.projects || resume.education || resume.certificates) && (
-        <Page size="A4" style={styles.page}>
-          {resume.projects && resume.projects.length > 0 && (
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Featured projects</Text>
-              {resume.projects.slice(0, 4).map((project, index) => (
-                <View key={index} style={styles.projectCard}>
-                  {project.name && <Text style={styles.projectName}>{project.name}</Text>}
-                  {project.description && (
-                    <Text style={styles.projectDescription}>{project.description}</Text>
-                  )}
-                  {project.highlights && project.highlights.length > 0 && (
-                    <View style={styles.achievementsList}>
-                      {project.highlights.slice(0, 3).map((item, hIndex) => (
-                        <Text key={hIndex} style={styles.achievementItem}>
-                          • {item}
-                        </Text>
-                      ))}
-                    </View>
-                  )}
-                  {project.keywords && project.keywords.length > 0 && (
-                    <View style={styles.tagRow}>
-                      {project.keywords.slice(0, 6).map((keyword, kIndex) => (
-                        <Text key={kIndex} style={styles.tag}>
-                          {keyword}
-                        </Text>
-                      ))}
-                    </View>
-                  )}
-                </View>
-              ))}
-            </View>
-          )}
-
-          {(resume.education && resume.education.length > 0) || (resume.certificates && resume.certificates.length > 0) ? (
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Education & Certifications</Text>
-              {resume.education?.map((edu, index) => (
-                <View key={`edu-${index}`} style={styles.educationItem}>
-                  {edu.studyType && (
-                    <Text style={styles.degree}>
-                      {edu.studyType}
-                      {edu.area ? ` • ${edu.area}` : ''}
-                    </Text>
-                  )}
-                  {edu.institution && <Text style={styles.institution}>{edu.institution}</Text>}
-                  {(edu.startDate || edu.endDate) && (
-                    <Text style={styles.metricLabel}>
-                      {formatDate(edu.startDate)} — {formatDate(edu.endDate)}
-                    </Text>
-                  )}
-                </View>
-              ))}
-
-              {resume.certificates?.map((cert, index) => (
-                <View key={`cert-${index}`} style={styles.educationItem}>
-                  {cert.name && <Text style={styles.degree}>{cert.name}</Text>}
-                  {cert.issuer && <Text style={styles.institution}>{cert.issuer}</Text>}
-                  {cert.date && <Text style={styles.metricLabel}>{cert.date}</Text>}
-                </View>
-              ))}
-            </View>
-          ) : null}
-
-          <View style={styles.footer}>
-            <Text>Generated on {new Date().toLocaleDateString()}</Text>
-            {basics.name && <Text>{basics.name} • Professional Profile</Text>}
-          </View>
-        </Page>
-      )}
     </Document>
   );
 }

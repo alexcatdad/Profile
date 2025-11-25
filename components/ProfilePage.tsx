@@ -1,9 +1,10 @@
 import type { Dictionary } from '@/app/dictionaries/en';
 import type { JSONResume } from '@/types/json-resume';
-import { ResumeLayout } from './ResumeLayout';
-import { DownloadButtons } from './DownloadButtons';
-import { ScrollProgress } from './ScrollProgress';
 import { CoverLetterModalWrapper } from './CoverLetterModalWrapper';
+import { DownloadButtons } from './DownloadButtons';
+import { Navigation } from './Navigation';
+import { ResumeLayout } from './ResumeLayout';
+import { ScrollProgress } from './ScrollProgress';
 
 interface ProfilePageProps {
   resume: JSONResume;
@@ -16,15 +17,21 @@ export function ProfilePage({ resume, dictionary, coverLetterOpen = false }: Pro
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <ScrollProgress />
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(56,189,248,0.18),_transparent_55%)]"
+        className="pointer-events-none absolute inset-0 neo-grid opacity-50"
         aria-hidden="true"
       />
-      <div className="pointer-events-none absolute inset-0 bg-grid-overlay opacity-15" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 neo-noise" aria-hidden="true" />
       <div
-        className="pointer-events-none absolute inset-x-0 top-[-30%] h-[520px] bg-gradient-to-b from-emerald-500/20 via-transparent to-transparent blur-3xl"
+        className="pointer-events-none absolute -top-1/3 left-1/2 h-[780px] w-[780px] -translate-x-1/2 neo-orb"
         aria-hidden="true"
       />
-      <div className="relative z-10">
+      <div
+        className="pointer-events-none absolute top-1/4 right-[-10%] h-[420px] w-[420px] neo-orb opacity-70"
+        aria-hidden="true"
+      />
+      <div className="pointer-events-none absolute inset-0 neo-scanline" aria-hidden="true" />
+      <div className="relative z-10 space-y-6">
+        <Navigation dictionary={dictionary} />
         <DownloadButtons basics={resume.basics} targetRoles={resume._custom?.targetRoles} />
         <main aria-label="Resume content">
           <ResumeLayout resume={resume} />

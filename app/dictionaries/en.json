@@ -37,9 +37,13 @@
     "granted": "Access granted!"
   },
   "navigation": {
+    "overview": "Overview",
+    "metrics": "Metrics",
     "skills": "Skills",
     "experience": "Experience",
     "projects": "Projects",
+    "publications": "Publications",
+    "personal": "Personal",
     "education": "Education",
     "contact": "Contact",
     "downloadCV": "Download CV",

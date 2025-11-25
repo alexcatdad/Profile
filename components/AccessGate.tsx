@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import type { Dictionary } from '@/app/dictionaries/en';
-import type { Basics } from '@/types/json-resume';
 import { getAccessData } from '@/lib/storage';
+import type { Basics } from '@/types/json-resume';
 import { AccessModal } from './AccessModal';
 import { WelcomeToast } from './WelcomeToast';
 
@@ -32,7 +32,7 @@ export function AccessGate({ dictionary, basics, children }: AccessGateProps) {
   if (isChecking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-[#ff47c0]" />
       </div>
     );
   }
