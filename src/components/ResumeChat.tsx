@@ -3,6 +3,7 @@
 import { Loader2, MessageCircle, Send, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useResumeHighlight } from '@/hooks/useResumeHighlight';
+import { getAccessData } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 import { WebLLMService } from '@/lib/web-llm';
 import type { JSONResume } from '@/types/json-resume';
@@ -25,7 +26,10 @@ const sectionLabels: Record<'experience' | 'skills' | 'projects' | 'personal', s
   personal: 'Personal',
 };
 
-export function ResumeChat({ resume }: ResumeChatProps) {
+export function ResumeChat({
+  resume,
+  alignment = 'right',
+}: ResumeChatProps & { alignment?: 'left' | 'right' }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -34,13 +38,21 @@ export function ResumeChat({ resume }: ResumeChatProps) {
   const [initProgress, setInitProgress] = useState(0);
   const [initText, setInitText] = useState('');
   const [llmService, setLlmService] = useState<WebLLMService | null>(null);
+  const [visitorName, setVisitorName] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { highlightSection } = useResumeHighlight();
 
+  useEffect(() => {
+    const data = getAccessData();
+    if (data?.name) {
+      setVisitorName(data.name);
+    }
+  }, []);
+
   // Initialize WebLLM service
   useEffect(() => {
-    if (isOpen && !llmService) {
+    if (!llmService) {
       setIsInitializing(true);
       const service = new WebLLMService(resume, {
         onProgress: (progress, text) => {
@@ -74,7 +86,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
         llmService.dispose();
       }
     };
-  }, [isOpen, resume, llmService]);
+  }, [resume, llmService]);
 
   // Auto-scroll to bottom when messages change
   useEffect(
@@ -139,6 +151,12 @@ export function ResumeChat({ resume }: ResumeChatProps) {
       assistantMessage.content = response.answer || fullContent;
       assistantMessage.sections = response.sections || [];
 
+      // Auto-scroll/highlight if items are found
+      if (response.sections && response.sections.length > 0) {
+        // Fallback to section highlight if no specific items
+        highlightSection(response.sections[0]);
+      }
+
       setMessages((prev) => {
         const updated = [...prev];
         const lastIndex = updated.length - 1;
@@ -159,7 +177,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, llmService, isInitializing]);
+  }, [input, isLoading, llmService, isInitializing, highlightSection]);
 
   const handleSectionClick = useCallback(
     (section: 'experience' | 'skills' | 'projects' | 'personal') => {
@@ -179,19 +197,24 @@ export function ResumeChat({ resume }: ResumeChatProps) {
   );
 
   return (
-    <div className="fixed bottom-8 left-8 z-50">
+    <div className={cn('fixed bottom-8 z-50', alignment === 'left' ? 'left-8' : 'right-8')}>
       {isOpen && (
-        <div className="absolute bottom-20 left-0 flex h-[600px] w-[400px] flex-col rounded-3xl border border-border bg-card/95 shadow-apple-lg backdrop-blur transition-all duration-200 supports-[backdrop-filter]:bg-card/90 dark:border-white/10 dark:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90">
+        <div
+          className={cn(
+            'absolute bottom-20 flex h-[600px] w-[400px] flex-col rounded-3xl border border-border bg-card/95 shadow-apple-lg backdrop-blur transition-all duration-200 supports-[backdrop-filter]:bg-card/90 dark:bg-card/95 dark:supports-[backdrop-filter]:bg-card/90',
+            alignment === 'left' ? 'left-0 origin-bottom-left' : 'right-0 origin-bottom-right'
+          )}
+        >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border px-4 py-3 dark:border-white/10">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-accent dark:text-[#45caff]" />
-              <h3 className="text-sm font-semibold text-foreground dark:text-white">Resume Q&A</h3>
+              <MessageCircle className="h-5 w-5 text-accent" />
+              <h3 className="text-sm font-semibold text-foreground">Resume Q&A</h3>
             </div>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#ff47c0]/60"
+              className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:hover:bg-secondary dark:hover:text-foreground dark:focus-visible:ring-primary"
               aria-label="Close chat"
             >
               <X className="h-4 w-4" />
@@ -202,28 +225,28 @@ export function ResumeChat({ resume }: ResumeChatProps) {
           <div className="flex-1 overflow-y-auto px-4 py-4">
             {isInitializing ? (
               <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
-                <Loader2 className="h-8 w-8 animate-spin text-accent dark:text-[#45caff]" />
+                <Loader2 className="h-8 w-8 animate-spin text-accent" />
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-foreground dark:text-white">
+                  <p className="text-sm font-medium text-foreground">
                     {initText || 'Loading AI model...'}
                   </p>
-                  <div className="h-1.5 w-48 overflow-hidden rounded-full bg-secondary dark:bg-white/10">
+                  <div className="h-1.5 w-48 overflow-hidden rounded-full bg-secondary">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width] dark:from-[#ff47c0] dark:to-[#45caff]"
+                      className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width]"
                       style={{ width: `${initProgress * 100}%` }}
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground dark:text-zinc-400">
-                    {Math.round(initProgress * 100)}%
-                  </p>
+                  <p className="text-xs text-muted-foreground">{Math.round(initProgress * 100)}%</p>
                 </div>
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col gap-2 py-8 text-center">
-                <p className="text-sm text-muted-foreground dark:text-zinc-300">
-                  Ask me anything about Alex's resume!
+                <p className="text-sm text-muted-foreground">
+                  {visitorName
+                    ? `Hi ${visitorName}, I'm a small assistant running in your browser to help you find specific details in Alex's resume.`
+                    : "Ask me anything about Alex's resume!"}
                 </p>
-                <p className="text-xs text-muted-foreground/80 dark:text-zinc-500">
+                <p className="text-xs text-muted-foreground/80">
                   Try: "What's his experience with Next.js?"
                 </p>
               </div>
@@ -241,8 +264,8 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                       className={cn(
                         'max-w-[85%] rounded-2xl px-4 py-2 text-sm',
                         message.role === 'user'
-                          ? 'bg-gradient-to-r from-primary to-accent text-white dark:from-[#ff47c0] dark:to-[#45caff]'
-                          : 'bg-secondary text-foreground dark:bg-white/[0.04] dark:text-zinc-200'
+                          ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground light:text-foreground'
+                          : 'bg-secondary text-foreground'
                       )}
                     >
                       <p className="whitespace-pre-wrap break-words">{message.content}</p>
@@ -254,7 +277,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                             key={section}
                             type="button"
                             onClick={() => handleSectionClick(section)}
-                            className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-accent transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 dark:border-white/20 dark:bg-black/30 dark:text-[#45caff] dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-[#45caff]/60"
+                            className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-accent transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent dark:bg-secondary dark:text-accent dark:hover:bg-secondary dark:hover:text-foreground dark:focus-visible:ring-accent"
                           >
                             {sectionLabels[section]}
                           </button>
@@ -265,8 +288,8 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                 ))}
                 {isLoading && (
                   <div className="flex items-start gap-2">
-                    <div className="rounded-2xl bg-secondary px-4 py-2 dark:bg-white/[0.04]">
-                      <Loader2 className="h-4 w-4 animate-spin text-accent dark:text-[#45caff]" />
+                    <div className="rounded-2xl bg-secondary px-4 py-2">
+                      <Loader2 className="h-4 w-4 animate-spin text-accent" />
                     </div>
                   </div>
                 )}
@@ -277,7 +300,7 @@ export function ResumeChat({ resume }: ResumeChatProps) {
 
           {/* Input Area */}
           {!isInitializing && (
-            <div className="border-t border-border p-4 dark:border-white/10">
+            <div className="border-t border-border p-4">
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
@@ -287,13 +310,13 @@ export function ResumeChat({ resume }: ResumeChatProps) {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask about the resume..."
                   disabled={isLoading}
-                  className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-zinc-500 dark:focus:border-[#45caff]/50 dark:focus:ring-[#45caff]/20"
+                  className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50 dark:bg-secondary dark:text-foreground dark:placeholder:text-muted-foreground dark:focus:border-accent dark:focus:ring-accent"
                 />
                 <button
                   type="button"
                   onClick={handleSend}
                   disabled={!input.trim() || isLoading}
-                  className="rounded-xl bg-gradient-to-r from-primary to-accent p-2 text-white transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:from-[#ff47c0] dark:to-[#45caff] dark:focus-visible:ring-[#ff47c0]/60"
+                  className="rounded-xl bg-gradient-to-r from-primary to-accent p-2 text-primary-foreground light:text-foreground transition-opacity disabled:opacity-50 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary"
                   aria-label="Send message"
                 >
                   <Send className="h-4 w-4" />
@@ -307,15 +330,27 @@ export function ResumeChat({ resume }: ResumeChatProps) {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#ff47c0] via-[#b04bff] to-[#45caff] transition-all duration-300 shadow-apple-lg hover:shadow-[0_20px_50px_rgba(255,71,192,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff47c0]/40"
+        disabled={isInitializing}
+        className={cn(
+          'flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent transition-all duration-300 shadow-apple-lg hover:shadow-primary/45 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40',
+          isInitializing && 'opacity-80 cursor-not-allowed'
+        )}
         style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` }}
-        aria-label={isOpen ? 'Close resume chat' : 'Open resume chat'}
+        aria-label={
+          isInitializing
+            ? 'Initializing AI model'
+            : isOpen
+              ? 'Close resume chat'
+              : 'Open resume chat'
+        }
         aria-expanded={isOpen}
       >
-        {isOpen ? (
-          <X className="w-6 h-6 text-white" />
+        {isInitializing ? (
+          <Loader2 className="w-6 h-6 text-primary-foreground animate-spin" />
+        ) : isOpen ? (
+          <X className="w-6 h-6 text-primary-foreground" />
         ) : (
-          <MessageCircle className="w-6 h-6 text-white" />
+          <MessageCircle className="w-6 h-6 text-primary-foreground" />
         )}
       </button>
     </div>

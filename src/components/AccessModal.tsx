@@ -142,7 +142,7 @@ export function AccessModal({
 
   return (
     <OverlayContainer>
-      <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="fixed inset-0 bg-background/60 dark:bg-background/80 backdrop-blur-xl z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div className="min-h-full w-full flex items-center justify-center py-8">
           <FocusScope contain restoreFocus autoFocus>
             <div
@@ -164,7 +164,7 @@ export function AccessModal({
                         alt={profileName}
                         width={100}
                         height={100}
-                        className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto object-cover shadow-apple-lg ring-4 ring-white/30 dark:ring-white/10"
+                        className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto object-cover shadow-apple-lg ring-4 ring-border"
                       />
                     </div>
                   )}
@@ -194,7 +194,7 @@ export function AccessModal({
                           return (
                             <li
                               key={benefit.text}
-                              className="flex items-start gap-3 text-foreground/90 text-sm sm:text-base transition duration-200"
+                              className="flex items-start gap-3 text-muted-foreground text-sm sm:text-base transition duration-200"
                               style={{ transitionDelay: `${0.1 * index}s` }}
                             >
                               <Icon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -224,7 +224,7 @@ export function AccessModal({
                           {...nameProps}
                           ref={nameInputRef}
                           id="name"
-                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground/50 text-sm sm:text-base shadow-apple"
+                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground text-sm sm:text-base shadow-apple"
                         />
                         {nameError && (
                           <p className="mt-2 text-sm text-destructive flex items-center gap-1.5 font-medium transition-opacity">
@@ -245,7 +245,7 @@ export function AccessModal({
                           {...emailProps}
                           ref={emailInputRef}
                           id="email"
-                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground/50 text-sm sm:text-base shadow-apple"
+                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground text-sm sm:text-base shadow-apple"
                         />
                         {emailError && (
                           <p className="mt-2 text-sm text-destructive flex items-center gap-1.5 font-medium transition-opacity">
@@ -266,7 +266,7 @@ export function AccessModal({
                           {...companyProps}
                           ref={companyInputRef}
                           id="company"
-                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground/50 text-sm sm:text-base shadow-apple"
+                          className="w-full px-4 py-3 glass-subtle border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary text-foreground transition-all placeholder:text-muted-foreground text-sm sm:text-base shadow-apple"
                         />
                       </div>
 
@@ -274,7 +274,7 @@ export function AccessModal({
                         {...submitButtonProps}
                         ref={submitButtonRef}
                         type="submit"
-                        className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-bold py-3.5 sm:py-4 px-6 rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-apple-lg hover:shadow-apple-xl text-sm sm:text-base transform hover:scale-[1.02] active:scale-95"
+                        className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-primary-foreground light:text-foreground font-bold py-3.5 sm:py-4 px-6 rounded-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-apple-lg hover:shadow-apple-xl text-sm sm:text-base transform hover:scale-[1.02] active:scale-95"
                       >
                         {isSubmitting
                           ? dictionary.accessModal.submitting
@@ -294,9 +294,9 @@ export function AccessModal({
                 ) : (
                   <div className="text-center py-8 sm:py-12 transition duration-300">
                     <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6">
-                      <div className="absolute inset-0 bg-green-500/20 rounded-full blur-xl" />
+                      <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
                       <div className="relative w-full h-full glass-strong rounded-full flex items-center justify-center shadow-apple-lg">
-                        <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12 text-green-500" />
+                        <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />
                       </div>
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-extrabold mb-2 sm:mb-3 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">

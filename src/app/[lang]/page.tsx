@@ -8,13 +8,11 @@ import { filterResumeByRole, getRoleFromSearchParams } from '@/lib/role-filter';
 function ProfilePageWrapper({
   resume,
   dictionary,
-  coverLetterOpen,
 }: {
   resume: Awaited<ReturnType<typeof loadResume>>;
   dictionary: Awaited<ReturnType<typeof getDictionary>>;
-  coverLetterOpen: boolean;
 }) {
-  return <ProfilePage resume={resume} dictionary={dictionary} coverLetterOpen={coverLetterOpen} />;
+  return <ProfilePage resume={resume} dictionary={dictionary} />;
 }
 
 export default async function Page({
@@ -41,27 +39,16 @@ export default async function Page({
     resume = filterResumeByRole(resume, role);
   }
 
-  const coverLetterOpen =
-    search.coverLetter === 'true' ||
-    search.coverLetter === '1' ||
-    search.coverLetter === 'show' ||
-    search.cover === 'true' ||
-    search.cl === 'true';
-
   return (
     <AccessGate dictionary={dictionary} basics={resume.basics}>
       <Suspense
         fallback={
-          <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-100">
+          <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
             Loading...
           </div>
         }
       >
-        <ProfilePageWrapper
-          resume={resume}
-          dictionary={dictionary}
-          coverLetterOpen={coverLetterOpen}
-        />
+        <ProfilePageWrapper resume={resume} dictionary={dictionary} />
       </Suspense>
     </AccessGate>
   );

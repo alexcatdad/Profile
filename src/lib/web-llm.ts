@@ -6,6 +6,7 @@ import type { JSONResume } from '@/types/json-resume';
 export interface ResumeChatResponse {
   answer: string;
   sections: Array<'experience' | 'skills' | 'projects' | 'personal'>;
+  itemIds?: string[];
 }
 
 export interface WebLLMOptions {
@@ -25,8 +26,8 @@ export class WebLLMService {
 
   constructor(resume: JSONResume, options: WebLLMOptions = {}) {
     // MLC Web-LLM model ID - must match exactly from https://mlc.ai/models
-    // Using smaller model that's more likely to be in default model list
-    this.modelId = options.model || 'SmolLM2-360M-Instruct-q4f16_1-MLC';
+    // Using Llama 3.2 3B for better reasoning and instruction following
+    this.modelId = options.model || 'Llama-3.2-3B-Instruct-q4f16_1-MLC';
     this.resumeContext = this.buildResumeContext(resume);
   }
 
@@ -37,60 +38,81 @@ export class WebLLMService {
     const parts: string[] = [];
 
     if (resume.basics) {
-      parts.push(`Name: ${resume.basics.name || 'N/A'}`);
-      parts.push(`Title: ${resume.basics.label || 'N/A'}`);
-      if (resume.basics.summary) {
-        parts.push(`Summary: ${resume.basics.summary}`);
+      parts.push(`Name: ${resume.basics.name}`);
+      parts.push(`Label: ${resume.basics.label}`);
+      parts.push(`Summary: ${resume.basics.summary}`);
+      if (resume.basics.location) {
+        parts.push(
+          `Location: ${resume.basics.location.city}, ${resume.basics.location.region}, ${resume.basics.location.countryCode}`
+        );
+      }
+      if (resume.basics.profiles) {
+        parts.push(
+          `Profiles: ${resume.basics.profiles.map((p) => `${p.network} (${p.username})`).join(', ')}`
+        );
       }
     }
 
+    // Work
     if (resume.work && resume.work.length > 0) {
       parts.push('\nExperience:');
       resume.work.forEach((job) => {
-        parts.push(`- ${job.position || 'N/A'} at ${job.name || 'N/A'}`);
-        if (job.summary) parts.push(`  ${job.summary}`);
+        const dateRange = `${job.startDate || ''} - ${job.endDate || 'Present'}`;
+        parts.push(`${job.position || 'N/A'} at ${job.name || 'N/A'} (${dateRange})`);
+        if (job.summary) parts.push(`Summary: ${job.summary}`);
         if (job.highlights && job.highlights.length > 0) {
-          job.highlights.slice(0, 3).forEach((h) => {
-            parts.push(`  • ${h}`);
-            return;
-          });
-        }
-        if (job.keywords && job.keywords.length > 0) {
-          parts.push(`  Skills: ${job.keywords.join(', ')}`);
+          parts.push(`Highlights: ${job.highlights.join('; ')}`);
         }
       });
     }
 
+    // Skills
     if (resume.skills && resume.skills.length > 0) {
       parts.push('\nSkills:');
       resume.skills.forEach((skill) => {
-        parts.push(`- ${skill.name || 'N/A'}: ${skill.level || 'N/A'}`);
-        if (skill.keywords && skill.keywords.length > 0) {
-          parts.push(`  ${skill.keywords.join(', ')}`);
-        }
+        parts.push(`${skill.name}: ${skill.keywords ? skill.keywords.join(', ') : ''}`);
       });
     }
 
+    // Projects
     if (resume.projects && resume.projects.length > 0) {
       parts.push('\nProjects:');
       resume.projects.forEach((project) => {
-        parts.push(`- ${project.name || 'N/A'}`);
-        if (project.description) parts.push(`  ${project.description}`);
-        if (project.highlights && project.highlights.length > 0) {
-          project.highlights.slice(0, 2).forEach((h) => {
-            parts.push(`  • ${h}`);
-            return;
-          });
-        }
+        parts.push(
+          `${project.name}: ${project.description || ''} (${project.keywords ? project.keywords.join(', ') : ''})`
+        );
       });
     }
 
+    // Education
     if (resume.education && resume.education.length > 0) {
       parts.push('\nEducation:');
-      resume.education.forEach((edu) => {
+      resume.education.forEach((edu, index) => {
+        const dateRange =
+          edu.startDate && edu.endDate
+            ? `(${edu.startDate} to ${edu.endDate})`
+            : edu.startDate
+              ? `(Started ${edu.startDate})`
+              : '';
         parts.push(
-          `- ${edu.studyType || 'N/A'} in ${edu.area || 'N/A'} from ${edu.institution || 'N/A'}`
+          `[education.${index}] - ${edu.studyType || 'N/A'} in ${edu.area || 'N/A'} from ${edu.institution || 'N/A'} ${dateRange}`
         );
+      });
+    }
+
+    if (resume.volunteer && resume.volunteer.length > 0) {
+      parts.push('\nVolunteer:');
+      resume.volunteer.forEach((vol, index) => {
+        const dateRange =
+          vol.startDate && vol.endDate
+            ? `(${vol.startDate} to ${vol.endDate})`
+            : vol.startDate
+              ? `(Started ${vol.startDate})`
+              : '';
+        parts.push(
+          `[volunteer.${index}] - ${vol.position || 'N/A'} at ${vol.organization || 'N/A'} ${dateRange}`
+        );
+        if (vol.summary) parts.push(`  ${vol.summary}`);
       });
     }
 
@@ -159,9 +181,18 @@ export class WebLLMService {
     }
 
     // System prompt is good - it clearly instructs the LLM on its role and the required output format.
-    const systemPrompt = `You are a helpful assistant that answers questions about Alex Alexandrescu's resume. 
-When answering, identify which resume sections are relevant to the question. 
-After your answer, list the relevant sections as a JSON array: ["experience", "skills", "projects", "personal"].
+    const systemPrompt = `You are the interactive version of Alex Alexandrescu's resume.
+Your ONLY purpose is to answer questions about Alex's professional background using the provided Resume Context.
+
+STRICT RULES:
+1. Answer ONLY using the information in the Resume Context below.
+2. If the answer is not in the context, state "I don't have that information in the resume."
+3. DO NOT use outside knowledge or hallucinate capabilities (e.g. do not say you can help with recruiting or job postings).
+4. If asked "what can you do" or "who are you", reply EXACTLY: "I can answer specific questions about Alex's experience, skills, and projects based on his resume."
+5. You must cite relevant sections using ONLY these exact keys: ["experience", "skills", "projects", "personal"].
+6. Format your response exactly as requested.
+7. If the user says "Hi", "Hello", or similar greetings, reply politely and briefly, then invite them to ask about the resume.
+8. DO NOT prefix your answer with "Answer:". Start directly with the response text.
 
 Resume Context:
 ${this.resumeContext}
@@ -183,8 +214,6 @@ Sections: ["section1", "section2"]`;
           { role: 'user', content: userPrompt },
         ],
         stream: true,
-        temperature: 0.7,
-        max_tokens: 1000,
       });
 
       for await (const chunk of response) {
@@ -286,6 +315,7 @@ Sections: ["section1", "section2"]`;
     // Remove 'Sections: [...]' or standalone JSON array at the end if present
     // The s flag is important for the dot to match newlines
     return answer
+      .replace(/^Answer:\s*/i, '') // Remove "Answer:" prefix if present
       .replace(/\s*Sections:\s*\[.*?\]\s*$/is, '')
       .replace(/\s*\[.*?\]\s*$/s, '')
       .trim();

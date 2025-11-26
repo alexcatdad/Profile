@@ -462,7 +462,7 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
               )}
               {lastSaved && !isSaving && (
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="w-2 h-2 rounded-full bg-primary" />
                   {dictionary.coverLetter.lastEdited.replace(
                     '{timestamp}',
                     lastSaved.toLocaleTimeString()
@@ -482,11 +482,11 @@ export function CoverLetterModal({ isOpen, onClose, template, dictionary }: Cove
                 {...downloadButtonProps}
                 ref={downloadButtonRef}
                 disabled={isSaving}
-                className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground light:text-foreground rounded-2xl hover:from-accent hover:to-primary transition-all duration-300 font-semibold text-sm shadow-apple-lg hover:shadow-apple-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSaving ? (
                   <>
-                    <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="inline-block w-4 h-4 border-2 border-border border-t-primary-foreground rounded-full animate-spin" />
                     Generating PDF...
                   </>
                 ) : (

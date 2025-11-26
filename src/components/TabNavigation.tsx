@@ -19,7 +19,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   ];
 
   return (
-    <div className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-border bg-secondary/50 p-2 text-sm font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-400">
+    <div className="mb-8 flex flex-wrap gap-2 rounded-2xl border border-border bg-secondary/50 p-2 text-sm font-semibold text-muted-foreground dark:border-border dark:bg-card dark:text-muted-foreground">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -27,10 +27,10 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             key={tab.id}
             className={cn(
               'relative flex-1 rounded-xl px-4 py-2 transition-all duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60',
               isActive
-                ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-apple dark:from-emerald-500 dark:to-emerald-600'
-                : 'text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white'
+                ? 'bg-primary text-primary-foreground shadow-apple'
+                : 'text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground'
             )}
             type="button"
             onClick={() => onTabChange(tab.id)}
@@ -40,7 +40,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             {isActive && (
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-emerald-500/80 to-emerald-600/80 shadow-apple dark:from-emerald-500/80 dark:to-emerald-600/80"
+                className="pointer-events-none absolute inset-0 -z-10 rounded-xl bg-primary/80 shadow-apple"
               />
             )}
           </button>

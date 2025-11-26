@@ -195,26 +195,22 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
   );
 
   const summarySection = showSummary ? (
-    <section className="interactive-card relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/20 via-accent/12 to-transparent p-6 shadow-apple-lg dark:border-white/10 dark:from-[#ff47c0]/20 dark:via-[#45caff]/12">
+    <section className="interactive-card relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/20 via-accent/12 to-transparent p-6 shadow-apple-lg dark:from-primary/20 dark:via-accent/12">
       <div
         className="absolute inset-y-0 right-0 w-1/3 rounded-3xl bg-gradient-to-l from-white/5 to-transparent blur-3xl"
         aria-hidden="true"
       />
       <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-primary dark:text-[#f6a7ff]">
-            Snapshot
-          </p>
-          <p className="mt-3 text-base text-foreground/90 dark:text-zinc-100/90">
-            {resume.basics?.summary}
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-primary">Snapshot</p>
+          <p className="mt-3 text-base text-muted-foreground">{resume.basics?.summary}</p>
         </div>
         {companyPreferences?.primary && (
-          <div className="w-full rounded-2xl border border-border bg-secondary/40 px-4 py-3 text-sm text-muted-foreground shadow-apple md:w-auto dark:border-white/15 dark:bg-black/40 dark:text-zinc-200">
-            <p className="font-semibold text-foreground dark:text-white">Currently focused on</p>
-            <p className="text-primary dark:text-[#f6a7ff]">{companyPreferences.primary}</p>
+          <div className="w-full rounded-2xl border border-border bg-secondary/40 px-4 py-3 text-sm text-muted-foreground shadow-apple md:w-auto dark:bg-secondary">
+            <p className="font-semibold text-foreground">Currently focused on</p>
+            <p className="text-primary">{companyPreferences.primary}</p>
             {companyPreferences.secondary && (
-              <p className="text-xs text-muted-foreground/80 dark:text-zinc-400">
+              <p className="text-xs text-muted-foreground/80">
                 Secondary: {companyPreferences.secondary}
               </p>
             )}
@@ -229,19 +225,13 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
       {metricCards.map((metric) => (
         <div
           key={metric.label}
-          className="interactive-card rounded-3xl border border-border bg-card/50 p-5 shadow-apple dark:border-white/10 dark:bg-white/[0.04]"
+          className="interactive-card rounded-3xl border border-border bg-card/50 p-5 shadow-apple dark:bg-secondary"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary dark:text-[#f6a7ff]">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             {metric.label}
           </p>
-          <p className="mt-2 text-3xl font-semibold text-foreground dark:text-white">
-            {metric.value}
-          </p>
-          {metric.caption && (
-            <p className="mt-1 text-sm text-muted-foreground dark:text-zinc-400">
-              {metric.caption}
-            </p>
-          )}
+          <p className="mt-2 text-3xl font-semibold text-foreground">{metric.value}</p>
+          {metric.caption && <p className="mt-1 text-sm text-muted-foreground">{metric.caption}</p>}
         </div>
       ))}
     </section>
@@ -251,38 +241,36 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
     targetRoles.length > 0 ||
     (quantifiable?.companyTypes && quantifiable.companyTypes.length > 0) ||
     keyAchievements.length > 0 ? (
-      <section className="interactive-card rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:border-white/10 dark:bg-white/[0.02]">
+      <section className="interactive-card rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:bg-secondary">
         <div className="grid gap-4 lg:grid-cols-2">
           {targetRoles.slice(0, 4).map(([roleKey, role]) => (
             <div
               key={roleKey}
-              className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200"
+              className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:bg-secondary"
             >
-              <p className="font-semibold text-primary dark:text-[#f6a7ff]">{role.label}</p>
-              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">
-                {role.summaryFocus}
-              </p>
+              <p className="font-semibold text-primary">{role.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground/80">{role.summaryFocus}</p>
             </div>
           ))}
 
           {quantifiable?.companyTypes && quantifiable.companyTypes.length > 0 && (
-            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200">
-              <p className="font-semibold text-primary dark:text-[#f6a7ff]">Company types</p>
-              <p className="mt-1 text-xs text-muted-foreground/80 dark:text-zinc-400">
+            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 text-sm text-muted-foreground dark:bg-secondary">
+              <p className="font-semibold text-primary">Company types</p>
+              <p className="mt-1 text-xs text-muted-foreground/80">
                 {quantifiable.companyTypes.join(' • ')}
               </p>
             </div>
           )}
 
           {keyAchievements.length > 0 && (
-            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 lg:col-span-2 dark:border-white/10 dark:bg-black/30">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary dark:text-[#f6a7ff]">
+            <div className="hover-lift rounded-2xl border border-border bg-secondary/30 p-4 lg:col-span-2 dark:bg-secondary">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
                 Highlights
               </p>
-              <ul className="mt-3 space-y-1 text-sm text-muted-foreground dark:text-zinc-300">
+              <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
                 {keyAchievements.slice(0, 3).map((achievement) => (
                   <li key={achievement} className="flex items-start gap-2">
-                    <span className="text-accent dark:text-[#45caff]">•</span>
+                    <span className="text-accent">•</span>
                     <span>{achievement}</span>
                   </li>
                 ))}
@@ -295,35 +283,25 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
 
   const publicationsSection =
     (activeTab === 'full' || activeTab === 'projects') && hasPublications ? (
-      <section className="interactive-card mb-12 rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:border-white/10 dark:bg-white/[0.03]">
+      <section className="interactive-card mb-12 rounded-3xl border border-border bg-card/50 p-6 shadow-apple dark:bg-secondary">
         <div className="mb-4 flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-accent dark:bg-[#ff47c0]/15 dark:text-[#45caff]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-accent dark:bg-primary/15 dark:text-accent">
             ✦
           </span>
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-primary/80 dark:text-[#f6a7ff]/80">
-              Thought leadership
-            </p>
-            <h2 className="text-xl font-semibold text-foreground dark:text-white">Publications</h2>
+            <p className="text-xs uppercase tracking-[0.3em] text-primary">Thought leadership</p>
+            <h2 className="text-xl font-semibold text-foreground">Publications</h2>
           </div>
         </div>
         <div className="space-y-4">
           {(resume.publications || []).map((pub, index) => (
             <article
               key={`${pub.name ?? 'publication'}-${index}`}
-              className="hover-lift rounded-3xl border border-border bg-secondary/30 p-5 text-sm text-muted-foreground dark:border-white/10 dark:bg-black/30 dark:text-zinc-200"
+              className="hover-lift rounded-3xl border border-border bg-secondary/30 p-5 text-sm text-muted-foreground dark:bg-secondary"
             >
-              {pub.name && (
-                <h3 className="text-lg font-semibold text-foreground dark:text-white">
-                  {pub.name}
-                </h3>
-              )}
-              {pub.publisher && (
-                <p className="text-accent text-xs dark:text-[#45caff]">{pub.publisher}</p>
-              )}
-              {pub.summary && (
-                <p className="mt-2 text-muted-foreground dark:text-zinc-300">{pub.summary}</p>
-              )}
+              {pub.name && <h3 className="text-lg font-semibold text-foreground">{pub.name}</h3>}
+              {pub.publisher && <p className="text-accent text-xs">{pub.publisher}</p>}
+              {pub.summary && <p className="mt-2 text-muted-foreground">{pub.summary}</p>}
             </article>
           ))}
         </div>
@@ -408,7 +386,7 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
   }, [activeTab, activeSection, availableSections]);
 
   return (
-    <div className="relative min-h-screen px-4 pb-16 pt-6 text-foreground md:px-8 dark:text-zinc-100">
+    <div className="relative min-h-screen px-4 pb-16 pt-6 text-foreground md:px-8">
       <div className="mx-auto max-w-5xl">
         <Header basics={resume.basics} />
 
@@ -420,7 +398,7 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
         >
           <div
             className={cn(
-              'mx-auto max-w-5xl rounded-3xl border border-border bg-card/90 px-4 shadow-apple backdrop-blur supports-[backdrop-filter]:bg-card/70 dark:border-white/10 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/70',
+              'mx-auto max-w-5xl rounded-3xl border border-border bg-card/90 px-4 shadow-apple backdrop-blur supports-[backdrop-filter]:bg-card/70 dark:bg-card/90 dark:supports-[backdrop-filter]:bg-card/70',
               showStickyContext ? 'py-4' : 'pt-4 pb-0'
             )}
           >
@@ -428,15 +406,15 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
 
             {showStickyContext && (
               <div className="mt-4 space-y-3">
-                <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.4em] text-primary/80 dark:text-[#f6a7ff]/80">
+                <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.4em] text-primary">
                   <span>{sectionLabels[activeSection]}</span>
-                  <span className="tracking-normal text-foreground dark:text-white">
+                  <span className="tracking-normal text-foreground">
                     {Math.round(fullViewProgress)}%
                   </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary dark:bg-white/10">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary via-primary/80 to-accent transition-[width] dark:from-[#ff47c0] dark:via-[#b04bff] dark:to-[#45caff]"
+                    className="h-full rounded-full bg-gradient-to-r from-primary via-primary/80 to-accent transition-[width] dark:from-primary dark:to-accent"
                     style={{ width: `${fullViewProgress}%` }}
                   />
                 </div>
@@ -447,10 +425,10 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
                       type="button"
                       onClick={() => scrollToSection(id)}
                       className={cn(
-                        'rounded-2xl px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 dark:focus-visible:ring-[#ff47c0]/60',
+                        'rounded-2xl px-3 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                         activeSection === id
-                          ? 'bg-gradient-to-r from-primary to-accent text-white shadow-apple dark:from-[#ff47c0] dark:to-[#45caff]'
-                          : 'text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white'
+                          ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground light:text-foreground shadow-apple dark:from-primary dark:to-accent'
+                          : 'text-muted-foreground hover:text-foreground'
                       )}
                     >
                       {sectionLabels[id]}
@@ -513,7 +491,7 @@ export function ResumeLayout({ resume }: ResumeLayoutProps) {
             />
           )}
 
-        <footer className="mt-12 border-t border-white/10 pt-4 text-center text-sm text-zinc-500">
+        <footer className="mt-12 border-t border-border pt-4 text-center text-sm text-muted-foreground">
           {resume.meta?.version && `JSON Resume ${resume.meta.version}`}
           {resume.meta?.lastModified && ` · Last updated ${resume.meta.lastModified}`}
         </footer>

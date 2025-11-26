@@ -24,27 +24,30 @@ export function ProjectsSection({ projects, highlighted = false }: ProjectsSecti
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-primary/80">
             Projects
           </p>
-          <h2 className="text-2xl font-semibold text-foreground dark:text-white">Selected work</h2>
+          <h2 className="text-2xl font-semibold text-foreground dark:text-foreground">
+            Selected work
+          </h2>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {projects.map((project, index) => (
           <article
             key={`${project.name ?? 'project'}-${index}`}
-            className="interactive-card flex h-full flex-col rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-200"
+            data-resume-item={`projects.${index}`}
+            className="interactive-card flex h-full flex-col rounded-3xl border border-border bg-card/50 p-5 text-sm text-foreground/90 shadow-apple transition-transform duration-300 hover:-translate-y-1 dark:border-border dark:bg-card dark:text-muted-foreground"
           >
             {project.name && (
-              <h3 className="text-xl font-semibold text-foreground dark:text-white">
+              <h3 className="text-xl font-semibold text-foreground dark:text-foreground">
                 {project.name}
               </h3>
             )}
             {project.description && (
-              <p className="mt-2 text-sm text-muted-foreground dark:text-zinc-400">
+              <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
                 {project.description}
               </p>
             )}
             {project.highlights && project.highlights.length > 0 && (
-              <ul className="mt-3 space-y-2 text-xs text-muted-foreground dark:text-zinc-300">
+              <ul className="mt-3 space-y-2 text-xs text-muted-foreground dark:text-muted-foreground">
                 {project.highlights.slice(0, 3).map((highlight) => (
                   <li
                     key={`${project.name ?? 'project'}-${highlight}`}
@@ -61,7 +64,7 @@ export function ProjectsSection({ projects, highlighted = false }: ProjectsSecti
                 {project.keywords.map((keyword) => (
                   <span
                     key={`${project.name ?? 'project'}-${keyword}`}
-                    className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-primary dark:border-white/10 dark:bg-black/30 dark:text-[#f6a7ff]"
+                    className="rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-primary dark:border-border dark:bg-background/30 dark:text-primary"
                   >
                     {keyword}
                   </span>

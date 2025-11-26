@@ -80,7 +80,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
 
   const downloadCoverLetterButtonRef = useRef<HTMLButtonElement>(null);
 
-  const downloadCoverLetterButtonProps = useButton(
+  const _downloadCoverLetterButtonProps = useButton(
     {
       onPress: () => {
         const url = new URL(window.location.href);
@@ -97,8 +97,8 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
       aria-label="Primary profile navigation"
       className={`relative z-50 transition-all duration-500 ${
         isScrolled
-          ? 'glass-strong shadow-apple-lg border-b border-border dark:border-white/10'
-          : 'glass-subtle border-b border-border dark:border-white/5 shadow-apple'
+          ? 'glass-strong shadow-apple-lg border-b border-border'
+          : 'glass-subtle border-b border-border shadow-apple'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -139,13 +139,13 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
-            <button
+            {/* <button
               {...downloadCoverLetterButtonProps}
               ref={downloadCoverLetterButtonRef}
               className="px-5 py-2.5 glass hover:glass-strong rounded-2xl transition-transform duration-200 font-semibold text-sm shadow-apple hover:shadow-apple-lg hover:-translate-y-0.5 hover:text-primary text-foreground"
             >
               {dictionary.navigation.downloadCoverLetter}
-            </button>
+            </button> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -166,7 +166,7 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden border-t border-border dark:border-white/10 glass-strong transition-all duration-300 ${
+        className={`lg:hidden border-t border-border glass-strong transition-all duration-300 ${
           isMobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 overflow-hidden opacity-0'
         }`}
       >
@@ -186,18 +186,18 @@ export function NavigationClient({ dictionary }: NavigationClientProps) {
               {link.label}
             </button>
           ))}
-          <div className="pt-4 mt-4 border-t border-border dark:border-white/10 space-y-3">
+          <div className="pt-4 mt-4 border-t border-border space-y-3">
             <div className="flex items-center justify-between px-5 py-3 glass rounded-2xl">
               <span className="text-sm font-semibold text-muted-foreground">Theme</span>
               <ThemeToggle />
             </div>
-            <button
+            {/* <button
               {...downloadCoverLetterButtonProps}
               ref={downloadCoverLetterButtonRef}
               className="w-full px-5 py-3 glass hover:glass-strong rounded-2xl transition-transform duration-200 font-semibold text-left shadow-apple text-foreground"
             >
               {dictionary.navigation.downloadCoverLetter}
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

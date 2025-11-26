@@ -46,7 +46,7 @@ export function ContactReveal({ email, dictionary }: ContactRevealProps) {
       <button
         {...revealButtonProps}
         ref={revealButtonRef}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card transition-transform duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-primary/50 hover:bg-accent hover:shadow-md"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card transition-transform duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-primary hover:bg-accent hover:shadow-md"
         aria-label="Reveal email"
       >
         <Mail className="w-5 h-5 text-muted-foreground" />
@@ -56,13 +56,13 @@ export function ContactReveal({ email, dictionary }: ContactRevealProps) {
 
   return (
     <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm shadow-lg transition-transform duration-200 hover:-translate-y-0.5">
-      <span className="font-mono text-card-foreground">{email}</span>
+      <span className="font-mono text-foreground">{email}</span>
       <button
         {...copyButtonProps}
         ref={copyButtonRef}
         className={`px-3 py-1.5 text-xs rounded-md transition-colors duration-200 flex items-center gap-1.5 ${
           copied
-            ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+            ? 'bg-primary/10 text-primary dark:text-primary'
             : 'bg-primary text-primary-foreground hover:bg-primary/90'
         }`}
       >

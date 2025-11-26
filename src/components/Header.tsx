@@ -34,28 +34,24 @@ export function Header({ basics }: HeaderProps) {
   const featuredProfile = basics.profiles?.[0];
 
   return (
-    <header className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple-lg backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03] transition-all duration-300">
+    <header className="interactive-card mb-10 rounded-3xl border border-border bg-card/50 p-6 shadow-apple-lg backdrop-blur-xl dark:bg-card/50 transition-all duration-300">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           {basics.name && (
-            <h1 className="text-3xl font-semibold text-foreground md:text-4xl dark:text-white">
-              {basics.name}
-            </h1>
+            <h1 className="text-3xl font-semibold text-foreground md:text-4xl">{basics.name}</h1>
           )}
           {basics.label && (
-            <p className="text-lg font-medium text-emerald-600 dark:text-emerald-300/90 transition-opacity">
-              {basics.label}
-            </p>
+            <p className="text-lg font-medium text-primary/90 transition-opacity">{basics.label}</p>
           )}
-          <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground dark:text-zinc-400">
+          <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {location && (
-              <span className="rounded-full bg-secondary px-3 py-1 text-[11px] text-foreground dark:bg-white/5 dark:text-zinc-100">
+              <span className="rounded-full bg-secondary px-3 py-1 text-[11px] text-foreground dark:bg-secondary">
                 {location}
               </span>
             )}
             {basics.pronouns && (
-              <span className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-[11px] text-foreground dark:bg-white/5 dark:text-zinc-100">
-                <UserRound className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-300" />
+              <span className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-[11px] text-foreground dark:bg-secondary">
+                <UserRound className="h-3.5 w-3.5 text-primary" />
                 {basics.pronouns}
               </span>
             )}
@@ -66,7 +62,7 @@ export function Header({ basics }: HeaderProps) {
             href={featuredProfile.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-2xl border border-border bg-secondary/50 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-emerald-500/60 hover:text-emerald-600 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:border-emerald-400/60 dark:hover:text-emerald-300"
+            className="inline-flex items-center gap-2 rounded-2xl border border-border bg-secondary/50 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary dark:border-border dark:bg-secondary dark:hover:border-primary dark:hover:text-primary"
           >
             <span>{featuredProfile.network}</span>
             <ArrowUpRight className="h-4 w-4" />
@@ -80,7 +76,7 @@ export function Header({ basics }: HeaderProps) {
             const Icon = item.icon;
             const sharedProps = {
               className:
-                'group flex items-center gap-3 rounded-2xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground transition dark:border-white/10 dark:bg-white/5 dark:text-zinc-200',
+                'group flex items-center gap-3 rounded-2xl border border-border bg-secondary/30 px-4 py-3 text-sm text-muted-foreground transition dark:border-border dark:bg-secondary',
             };
             return item.href ? (
               <a
@@ -88,14 +84,14 @@ export function Header({ basics }: HeaderProps) {
                 href={item.href}
                 target={item.href.startsWith('http') ? '_blank' : undefined}
                 rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className={`${sharedProps.className} hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:border-emerald-400/40 dark:hover:text-emerald-200`}
+                className={`${sharedProps.className} hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary`}
               >
-                <Icon className="h-4 w-4 text-emerald-500 transition group-hover:scale-110 dark:text-emerald-300" />
+                <Icon className="h-4 w-4 text-primary transition group-hover:scale-110" />
                 <span className="truncate">{item.label}</span>
               </a>
             ) : (
               <div key={item.label} className={sharedProps.className}>
-                <Icon className="h-4 w-4 text-emerald-500 dark:text-emerald-300" />
+                <Icon className="h-4 w-4 text-primary" />
                 <span className="truncate">{item.label}</span>
               </div>
             );

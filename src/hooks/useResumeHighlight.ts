@@ -36,6 +36,10 @@ interface UseResumeHighlightReturn {
    */
   highlightSection: (id: SectionId) => void;
   /**
+   * Function to trigger highlight for a specific item
+   */
+  highlightItem: (itemId: string) => void;
+  /**
    * Function to clear the highlight
    */
   clearHighlight: () => void;
@@ -108,6 +112,33 @@ export function useResumeHighlight(
     }, duration);
   };
 
+  const highlightItem = (itemId: string) => {
+    if (typeof window === 'undefined') return;
+
+    // Use a small delay to ensure DOM is ready
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      const element = document.querySelector(`[data-resume-item="${itemId}"]`);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + window.scrollY - scrollOffset;
+        window.scrollTo({
+          top,
+          behavior: 'smooth',
+        });
+
+        // Add a temporary highlight class or style if needed
+        element.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+        setTimeout(() => {
+          element.classList.remove('ring-2', 'ring-primary', 'ring-offset-2');
+        }, duration);
+      }
+    }, 50);
+  };
+
   const isHighlighted = (id: SectionId) => {
     return highlightedSection === id;
   };
@@ -127,6 +158,7 @@ export function useResumeHighlight(
   return {
     highlightedSection,
     highlightSection,
+    highlightItem,
     clearHighlight,
     isHighlighted,
   };
