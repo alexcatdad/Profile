@@ -30,7 +30,6 @@
     "@vercel/edge-config": "^1.4.3",
     "@vercel/functions": "^3.3.3",
     "@vercel/speed-insights": "^1.2.0",
-    "botid": "^1.5.10",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "commander": "^14.0.2",
