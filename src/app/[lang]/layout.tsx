@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import '../globals.css';
 import { ThemeScript } from '@/components/ThemeScript';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export async function generateStaticParams() {
   return [{ lang: 'en' }, { lang: 'nl' }];
@@ -68,7 +70,11 @@ export default async function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="antialiased text-foreground">{children}</body>
+      <body className="antialiased text-foreground">
+        {children}
+        <SpeedInsights />
+        <Analytics />
+      </body>
     </html>
   );
 }
